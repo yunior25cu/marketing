@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "id": "inventario-01",
+  "version": 1,
+  "status": "DRAFT",
+  "createdAt": "2026-09-27T02:55:14.576Z",
+  "updatedAt": "2026-09-27T03:05:42.142Z",
+  "approvedAt": null,
+  "approvedBy": null,
+  "brief": {
+    "title": "NO SE QUEDA EN VENTAS.",
+    "objective": "Mostrar de manera visual que una operación de venta puede modificar las existencias del producto y que Balaxys mantiene relacionada la operación comercial con el inventario.",
+    "audience": "Dueños, administradores y responsables operativos de pequeñas y medianas empresas.",
+    "message": "Demostrar mediante movimiento y datos, sin lista de funcionalidades, que lo que sucede en ventas tiene consecuencias en el resto de la operación.",
+    "duration": 10000,
+    "formats": ["16:9", "9:16"],
+    "channel": "Digital genérico (video corto sin audio obligatorio)",
+    "cta": null,
+    "tone": "Preciso, sobrio y operativo",
+    "productCapabilities": [
+      {
+        "statement": "Al confirmar una venta en Balaxys, las existencias del artículo vendido disminuyen en la cantidad vendida (venta #18492: A-104, 18 → 15).",
+        "status": "UNVERIFIED",
+        "evidence": null
+      },
+      {
+        "statement": "El descuento de existencias ocurre en el paso de confirmación de la venta (Borrador → Confirmada), no en otro momento como facturación, despacho o entrega.",
+        "status": "UNVERIFIED",
+        "evidence": null
+      },
+      {
+        "statement": "Balaxys registra la salida de inventario como un movimiento identificado que conserva la referencia a la venta de origen (M-0417 → origen venta #18492).",
+        "status": "UNVERIFIED",
+        "evidence": null
+      }
+    ],
+    "constraints": [
+      "No inventar capacidades: validar cada claim contra brand/BALAXYS_PRODUCT_CAPABILITIES.md",
+      "Mantener IN_REVIEW mientras exista un claim sin evidencia",
+      "Rotular datos de demostración",
+      "No modificar Brand OS, tokens ni reglas permanentes",
+      "Sin lista de funcionalidades: demostrar con movimiento y datos",
+      "No aprobar automáticamente"
+    ],
+    "references": [
+      "brand/BALAXYS_CREATIVE_CONSTITUTION.md",
+      "brand/BALAXYS_COPY_SYSTEM.md",
+      "brand/BALAXYS_MOTION_SYSTEM.md",
+      "brand/BALAXYS_PRODUCT_CAPABILITIES.md"
+    ],
+    "campaignType": "awareness",
+    "audio": "optional",
+    "language": "es"
+  },
+  "concept": {
+    "idea": "Lo que pasa en Ventas cruza la línea que lo separa de Inventario: una venta confirmada llega al stock y deja un movimiento con su origen.",
+    "visualMechanism": "Retícula dividida en VENTAS | INVENTARIO. Venta #18492 (A-104 × 3) se confirma → el dato −3 cruza la divisoria → existencias 18 → 15 → movimiento M-0417 con origen venta #18492.",
+    "narrative": "Premisa escrita a ambos lados de la divisoria → demostración causal en cinco eventos → resolución que repite la frontera y deja la secuencia en texto.",
+    "closing": "UNA VENTA SE CIERRA. EL STOCK SE MUEVE.",
+    "originalityCheck": "La pieza depende de la gramática Balaxys (retícula como frontera entre áreas, documento con identidad, dato que viaja, Signal Lime sólo en el cambio, origen conservado). El hecho venta → stock es común en la categoría; la diferencia es mostrar el origen que conserva el movimiento, y ese claim está sin verificar."
+  },
+  "storyboard": [
+    {
+      "id": "intro",
+      "from": 0,
+      "to": 2400,
+      "label": "Premisa",
+      "visual": "Retícula VENTAS | INVENTARIO; la frase empieza en Ventas y termina del otro lado",
+      "copy": "LO QUE PASA EN VENTAS / NO SE QUEDA EN VENTAS."
+    },
+    {
+      "id": "event",
+      "from": 2400,
+      "to": 7400,
+      "label": "Demostración",
+      "visual": "Venta #18492 confirmada → −3 cruza la divisoria → existencias 18 → 15 → movimiento M-0417 con origen",
+      "copy": "Datos de demostración"
+    },
+    {
+      "id": "close",
+      "from": 7400,
+      "to": 10000,
+      "label": "Resolución",
+      "visual": "Frase a ambos lados de la divisoria y secuencia completa en texto",
+      "copy": "UNA VENTA SE CIERRA. / EL STOCK SE MUEVE."
+    }
+  ],
+  "copy": {
+    "introLines": ["LO QUE PASA", "EN VENTAS", "NO SE QUEDA", "EN VENTAS."],
+    "closingLines": ["UNA VENTA", "SE CIERRA.", "EL STOCK", "SE MUEVE."],
+    "cta": null
+  },
+  "playback": {
+    "kind": "custom",
+    "sceneId": "sale-stock-link",
+    "introMs": 2400,
+    "outroMs": 2600
+  },
+  "reviews": {
+    "brand": {
+      "status": "PENDING",
+      "summary": "Pendiente de Brand Guardian.",
+      "blocking": false
+    },
+    "quality": {
+      "status": "PENDING",
+      "summary": "Pendiente de Quality Auditor.",
+      "blocking": false
+    },
+    "performance": {
+      "status": "PENDING",
+      "summary": "Pendiente de Performance Auditor.",
+      "blocking": false
+    },
+    "technical": {
+      "lint": false,
+      "typecheck": false,
+      "tests": false,
+      "build": false
+    }
+  }
+}

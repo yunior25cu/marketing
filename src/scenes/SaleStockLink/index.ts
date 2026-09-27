@@ -1,0 +1,61 @@
+import type { SceneDefinition } from '@/renderer/scene'
+export const saleStockLink: SceneDefinition = {
+  id: 'sale-stock-link',
+  title: 'La venta cruza a inventario.',
+  kicker: 'VENTAS → INVENTARIO',
+  description: 'Una venta confirmada produce una salida de stock que conserva su origen.',
+  duration: 5000,
+  background: 'graphite',
+  viewport: { ratios: ['16:9', '9:16'], focus: 'center' },
+  document: {
+    kind: 'VENTA',
+    id: '#18492',
+    rows: [
+      { label: 'Artículo', value: 'A-104' },
+      { label: 'Cantidad', value: '3' },
+      { label: 'Estado', value: 'CONFIRMADA' },
+    ],
+  },
+  nodes: [
+    {
+      id: 'sale',
+      title: 'Venta',
+      at: 500,
+      before: 'Borrador',
+      after: 'Confirmada',
+      note: 'Evento de origen',
+    },
+    {
+      id: 'stock',
+      title: 'Existencias · A-104',
+      at: 1600,
+      before: '18',
+      after: '15',
+      note: 'Salida de 3 unidades',
+    },
+    {
+      id: 'movement',
+      title: 'Movimiento',
+      at: 2300,
+      before: '—',
+      after: 'M-0417',
+      note: 'Salida registrada',
+    },
+    {
+      id: 'origin',
+      title: 'Origen',
+      at: 3000,
+      before: '—',
+      after: 'Venta #18492',
+      note: 'Relación visible',
+    },
+  ],
+  events: [
+    { id: 'e1', at: 500, kind: 'origin', label: 'Venta confirmada' },
+    { id: 'e2', at: 1000, kind: 'propagate', label: 'Salida −3' },
+    { id: 'e3', at: 1600, kind: 'change', label: 'Existencias 15' },
+    { id: 'e4', at: 2300, kind: 'record', label: 'Movimiento M-0417' },
+    { id: 'e5', at: 3000, kind: 'resolve', label: 'Origen #18492' },
+  ],
+  disclosure: 'Secuencia conceptual · datos de demostración.',
+}

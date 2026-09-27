@@ -87,7 +87,7 @@ export interface CampaignRecord {
   transformationMap?: { from: string; transition: SemanticTransition; to: string; at: number }[]
   audioTimelineId?: string
   playback: {
-    kind: 'launch-01' | 'template'
+    kind: 'launch-01' | 'template' | 'custom'
     sceneId: string
     introMs: number
     outroMs: number

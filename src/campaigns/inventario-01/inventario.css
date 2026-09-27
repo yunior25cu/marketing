@@ -1,0 +1,460 @@
+/*
+ * inventario-01 se compone sobre un cuadro fijo del tamaño de exportación
+ * (1920×1080 o 1080×1920) y se escala entero al contenedor. Las medidas en px
+ * son píxeles del cuadro final; la vista previa conserva la misma proporción.
+ */
+.inv-stage {
+  display: flex;
+  justify-content: center;
+  background: var(--obsidian);
+  border: 1px solid var(--line);
+}
+.inv-viewport {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+.inv-stage--vertical .inv-viewport {
+  width: min(100%, 440px);
+}
+.inv-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.inv-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  transform-origin: 0 0;
+  background: var(--graphite);
+  color: var(--bone);
+}
+.inv-frame > *,
+.inv-demo > *,
+.inv-statement > * {
+  position: absolute;
+}
+.inv-statement,
+.inv-demo {
+  inset: 0;
+}
+
+/* Retícula: la línea divisoria separa Ventas de Inventario. */
+.inv-frame__divider {
+  background: var(--line);
+}
+.inv-frame--horizontal .inv-frame__divider {
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+}
+.inv-frame--vertical .inv-frame__divider {
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+}
+
+/* Encabezado y pie */
+.inv-frame__header,
+.inv-frame__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+}
+.inv-frame__header {
+  top: 64px;
+  left: 96px;
+  right: 96px;
+}
+.inv-frame__footer {
+  bottom: 64px;
+  left: 96px;
+  right: 96px;
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+  color: var(--muted);
+}
+.inv-frame .eyebrow {
+  font-size: 20px;
+}
+.inv-frame__footer .micro-label,
+.inv-frame__footer .mono,
+.inv-zone .micro-label,
+.inv-link__caption,
+.inv-stock .micro-label {
+  font-size: 17px;
+}
+.inv-frame__header .status {
+  zoom: 2;
+}
+
+/* Zonas */
+.inv-zone {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+  transition: border-color 0.28s var(--ease-standard);
+}
+.inv-zone.is-active {
+  border-color: var(--signal);
+}
+.inv-zone .micro-label {
+  color: var(--mist);
+}
+.inv-frame--horizontal .inv-zone {
+  top: 152px;
+  width: 768px;
+}
+.inv-frame--horizontal .inv-zone--sale {
+  left: 96px;
+}
+.inv-frame--horizontal .inv-zone--stock {
+  left: 1056px;
+}
+.inv-pulse {
+  position: relative;
+  display: inline-flex;
+  zoom: 2;
+}
+.inv-pulse__ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--signal);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Premisa y resolución: el primer tiempo ocupa Ventas; el segundo, Inventario. */
+.inv-frame .kinetic-text {
+  font-size: 120px;
+}
+.inv-frame--horizontal .inv-beat--a {
+  left: 96px;
+  top: 290px;
+}
+.inv-frame--horizontal .inv-beat--b {
+  left: 1056px;
+  top: 560px;
+}
+.inv-trail,
+.inv-log {
+  background: var(--graphite);
+}
+.inv-trail {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+}
+.inv-trail .data-ticker {
+  flex: 1;
+  justify-content: space-between;
+  zoom: 1.7;
+}
+.inv-signature {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  white-space: nowrap;
+}
+.inv-signature b {
+  color: var(--signal);
+}
+.inv-frame--horizontal .inv-trail {
+  left: 96px;
+  right: 96px;
+  top: 812px;
+}
+
+/* Demostración */
+.inv-doc .document-card {
+  zoom: 2;
+}
+.inv-doc.is-linked .document-card {
+  outline: 1.5px solid var(--signal);
+  outline-offset: 6px;
+}
+.inv-doc.is-linked .document-card__head .mono {
+  color: var(--signal-dark);
+}
+.inv-frame--horizontal .inv-doc {
+  left: 96px;
+  top: 540px;
+  transform: translateY(-50%);
+}
+
+.inv-link__track,
+.inv-link__fill,
+.inv-link__rider {
+  position: absolute;
+}
+.inv-link__track {
+  background: var(--line);
+}
+.inv-link__fill {
+  background: var(--signal);
+  box-shadow: 0 0 14px var(--signal);
+}
+.inv-link__caption {
+  position: absolute;
+  white-space: nowrap;
+}
+.inv-token {
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+  padding: 10px 18px;
+  border: 2px solid var(--signal);
+  border-radius: var(--radius-sm);
+  background: var(--obsidian);
+  color: var(--signal);
+  font-size: 26px;
+}
+.inv-frame--horizontal .inv-link {
+  left: 624px;
+  width: 400px;
+  top: 540px;
+  height: 0;
+}
+.inv-frame--horizontal .inv-link__track {
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: 2px;
+}
+.inv-frame--horizontal .inv-link__fill {
+  left: 0;
+  right: 0;
+  top: -2px;
+  height: 4px;
+  transform-origin: left center;
+}
+.inv-frame--horizontal .inv-link__rider {
+  inset: 0;
+}
+.inv-frame--horizontal .inv-token {
+  transform: translate(calc(-100% - 12px), -50%);
+}
+.inv-frame--horizontal .inv-link__caption {
+  left: 0;
+  bottom: 36px;
+}
+
+.inv-frame .metric-counter {
+  gap: 18px;
+}
+.inv-frame .metric-counter__row {
+  gap: 28px;
+}
+.inv-frame .metric-counter__row .data-value {
+  font-size: 132px;
+}
+.inv-frame .metric-arrow {
+  font-size: 64px;
+}
+.inv-frame .metric-note {
+  font-size: 20px;
+}
+.inv-frame--horizontal .inv-stock {
+  left: 1056px;
+  top: 540px;
+  transform: translateY(-50%);
+}
+
+.inv-ledger__row {
+  display: grid;
+  grid-template-columns: 130px 140px 80px 1fr 60px;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 22px;
+}
+.inv-ledger__row > span:last-child {
+  text-align: right;
+}
+.inv-ledger__row--head {
+  color: var(--muted);
+}
+.inv-ledger__row--head > span:last-child {
+  margin-right: -0.14em;
+}
+.inv-frame .inv-ledger__row--head {
+  font-size: 15px;
+}
+.inv-ledger__wide {
+  grid-column: span 3;
+  color: var(--muted);
+}
+.inv-ledger__origin {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.inv-ledger__origin .inv-pulse {
+  zoom: 1.6;
+}
+.inv-frame--horizontal .inv-ledger {
+  left: 1056px;
+  width: 768px;
+  top: 700px;
+}
+
+.inv-log {
+  display: flex;
+  justify-content: space-between;
+}
+.inv-log .event-marker {
+  zoom: 1.6;
+  opacity: 0.35;
+  transition: opacity 0.28s var(--ease-standard);
+}
+.inv-log .event-marker.is-active {
+  opacity: 1;
+}
+.inv-frame--horizontal .inv-log {
+  left: 96px;
+  right: 96px;
+  top: 890px;
+}
+
+/* 9:16 — Ventas arriba, Inventario abajo; la línea cruza la divisoria. */
+.inv-frame--vertical .inv-frame__header {
+  top: 88px;
+  left: 80px;
+  right: 80px;
+}
+.inv-frame--vertical .inv-frame__footer {
+  bottom: 88px;
+  left: 80px;
+  right: 80px;
+}
+.inv-frame--vertical .eyebrow {
+  font-size: 26px;
+}
+.inv-frame--vertical .inv-frame__footer .micro-label,
+.inv-frame--vertical .inv-frame__footer .mono,
+.inv-frame--vertical .inv-zone .micro-label,
+.inv-frame--vertical .inv-link__caption,
+.inv-frame--vertical .inv-stock .micro-label {
+  font-size: 22px;
+}
+.inv-frame--vertical .inv-frame__header .status {
+  zoom: 2.4;
+}
+.inv-frame--vertical .inv-zone {
+  left: 80px;
+  right: 80px;
+}
+.inv-frame--vertical .inv-zone--sale {
+  top: 184px;
+}
+.inv-frame--vertical .inv-zone--stock {
+  top: 984px;
+}
+.inv-frame--vertical .kinetic-text {
+  font-size: 132px;
+}
+.inv-frame--vertical .inv-beat--a {
+  left: 80px;
+  bottom: 1008px;
+}
+.inv-frame--vertical .inv-beat--b {
+  left: 80px;
+  top: 1064px;
+}
+.inv-frame--vertical .inv-trail {
+  left: 80px;
+  right: 80px;
+  top: 1384px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 40px;
+}
+.inv-frame--vertical .inv-trail .data-ticker {
+  zoom: 2.2;
+}
+.inv-frame--vertical .inv-signature {
+  align-self: flex-end;
+  font-size: 40px;
+}
+.inv-frame--vertical .inv-doc {
+  left: 50%;
+  top: 268px;
+  transform: translateX(-50%);
+}
+.inv-frame--vertical .inv-doc .document-card {
+  zoom: 2.2;
+}
+.inv-frame--vertical .inv-link {
+  left: 540px;
+  top: 744px;
+  height: 304px;
+  width: 0;
+}
+.inv-frame--vertical .inv-link__track {
+  top: 0;
+  bottom: 0;
+  left: -1px;
+  width: 2px;
+}
+.inv-frame--vertical .inv-link__fill {
+  top: 0;
+  bottom: 0;
+  left: -2px;
+  width: 4px;
+  transform-origin: center top;
+}
+.inv-frame--vertical .inv-link__rider {
+  inset: 0;
+}
+.inv-frame--vertical .inv-token {
+  transform: translate(-50%, calc(-100% - 12px));
+  font-size: 32px;
+}
+.inv-frame--vertical .inv-link__caption {
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: right;
+}
+.inv-frame--vertical .inv-stock {
+  left: 50%;
+  top: 1064px;
+  transform: translateX(-50%);
+}
+.inv-frame--vertical .metric-counter__row .data-value {
+  font-size: 168px;
+}
+.inv-frame--vertical .metric-arrow {
+  font-size: 80px;
+}
+.inv-frame--vertical .metric-note {
+  font-size: 24px;
+}
+.inv-frame--vertical .inv-ledger {
+  left: 80px;
+  right: 80px;
+  top: 1420px;
+}
+.inv-frame--vertical .inv-ledger__row {
+  grid-template-columns: 150px 150px 80px 1fr 60px;
+  font-size: 26px;
+  padding: 16px 0;
+}
+.inv-frame--vertical .inv-ledger__row--head {
+  font-size: 19px;
+}

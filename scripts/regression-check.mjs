@@ -16,6 +16,7 @@ try {
     '/campaigns/launch-01',
     '/lab/campaigns/visual-engine-smoke-test',
     '/campaigns/continuous-motion-smoke-test',
+    '/lab/campaigns/inventario-01',
   ]
   for (const path of paths) {
     const response = await page.goto(`http://127.0.0.1:${port}${path}`, {

@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useState } from 'react'
 import { formats, ratios } from '@/compositions/formats'
 import { LaunchStage } from '@/campaigns/launch-01/LaunchStage'
 import { TemplateStage } from '@/campaigns/TemplateStage'
+import { customStages } from '@/campaigns/stages'
 import {
   activeAudioCues,
   advancedAudioTimeline,
@@ -149,7 +150,10 @@ function CampaignConsolePlayer({ record }: { record: CampaignRecord }) {
           >
             <AdvancedSmokeStage timeMs={timeline.time} ratio={ratio} reduced={timeline.reduced} />
           </Suspense>
-        ) : (\n          <TemplateStage record={record} timeMs={timeline.time} ratio={ratio} />
+        ) : CustomStage ? (
+          <CustomStage timeMs={timeline.time} ratio={ratio} />
+        ) : (
+          <TemplateStage record={record} timeMs={timeline.time} ratio={ratio} />
         )}
         {inspect && import.meta.env.DEV && (
           <div className="campaign-console__safe-area" aria-hidden="true" />
