@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react'
 import { formats, ratios } from '@/compositions/formats'
-import { KineticText } from '@/primitives/KineticText'
-import { SceneCanvas } from '@/renderer/SceneCanvas'
 import type { SceneRatio } from '@/renderer/scene'
 import { useTimeline } from '@/renderer/useTimeline'
-import { saleFlow } from '@/scenes/SaleFlow'
-import { campaignPhase, launch01 } from './definition'
+import { launch01 } from './definition'
+import { LaunchStage } from './LaunchStage'
 import { seconds } from '@/utils/time'
 import './campaign.css'
 
@@ -34,7 +32,6 @@ export function LaunchCampaign() {
       delete window.__BALAXYS_RENDER
     }
   }, [renderMode, timeline.seek])
-  const phase = campaignPhase(timeline.time)
   return (
     <main className={`campaign-page shell ${renderMode ? 'campaign-page--render' : ''}`}>
       <header className="campaign-page__header">
@@ -75,39 +72,7 @@ export function LaunchCampaign() {
           {formats[ratio].width} × {formats[ratio].height} / COMPOSICIÓN ADAPTATIVA
         </span>
       </div>
-      <div
-        className={`campaign-stage campaign-stage--${ratio.replace(':', '-')}`}
-        data-render-stage
-        aria-label="Campaña NO SON MÓDULOS de 10 segundos"
-      >
-        {phase === 'premise' && (
-          <div className="campaign-stage__statement">
-            <span className="eyebrow">BALAXYS / BUSINESS IN MOTION</span>
-            <KineticText
-              lines={['NO SON', 'MÓDULOS.']}
-              accent={1}
-              visibleCount={timeline.time < 700 ? 1 : 2}
-            />
-            <span className="micro-label">01 / LA PREMISA</span>
-          </div>
-        )}
-        {phase === 'event' && (
-          <SceneCanvas scene={saleFlow} timeMs={timeline.time - 1700} ratio={ratio} compact />
-        )}
-        {phase === 'resolution' && (
-          <div className="campaign-stage__statement campaign-stage__statement--end">
-            <span className="eyebrow">UNA OPERACIÓN / MÚLTIPLES CONSECUENCIAS</span>
-            <KineticText
-              lines={['ES UNA', 'EMPRESA', 'EN MOVIMIENTO.']}
-              accent={2}
-              visibleCount={timeline.time < 8400 ? 1 : timeline.time < 9100 ? 2 : 3}
-            />
-            <span className="campaign-stage__signature">
-              BALAXYS <b>✳</b>
-            </span>
-          </div>
-        )}
-      </div>
+      <LaunchStage timeMs={timeline.time} ratio={ratio} />
       <div className="campaign-controls">
         <button
           className="button button--signal"

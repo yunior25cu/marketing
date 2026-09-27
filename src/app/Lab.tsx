@@ -17,6 +17,7 @@ import type { SceneRatio } from '@/renderer/scene'
 import { saleFlow } from '@/scenes/SaleFlow'
 import { inventoryFlow } from '@/scenes/InventoryFlow'
 import { accountingFlow } from '@/scenes/AccountingFlow'
+import { CampaignConsole } from './CampaignConsole'
 import './lab.css'
 
 const scenes = [saleFlow, inventoryFlow, accountingFlow]
@@ -52,6 +53,7 @@ export function Lab() {
         <a href="#primitives">04 / PRIMITIVES</a>
         <a href="#scenes">05 / SCENES</a>
         <a href="#campaigns">06 / CAMPAIGNS</a>
+        <a href="#campaign-console">07 / CONSOLE</a>
       </nav>
       <section id="tokens" className="lab-section">
         <div className="lab-section__head">
@@ -250,6 +252,7 @@ export function Lab() {
           Abrir campaña 01 <span>↗</span>
         </a>
       </section>
+      <CampaignConsole />
     </main>
   )
 }
