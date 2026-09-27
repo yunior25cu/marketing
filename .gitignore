@@ -6,3 +6,4 @@ coverage/
 *.local
 *.tsbuildinfo
 renders/
+assets/audio/local-imports/

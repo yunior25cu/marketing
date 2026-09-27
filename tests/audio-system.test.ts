@@ -33,6 +33,19 @@ describe('Balaxys audio system', () => {
     expect(audioAssetRegistry['balaxys-minimal-pulse-v1'].commercialUse).toBe(true)
   })
 
+  it('keeps stock candidates outside the active licensed catalog', async () => {
+    const candidates = JSON.parse(
+      await readFile('assets/audio/manifests/candidate-manifest.json', 'utf8'),
+    )
+    expect(candidates.candidates).toHaveLength(3)
+    expect(
+      candidates.candidates.every(
+        (item: { commercialUse: boolean | null; status: string }) =>
+          item.commercialUse === null && item.status === 'CANDIDATE_NOT_DOWNLOADED',
+      ),
+    ).toBe(true)
+  })
+
   it('pins exact V1 and V2 assets and their deterministic definitions', async () => {
     const lock = JSON.parse(
       await readFile('campaigns/facturacion-electronica-uy-01/audio-lock.json', 'utf8'),
