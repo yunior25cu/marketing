@@ -8,6 +8,7 @@ import { preview } from 'vite'
 import {
   advancedAudioTimeline,
   audioStats,
+  continuousAudioTimeline,
   encodeWav,
   renderAudio,
   validateAudioTimeline,
@@ -22,14 +23,17 @@ const options = Object.fromEntries(
   }),
 )
 const campaign = options.campaign ?? 'visual-engine-smoke-test'
-if (campaign !== 'visual-engine-smoke-test')
-  throw new Error('Esta versión del exportador AV sólo admite visual-engine-smoke-test')
+if (!['visual-engine-smoke-test', 'continuous-motion-smoke-test'].includes(campaign))
+  throw new Error('Campaña no disponible para exportación AV')
+const isContinuous = campaign === 'continuous-motion-smoke-test'
+const durationSeconds = isContinuous ? 10 : 8
+const audioTimeline = isContinuous ? continuousAudioTimeline : advancedAudioTimeline
 const ratio = options.ratio ?? '16:9'
 const sizes = { '16:9': [1920, 1080], '9:16': [1080, 1920] }
 if (!(ratio in sizes)) throw new Error('Ratio no disponible para esta campaña')
 const fps = Number(options.fps ?? 24)
 if (!Number.isInteger(fps) || fps < 1 || fps > 60) throw new Error('FPS inválido')
-const issues = validateAudioTimeline(advancedAudioTimeline)
+const issues = validateAudioTimeline(audioTimeline)
 if (issues.length) throw new Error(issues.join('; '))
 if (!ffmpegPath) throw new Error('FFmpeg no disponible')
 const [width, height] = sizes[ratio]
@@ -42,9 +46,10 @@ await mkdir(resolve(output, '..'), { recursive: true })
 await mkdir(renderRoot, { recursive: true })
 const frameDir = await mkdtemp(join(renderRoot, '.av-frames-'))
 const master = join(frameDir, 'master.wav')
-const samples = renderAudio(advancedAudioTimeline)
+const samples = renderAudio(audioTimeline)
 const stats = audioStats(samples, 48000)
-if (stats.clipped || Math.abs(stats.duration - 8) > 0.001) throw new Error('Audio inválido')
+if (stats.clipped || Math.abs(stats.duration - durationSeconds) > 0.001)
+  throw new Error('Audio inválido')
 await writeFile(master, encodeWav(samples))
 if (options.wav) {
   const wavPath = resolve(root, String(options.wav))
@@ -57,10 +62,7 @@ if (options.stems) {
   if (!stemDir.startsWith(root + sep)) throw new Error('Stems fuera del proyecto')
   await mkdir(stemDir, { recursive: true })
   for (const mode of ['sfx', 'ambience'])
-    await writeFile(
-      join(stemDir, `${mode}.wav`),
-      encodeWav(renderAudio(advancedAudioTimeline, { mode })),
-    )
+    await writeFile(join(stemDir, `${mode}.wav`), encodeWav(renderAudio(audioTimeline, { mode })))
 }
 const server = await preview({ preview: { host: '127.0.0.1', port: 4178 } })
 const address = server.httpServer.address()
@@ -78,6 +80,8 @@ try {
   await page.waitForFunction(() => Boolean(window.__BALAXYS_AV_RENDER))
   await page.waitForFunction(
     () =>
+      document.querySelector('[data-render-stage]')?.getAttribute('data-continuity') ===
+        'continuous' ||
       document.querySelector('[data-engine]')?.getAttribute('data-visual-ready') === 'true' ||
       document.querySelector('[data-engine]')?.getAttribute('data-engine') === 'canvas-fallback',
   )
@@ -86,7 +90,7 @@ try {
   const bounds = await stage.boundingBox()
   if (Math.round(bounds?.width ?? 0) !== width || Math.round(bounds?.height ?? 0) !== height)
     throw new Error(`Viewport inválido: ${bounds?.width}×${bounds?.height}`)
-  const frames = 8 * fps
+  const frames = durationSeconds * fps
   for (let index = 0; index < frames; index++) {
     await page.evaluate(
       async (ms) => {
@@ -100,7 +104,8 @@ try {
       animations: 'disabled',
     })
     if (errors.length) throw new Error(`Navegador: ${errors.join('; ')}`)
-    if ((index + 1) % fps === 0) process.stdout.write(`Capturados ${(index + 1) / fps}/8 s\n`)
+    if ((index + 1) % fps === 0)
+      process.stdout.write(`Capturados ${(index + 1) / fps}/${durationSeconds} s\n`)
   }
   await new Promise((done, fail) => {
     const child = spawn(
@@ -118,7 +123,7 @@ try {
         '-frames:v',
         String(frames),
         '-t',
-        '8',
+        String(durationSeconds),
         '-c:v',
         'libx264',
         '-preset',
@@ -132,7 +137,7 @@ try {
         '-b:a',
         '192k',
         '-af',
-        'atrim=0:8',
+        `atrim=0:${durationSeconds}`,
         '-movflags',
         '+faststart',
         output,
@@ -145,7 +150,7 @@ try {
     )
   })
   process.stdout.write(
-    `AV exportado: ${output}; ${width}×${height}, ${fps} fps, 8 s; audio peak=${stats.peak.toFixed(3)}\n`,
+    `AV exportado: ${output}; ${width}×${height}, ${fps} fps, ${durationSeconds} s; audio peak=${stats.peak.toFixed(3)}\n`,
   )
 } finally {
   if (browser) await browser.close()

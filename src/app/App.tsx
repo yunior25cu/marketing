@@ -16,6 +16,11 @@ const AdvancedCampaign = lazy(() =>
     default: module.AdvancedCampaign,
   })),
 )
+const ContinuousMotionCampaign = lazy(() =>
+  import('@/campaigns/continuous-motion-smoke-test/ContinuousMotionCampaign').then((module) => ({
+    default: module.ContinuousMotionCampaign,
+  })),
+)
 
 export function App() {
   const path = window.location.pathname.replace(/\/$/, '') || '/'
@@ -45,6 +50,8 @@ export function App() {
         <LaunchCampaign />
       ) : path === '/campaigns/visual-engine-smoke-test' ? (
         <AdvancedCampaign />
+      ) : path === '/campaigns/continuous-motion-smoke-test' ? (
+        <ContinuousMotionCampaign />
       ) : (
         <Home />
       )}

@@ -289,6 +289,9 @@ export function Lab() {
         <a href="/campaigns/launch-01" className="button button--signal">
           Abrir campaña 01 <span>↗</span>
         </a>
+        <a href="/campaigns/continuous-motion-smoke-test" className="button">
+          Ver continuous motion test <span>↗</span>
+        </a>
       </section>
       <CampaignConsole />
       <DeferredLab id="visual-engine">

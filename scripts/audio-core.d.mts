@@ -20,6 +20,7 @@ export const soundRegistry: Record<
   { category: string; duration: number; frequency: number; description: string }
 >
 export const advancedAudioTimeline: AudioTimeline
+export const continuousAudioTimeline: AudioTimeline
 export function validateAudioTimeline(timeline: AudioTimeline): string[]
 export function activeAudioCues(timeline: AudioTimeline, timeMs: number): AudioCue[]
 export function renderAudio(

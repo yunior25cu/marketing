@@ -1,0 +1,376 @@
+{
+  "schemaVersion": 1,
+  "id": "continuous-motion-smoke-test",
+  "version": 1,
+  "status": "IN_REVIEW",
+  "createdAt": "2026-09-27T00:00:00.000Z",
+  "updatedAt": "2026-09-27T00:00:00.000Z",
+  "approvedAt": null,
+  "approvedBy": null,
+  "motionStyle": "CONTINUOUS",
+  "powerpointRisk": "LOW",
+  "motionContinuity": "PASS",
+  "visualLevel": "ADVANCED_2D",
+  "audioLevel": "SFX_AMBIENCE",
+  "visualCheckpoints": [0, 1400, 4000, 6000, 8000, 9990],
+  "transitionCheckpoints": [
+    {
+      "at": 950,
+      "transition": "MORPH",
+      "moment": "before"
+    },
+    {
+      "at": 1100,
+      "transition": "MORPH",
+      "moment": "during"
+    },
+    {
+      "at": 1400,
+      "transition": "MORPH",
+      "moment": "after"
+    },
+    {
+      "at": 2200,
+      "transition": "CARRY",
+      "moment": "before"
+    },
+    {
+      "at": 3000,
+      "transition": "CARRY",
+      "moment": "during"
+    },
+    {
+      "at": 3850,
+      "transition": "CARRY",
+      "moment": "after"
+    },
+    {
+      "at": 4000,
+      "transition": "CONTINUATION",
+      "moment": "before"
+    },
+    {
+      "at": 4700,
+      "transition": "CONTINUATION",
+      "moment": "during"
+    },
+    {
+      "at": 5950,
+      "transition": "CONTINUATION",
+      "moment": "after"
+    },
+    {
+      "at": 5950,
+      "transition": "CAMERA_DISCOVERY",
+      "moment": "before"
+    },
+    {
+      "at": 6800,
+      "transition": "CAMERA_DISCOVERY",
+      "moment": "during"
+    },
+    {
+      "at": 7900,
+      "transition": "CAMERA_DISCOVERY",
+      "moment": "after"
+    },
+    {
+      "at": 8000,
+      "transition": "TYPOGRAPHIC_TRANSFORMATION",
+      "moment": "before"
+    },
+    {
+      "at": 8800,
+      "transition": "TYPOGRAPHIC_TRANSFORMATION",
+      "moment": "during"
+    },
+    {
+      "at": 9990,
+      "transition": "TYPOGRAPHIC_TRANSFORMATION",
+      "moment": "after"
+    }
+  ],
+  "transformationMap": [
+    {
+      "from": "stock 18",
+      "transition": "MORPH",
+      "to": "stock 17 + detached unit",
+      "at": 1100
+    },
+    {
+      "from": "detached unit",
+      "transition": "CONTINUATION",
+      "to": "moving line",
+      "at": 1400
+    },
+    {
+      "from": "moving line",
+      "transition": "TYPOGRAPHIC_TRANSFORMATION",
+      "to": "$13.490",
+      "at": 2450
+    },
+    {
+      "from": "$13.490 and its line",
+      "transition": "CONTINUATION",
+      "to": "sale document",
+      "at": 4000
+    },
+    {
+      "from": "sale document",
+      "transition": "MORPH",
+      "to": "accounting structure",
+      "at": 6000
+    },
+    {
+      "from": "linked operation map",
+      "transition": "CAMERA_DISCOVERY",
+      "to": "one connected composition",
+      "at": 7900
+    },
+    {
+      "from": "continuous data route",
+      "transition": "TYPOGRAPHIC_TRANSFORMATION",
+      "to": "closing statement and Balaxys signature",
+      "at": 8600
+    }
+  ],
+  "cameraPath": [
+    {
+      "at": 0,
+      "x": 13,
+      "y": 0,
+      "scale": 1.38,
+      "focus": 0.9,
+      "depth": 0.1
+    },
+    {
+      "at": 1400,
+      "x": 10,
+      "y": 0,
+      "scale": 1.3,
+      "focus": 0.8,
+      "depth": 0.18
+    },
+    {
+      "at": 3900,
+      "x": 1,
+      "y": -1,
+      "scale": 1.18,
+      "focus": 0.65,
+      "depth": 0.32
+    },
+    {
+      "at": 6000,
+      "x": -7,
+      "y": -2,
+      "scale": 1.04,
+      "focus": 0.35,
+      "depth": 0.5
+    },
+    {
+      "at": 8000,
+      "x": -2,
+      "y": 0,
+      "scale": 0.98,
+      "focus": 0.2,
+      "depth": 0.24
+    },
+    {
+      "at": 10000,
+      "x": 0,
+      "y": 0,
+      "scale": 0.94,
+      "focus": 0,
+      "depth": 0.12
+    }
+  ],
+  "audioTimelineId": "continuous-motion-v1",
+  "brief": {
+    "title": "UNA VENTA NUNCA ES SÓLO UNA VENTA.",
+    "objective": "Demostrar cómo una unidad de stock inicia una transformación visual que revela venta y registro contable.",
+    "audience": "Pequeñas y medianas empresas",
+    "message": "Una venta deja consecuencias conectadas desde el inventario hasta la contabilidad.",
+    "duration": 10000,
+    "formats": ["16:9", "9:16"],
+    "channel": "Laboratorio interno",
+    "cta": null,
+    "tone": "Preciso, sobrio y operativo",
+    "productCapabilities": [
+      {
+        "statement": "La pieza representa una relación conceptual entre venta, inventario y registro.",
+        "status": "UNVERIFIED",
+        "evidence": null
+      }
+    ],
+    "constraints": [
+      "Datos de demostración",
+      "No afirmar automatizaciones sin validación de producto",
+      "Una sola composición continua"
+    ],
+    "references": [],
+    "campaignType": "awareness",
+    "audio": "optional",
+    "language": "es"
+  },
+  "concept": {
+    "idea": "Una unidad que sale del stock sigue su camino hasta convertirse en valor, documento y estructura contable.",
+    "visualMechanism": "El fragmento que cambia 18 por 17 se desplaza, se alarga como trazo de valor y continúa como borde y relación contable.",
+    "narrative": "Una master composition de 10 segundos; cámara, objetos persistentes, datos, tipografía y cues avanzan en un único timeline.",
+    "closing": "UNA VENTA NUNCA ES SÓLO UNA VENTA. BALAXYS.",
+    "originalityCheck": "La continuidad depende de la transformación de stock en valor y registro, no de tarjetas o una demo genérica de dashboard."
+  },
+  "storyboard": [
+    {
+      "id": "trigger",
+      "from": 0,
+      "to": 1400,
+      "label": "Trigger",
+      "visual": "18 pasa a 17; la unidad desprendida conserva su origen.",
+      "copy": "18 → 17"
+    },
+    {
+      "id": "propagation",
+      "from": 1400,
+      "to": 4000,
+      "label": "Propagación",
+      "visual": "El fragmento viaja y continúa como línea que revela $13.490.",
+      "copy": "VALOR / DATOS DE DEMOSTRACIÓN"
+    },
+    {
+      "id": "record",
+      "from": 4000,
+      "to": 6000,
+      "label": "Registro",
+      "visual": "La línea forma un documento sin abandonar el valor ni el origen.",
+      "copy": "VENTA / #18492"
+    },
+    {
+      "id": "discovery",
+      "from": 6000,
+      "to": 8000,
+      "label": "Descubrimiento",
+      "visual": "La cámara se aleja y el documento continúa como estructura contable conectada.",
+      "copy": "STOCK · VENTA · REGISTRO"
+    },
+    {
+      "id": "resolve",
+      "from": 8000,
+      "to": 10000,
+      "label": "Resolución",
+      "visual": "La ruta desemboca en el titular dentro del mismo campo; firma derivada del trazo.",
+      "copy": "UNA VENTA NUNCA ES SÓLO UNA VENTA."
+    }
+  ],
+  "motionBeats": [
+    {
+      "id": "trigger",
+      "from": 0,
+      "to": 1400,
+      "label": "El stock contiene una unidad",
+      "persistentObjects": ["stock-18", "stock-17"],
+      "transformation": "18 se convierte en 17; una unidad se desprende.",
+      "camera": "Push-in inicial; el 18 ocupa el campo.",
+      "transition": "MORPH",
+      "audioCue": "stock-origin"
+    },
+    {
+      "id": "propagation",
+      "from": 1400,
+      "to": 4000,
+      "label": "La unidad transporta el valor",
+      "persistentObjects": ["stock-17", "value-line", "sale-value"],
+      "transformation": "El fragmento viaja, se extiende como línea y revela $13.490.",
+      "camera": "Tracking suave hacia la derecha siguiendo el trazo.",
+      "transition": "CARRY",
+      "audioCue": "line-build"
+    },
+    {
+      "id": "record",
+      "from": 4000,
+      "to": 6000,
+      "label": "El valor toma forma de documento",
+      "persistentObjects": ["stock-17", "value-line", "sale-value", "document"],
+      "transformation": "La línea continúa el borde del documento; el valor entra en el registro.",
+      "camera": "Reencuadre gradual, mantiene origen y destino en el mismo campo.",
+      "transition": "CONTINUATION",
+      "audioCue": "document-record"
+    },
+    {
+      "id": "discovery",
+      "from": 6000,
+      "to": 8000,
+      "label": "Una composición mayor aparece",
+      "persistentObjects": ["stock-17", "document", "accounting-entry", "continuity-link"],
+      "transformation": "El documento se abre en estructura contable y revela relaciones alrededor.",
+      "camera": "Pull-out para descubrir stock, venta, cuenta y registro conectados.",
+      "transition": "CAMERA_DISCOVERY",
+      "audioCue": "accounting-resolve"
+    },
+    {
+      "id": "resolve",
+      "from": 8000,
+      "to": 10000,
+      "label": "Los elementos forman una sola idea",
+      "persistentObjects": [
+        "stock-17",
+        "document",
+        "accounting-entry",
+        "continuity-link",
+        "brand-signature"
+      ],
+      "transformation": "La ruta de datos conduce a la frase final y la firma.",
+      "camera": "La cámara estabiliza el mapa sin cortar la composición.",
+      "transition": "TYPOGRAPHIC_TRANSFORMATION",
+      "audioCue": "brand-resolve"
+    }
+  ],
+  "copy": {
+    "introLines": ["18 → 17"],
+    "closingLines": ["UNA VENTA", "NUNCA ES SÓLO", "UNA VENTA."],
+    "cta": null
+  },
+  "playback": {
+    "kind": "custom",
+    "sceneId": "continuous-master-composition",
+    "introMs": 0,
+    "outroMs": 0
+  },
+  "reviews": {
+    "brand": {
+      "status": "PASS",
+      "summary": "Sin cards ni estética de dashboard; la señal nace de la unidad y continúa por la composición.",
+      "blocking": false
+    },
+    "quality": {
+      "status": "PASS",
+      "summary": "Una metáfora visual causal con datos de demostración. Claims de producto siguen sin verificar.",
+      "blocking": false
+    },
+    "performance": {
+      "status": "PASS",
+      "summary": "SVG/DOM determinista; sin filtros caros, canvas o geometría WebGL.",
+      "blocking": false
+    },
+    "visual": {
+      "status": "PASS",
+      "summary": "30 capturas en 15 checkpoints de transicion en 16:9 y 9:16; 0 issues, scrubbing determinista y frames revisados.",
+      "blocking": false
+    },
+    "audio": {
+      "status": "PASS",
+      "summary": "Exportaciones 16:9 y 9:16 decodifican; 6 cues sincronizados por energia, sin clipping. Escucha artistica pendiente.",
+      "blocking": false
+    },
+    "av": {
+      "status": "PENDING",
+      "summary": "Sync tecnico PASS en ambos MP4; falta escucha artistica humana.",
+      "blocking": false
+    },
+    "technical": {
+      "lint": true,
+      "typecheck": true,
+      "tests": true,
+      "build": true
+    }
+  }
+}

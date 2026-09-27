@@ -1,0 +1,212 @@
+.continuous-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  isolation: isolate;
+  perspective: 1600px;
+  color: var(--bone);
+  background:
+    linear-gradient(90deg, transparent 49.95%, #ffffff09 50%, transparent 50.05%),
+    radial-gradient(ellipse at 54% 54%, #1a201b 0, #0b0d0e 68%);
+  border: 1px solid var(--line);
+  font-family: var(--font-sans);
+}
+.continuous-stage--portrait {
+  aspect-ratio: 9 / 16;
+}
+.continuous-stage__camera {
+  overflow: visible;
+}
+.continuous-stage__art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.continuous-stage__art text {
+  fill: var(--bone);
+  font-family: var(--font-mono);
+}
+.continuous-stage__art path,
+.continuous-stage__art rect {
+  fill: none;
+  stroke: #7c8581;
+  stroke-width: 2;
+}
+.continuous-stage__art [data-persistent] {
+  transition: none;
+}
+.continuous-stage__eyebrow {
+  fill: var(--muted) !important;
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+.continuous-stage__stock {
+  font: 560 210px var(--font-sans) !important;
+  letter-spacing: -18px;
+}
+.continuous-stage__stock--next {
+  fill: var(--signal) !important;
+}
+.continuous-stage__unit {
+  fill: var(--signal) !important;
+  font-size: 44px;
+}
+.continuous-stage__fragment {
+  fill: var(--signal) !important;
+  font: 560 210px var(--font-sans) !important;
+}
+.continuous-stage__small {
+  fill: var(--mist) !important;
+  font-size: 19px;
+  letter-spacing: 2px;
+}
+.continuous-stage__continuity {
+  fill: none;
+  stroke: var(--signal);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+.continuous-stage__price {
+  fill: var(--signal) !important;
+  font: 580 58px var(--font-mono) !important;
+}
+.continuous-stage__document rect {
+  stroke: #d8ddd5;
+  stroke-width: 2;
+}
+.continuous-stage__document path {
+  stroke: #7c8581;
+  stroke-width: 2;
+}
+.continuous-stage__document text:not(.continuous-stage__eyebrow) {
+  fill: var(--mist);
+}
+.continuous-stage__ledger path {
+  stroke: #656d69;
+  stroke-width: 1.5;
+}
+.continuous-stage__ledger text:not(.continuous-stage__eyebrow) {
+  fill: var(--signal);
+  font-size: 19px;
+}
+.continuous-stage__map path,
+.continuous-stage__brand path {
+  fill: none;
+  stroke: #8da45b;
+  stroke-width: 2;
+}
+.continuous-stage__map circle {
+  fill: var(--signal);
+}
+.continuous-stage__map text {
+  fill: var(--muted);
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+.continuous-stage__brand text {
+  font: 650 19px var(--font-sans);
+  letter-spacing: 4px;
+}
+.continuous-stage__closing {
+  position: absolute;
+  z-index: 5;
+  top: 74%;
+  left: 32%;
+  width: 65%;
+  color: var(--bone);
+  pointer-events: none;
+}
+.continuous-stage__kinetic {
+  font-size: clamp(2rem, 3.8vw, 4.4rem);
+  line-height: 0.9;
+}
+.continuous-stage__kinetic span:last-child {
+  color: var(--signal);
+}
+.continuous-stage__frame {
+  position: absolute;
+  z-index: 2;
+  inset: 3% 3% auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--muted);
+  font: 600 clamp(0.45rem, 0.75vw, 0.8rem) var(--font-mono);
+  letter-spacing: 0.09em;
+}
+.continuous-page {
+  padding-bottom: 4rem;
+}
+.continuous-page h1 {
+  font-size: clamp(2rem, 6vw, 5rem);
+  letter-spacing: -0.06em;
+}
+.continuous-page > p {
+  color: var(--mist);
+  max-width: 48rem;
+}
+.continuous-page__controls {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  padding: 1rem 0;
+}
+.continuous-page__controls > input[type='range'] {
+  flex: 1;
+  min-width: 12rem;
+}
+.continuous-page__controls pre {
+  width: 100%;
+  color: var(--muted);
+}
+.continuous-page__note {
+  font: 0.72rem var(--font-mono);
+}
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+.continuous-render {
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+}
+.continuous-render--9-16 {
+  width: 1080px;
+  height: 1920px;
+}
+.continuous-render .continuous-stage {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  border: 0;
+}
+.continuous-render .continuous-stage__frame {
+  font-size: 13px;
+}
+.continuous-stage--portrait .continuous-stage__closing {
+  top: 68%;
+  left: 10%;
+  width: 80%;
+}
+.continuous-stage--portrait .continuous-stage__kinetic {
+  font-size: clamp(1.8rem, 6.8vw, 4.2rem);
+}
+@media (prefers-reduced-motion: reduce) {
+  .camera-layer,
+  .continuous-stage__art [data-persistent],
+  .kinetic-text--controlled {
+    transition: none !important;
+  }
+}

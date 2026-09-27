@@ -10,7 +10,13 @@ try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } })
   const errors = []
   page.on('pageerror', (error) => errors.push(error.message))
-  const paths = ['/', '/lab', '/campaigns/launch-01', '/lab/campaigns/visual-engine-smoke-test']
+  const paths = [
+    '/',
+    '/lab',
+    '/campaigns/launch-01',
+    '/lab/campaigns/visual-engine-smoke-test',
+    '/campaigns/continuous-motion-smoke-test',
+  ]
   for (const path of paths) {
     const response = await page.goto(`http://127.0.0.1:${port}${path}`, {
       waitUntil: 'networkidle',
@@ -18,6 +24,9 @@ try {
     if (response?.status() !== 200) throw new Error(`${path}: HTTP ${response?.status()}`)
     if (!(await page.locator('main').count())) throw new Error(`${path}: main ausente`)
   }
+  await page.goto(`http://127.0.0.1:${port}/lab/campaigns/visual-engine-smoke-test`, {
+    waitUntil: 'networkidle',
+  })
   await page.locator('.campaign-console__audio select').selectOption('sfx')
   await page.getByRole('button', { name: 'Reproducir' }).first().click()
   await page.getByRole('button', { name: 'Pausar' }).first().click()
@@ -30,7 +39,13 @@ try {
     await page.locator(selector).locator('section').waitFor({ state: 'visible' })
   }
   if (errors.length) throw new Error(errors.join('; '))
-  process.stdout.write(`Regresión UI: ${paths.join(', ')}, consola AV y labs OK\n`)
+  await page.goto(`http://127.0.0.1:${port}/campaigns/continuous-motion-smoke-test?render=1&t=3000`)
+  await page.locator('[data-render-stage][data-continuity="continuous"]').waitFor()
+  if (!(await page.locator('[data-persistent="value-line"]').count()))
+    throw new Error('Master composition continua ausente')
+  process.stdout.write(
+    `Regresión UI: ${paths.join(', ')}, consola AV, labs y master composition OK\n`,
+  )
 } finally {
   if (browser) await browser.close()
   await new Promise((done) => server.httpServer.close(done))

@@ -3,10 +3,13 @@ import { mkdir, writeFile } from 'node:fs/promises'
 import { join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import ffmpegPath from 'ffmpeg-static'
-import { advancedAudioTimeline, audioStats } from './audio-core.mjs'
+import { advancedAudioTimeline, audioStats, continuousAudioTimeline } from './audio-core.mjs'
 
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)))
 const input = resolve(root, process.argv[2] ?? 'renders/visual-engine-smoke-test-16x9-av.mp4')
+const continuous = process.argv.includes('--continuous')
+const timeline = continuous ? continuousAudioTimeline : advancedAudioTimeline
+const expectedDuration = timeline.duration / 1000
 const probe = spawnSync(ffmpegPath, ['-hide_banner', '-i', input], { encoding: 'utf8' })
 const text = probe.stderr ?? ''
 const duration = Number(
@@ -49,7 +52,7 @@ function rmsAround(ms, windowMs = 100) {
   for (let index = start; index < end; index++) squares += samples[index] ** 2
   return Math.sqrt(squares / Math.max(1, end - start))
 }
-const cueChecks = advancedAudioTimeline.cues.map((cue) => ({
+const cueChecks = timeline.cues.map((cue) => ({
   id: cue.id,
   at: cue.at,
   rms: rmsAround(cue.at + 30),
@@ -57,12 +60,14 @@ const cueChecks = advancedAudioTimeline.cues.map((cue) => ({
 const issues = []
 if (videoTracks !== 1 || audioTracks !== 1)
   issues.push(`pistas video/audio: ${videoTracks}/${audioTracks}`)
-if (Math.abs(duration - 8) > 0.05) issues.push(`duración contenedor: ${duration}`)
-if (Math.abs(stats.duration - 8) > 0.05) issues.push(`duración audio: ${stats.duration}`)
+if (Math.abs(duration - expectedDuration) > 0.05) issues.push(`duración contenedor: ${duration}`)
+if (Math.abs(stats.duration - expectedDuration) > 0.05)
+  issues.push(`duración audio: ${stats.duration}`)
 if (stats.clipped || stats.peak > 0.99) issues.push(`peak/clipping: ${stats.peak}`)
 if (stats.rms < 0.002) issues.push('Audio casi silencioso')
 for (const cue of cueChecks) if (cue.rms < 0.025) issues.push(`Cue inaudible: ${cue.id}`)
-if (rmsAround(7900) > 0.03) issues.push('Audio final demasiado alto; revisar fade')
+if (rmsAround(expectedDuration * 1000 - 100) > 0.03)
+  issues.push('Audio final demasiado alto; revisar fade')
 const report = {
   file: input,
   duration,

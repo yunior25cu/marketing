@@ -2,7 +2,11 @@ import { lazy, Suspense, useEffect, useState } from 'react'
 import { formats, ratios } from '@/compositions/formats'
 import { LaunchStage } from '@/campaigns/launch-01/LaunchStage'
 import { TemplateStage } from '@/campaigns/TemplateStage'
-import { activeAudioCues, advancedAudioTimeline } from '../../scripts/audio-core.mjs'
+import {
+  activeAudioCues,
+  advancedAudioTimeline,
+  continuousAudioTimeline,
+} from '../../scripts/audio-core.mjs'
 import { useAudioPlayer } from '@/audio/useAudioPlayer'
 import { campaignDocument, campaignRecords } from '@/orchestrator/registry'
 import type { CampaignRecord } from '@/orchestrator/contracts'
@@ -14,6 +18,11 @@ import './console.css'
 const AdvancedSmokeStage = lazy(() =>
   import('@/campaigns/visual-engine-smoke-test/AdvancedSmokeStage').then((module) => ({
     default: module.AdvancedSmokeStage,
+  })),
+)
+const ContinuousMotionStage = lazy(() =>
+  import('@/campaigns/continuous-motion-smoke-test/ContinuousMotionStage').then((module) => ({
+    default: module.ContinuousMotionStage,
   })),
 )
 
@@ -74,12 +83,19 @@ function CampaignConsolePlayer({ record }: { record: CampaignRecord }) {
   const [copied, setCopied] = useState(false)
   const initialTime = Number(new URLSearchParams(window.location.search).get('t')) || 0
   const timeline = useTimeline(record.brief.duration, false, initialTime)
-  const hasAudio = record.audioTimelineId === 'advanced-smoke-v1'
-  const audio = useAudioPlayer(hasAudio ? advancedAudioTimeline : null)
+  const hasAudio = ['advanced-smoke-v1', 'continuous-motion-v1'].includes(
+    record.audioTimelineId ?? '',
+  )
+  const audioTimeline =
+    record.audioTimelineId === 'continuous-motion-v1'
+      ? continuousAudioTimeline
+      : advancedAudioTimeline
+  const audio = useAudioPlayer(hasAudio ? audioTimeline : null)
   const [inspect, setInspect] = useState(false)
   const frameMetrics = useFrameMetrics(inspect && import.meta.env.DEV)
   const prompt = `MEJORAR CAMPAÑA\nCampaña: ${record.id}\nCambios: [describí qué querés mejorar]`
   const blockers = record.brief.productCapabilities.filter((claim) => claim.status !== 'VERIFIED')
+  const CustomStage = record.playback.kind === 'custom' ? customStages[record.id] : undefined
   return (
     <div className="campaign-console__body">
       <div className="campaign-console__meta">
@@ -121,14 +137,19 @@ function CampaignConsolePlayer({ record }: { record: CampaignRecord }) {
       >
         {record.playback.kind === 'launch-01' ? (
           <LaunchStage timeMs={timeline.time} ratio={ratio} />
+        ) : record.id === 'continuous-motion-smoke-test' ? (
+          <Suspense
+            fallback={<div className="campaign-console__stage-loading">Cargando vista…</div>}
+          >
+            <ContinuousMotionStage timeMs={timeline.time} ratio={ratio} />
+          </Suspense>
         ) : record.id === 'visual-engine-smoke-test' ? (
           <Suspense
             fallback={<div className="campaign-console__stage-loading">Cargando vista…</div>}
           >
             <AdvancedSmokeStage timeMs={timeline.time} ratio={ratio} reduced={timeline.reduced} />
           </Suspense>
-        ) : (
-          <TemplateStage record={record} timeMs={timeline.time} ratio={ratio} />
+        ) : (\n          <TemplateStage record={record} timeMs={timeline.time} ratio={ratio} />
         )}
         {inspect && import.meta.env.DEV && (
           <div className="campaign-console__safe-area" aria-hidden="true" />
@@ -164,7 +185,7 @@ function CampaignConsolePlayer({ record }: { record: CampaignRecord }) {
           type="range"
           min="0"
           max={record.brief.duration}
-          step="10"
+          step={record.motionStyle === 'CONTINUOUS' ? '1' : '10'}
           value={timeline.time}
           onChange={(event) => {
             audio.stop()
@@ -177,6 +198,13 @@ function CampaignConsolePlayer({ record }: { record: CampaignRecord }) {
         </span>
       </div>
       <div className="campaign-console__av-meta">
+        <span>MOTION STYLE / {record.motionStyle ?? 'DISCRETE'}</span>
+        {record.motionStyle === 'CONTINUOUS' && (
+          <>
+            <span>POWERPOINT RISK / {record.powerpointRisk ?? 'PENDING'}</span>
+            <span>MOTION CONTINUITY / {record.motionContinuity ?? 'PENDING'}</span>
+          </>
+        )}
         <span>VISUAL / {record.visualLevel ?? 'STANDARD'}</span>
         <span>AUDIO / {record.audioLevel ?? 'NONE'}</span>
         <span>CHECKPOINTS / {record.visualCheckpoints?.length ?? 0}</span>
@@ -243,7 +271,7 @@ function CampaignConsolePlayer({ record }: { record: CampaignRecord }) {
           <span>
             cue=
             {hasAudio
-              ? activeAudioCues(advancedAudioTimeline, timeline.time)
+              ? activeAudioCues(audioTimeline, timeline.time)
                   .map((cue) => cue.id)
                   .join(', ') || '—'
               : '—'}

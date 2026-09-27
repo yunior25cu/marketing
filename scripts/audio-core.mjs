@@ -24,6 +24,12 @@ export const soundRegistry = {
     frequency: 220,
     description: 'Convergencia final',
   },
+  'line-build': {
+    category: 'SFX',
+    duration: 0.58,
+    frequency: 360,
+    description: 'Trazo que se convierte en valor',
+  },
 }
 
 export const advancedAudioTimeline = {
@@ -38,6 +44,40 @@ export const advancedAudioTimeline = {
     { id: 'finance', at: 3200, sound: 'connection', track: 'sfx', event: 'finanzas:activado' },
     { id: 'accounting', at: 4800, sound: 'confirmation', track: 'sfx', event: 'registro:activado' },
     { id: 'convergence', at: 6600, sound: 'final-impact', track: 'sfx', event: 'cadena:completa' },
+  ],
+}
+
+export const continuousAudioTimeline = {
+  duration: 10000,
+  tracks: [
+    { id: 'sfx', category: 'SFX', gain: 0.54 },
+    { id: 'ambience', category: 'AMBIENCE', gain: 0.035 },
+  ],
+  cues: [
+    { id: 'stock-origin', at: 180, sound: 'signal-pulse', track: 'sfx', event: 'stock:18' },
+    { id: 'stock-split', at: 1160, sound: 'connection', track: 'sfx', event: 'stock:18->17' },
+    { id: 'line-build', at: 2450, sound: 'line-build', track: 'sfx', event: 'fragmento:linea' },
+    {
+      id: 'document-record',
+      at: 4050,
+      sound: 'connection',
+      track: 'sfx',
+      event: 'linea:documento',
+    },
+    {
+      id: 'accounting-resolve',
+      at: 6160,
+      sound: 'confirmation',
+      track: 'sfx',
+      event: 'documento:registro',
+    },
+    {
+      id: 'brand-resolve',
+      at: 8620,
+      sound: 'final-impact',
+      track: 'sfx',
+      event: 'composicion:balaxys',
+    },
   ],
 }
 
