@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "id": "launch-01",
+  "version": 1,
+  "status": "IN_REVIEW",
+  "createdAt": "2026-09-27T02:25:59.000Z",
+  "updatedAt": "2026-09-27T02:25:59.000Z",
+  "approvedAt": null,
+  "approvedBy": null,
+  "brief": {
+    "title": "NO SON MÓDULOS.",
+    "objective": "Mostrar que una operación comercial produce consecuencias relacionadas",
+    "audience": "Pequeñas y medianas empresas",
+    "message": "Una venta deja cambios de estado con origen visible",
+    "duration": 10000,
+    "formats": ["16:9", "1:1", "4:5", "9:16"],
+    "channel": "Digital genérico",
+    "cta": null,
+    "tone": "Preciso, sobrio y operativo",
+    "productCapabilities": [
+      { "statement": "Una venta actualiza inventario", "status": "UNVERIFIED", "evidence": null },
+      {
+        "statement": "Una venta crea una cuenta por cobrar",
+        "status": "UNVERIFIED",
+        "evidence": null
+      },
+      {
+        "statement": "Una venta produce un registro contable asociado",
+        "status": "UNVERIFIED",
+        "evidence": null
+      }
+    ],
+    "constraints": ["Datos de demostración", "No publicar claims sin validación de producto"],
+    "references": ["brand/BALAXYS_CREATIVE_CONSTITUTION.md"],
+    "campaignType": "awareness",
+    "audio": "optional",
+    "language": "es"
+  },
+  "concept": {
+    "idea": "Una operación no es un módulo aislado: se reconoce por sus consecuencias.",
+    "visualMechanism": "Venta #18492 → stock 18 a 17 → cuenta por cobrar → registro asociado",
+    "narrative": "Premisa contundente, demostración causal y resolución de marca.",
+    "closing": "ES UNA EMPRESA EN MOVIMIENTO.",
+    "originalityCheck": "La pieza se organiza en una cadena operativa propia del lenguaje Balaxys, con documento, cambios y señal; no depende de un dashboard genérico."
+  },
+  "storyboard": [
+    {
+      "id": "intro",
+      "from": 0,
+      "to": 1700,
+      "label": "Premisa",
+      "visual": "Tipografía cinética sobre retícula",
+      "copy": "NO SON MÓDULOS."
+    },
+    {
+      "id": "event",
+      "from": 1700,
+      "to": 7700,
+      "label": "Demostración",
+      "visual": "Venta #18492 y cadena de estados",
+      "copy": "Datos de demostración"
+    },
+    {
+      "id": "close",
+      "from": 7700,
+      "to": 10000,
+      "label": "Resolución",
+      "visual": "Cierre tipográfico y firma",
+      "copy": "ES UNA EMPRESA EN MOVIMIENTO."
+    }
+  ],
+  "copy": {
+    "introLines": ["NO SON", "MÓDULOS."],
+    "closingLines": ["ES UNA", "EMPRESA", "EN MOVIMIENTO."],
+    "cta": null
+  },
+  "playback": { "kind": "launch-01", "sceneId": "sale-flow", "introMs": 1700, "outroMs": 2300 },
+  "reviews": {
+    "brand": {
+      "status": "PASS",
+      "summary": "Prototipo visual consistente: una idea, retícula operativa, Signal Lime semántico y causa-efecto.",
+      "blocking": false
+    },
+    "quality": {
+      "status": "PASS",
+      "summary": "La pieza demuestra una cadena con datos rotulados; la publicación queda pendiente de validar capacidades.",
+      "blocking": false
+    },
+    "performance": {
+      "status": "PASS",
+      "summary": "Build de producción y exportaciones de 30 fps completadas sin bloqueo observado.",
+      "blocking": false
+    },
+    "technical": { "lint": true, "typecheck": true, "tests": true, "build": true }
+  }
+}

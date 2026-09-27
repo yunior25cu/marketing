@@ -8,6 +8,7 @@
     "dev": "vite --host 0.0.0.0",
     "build": "tsc -b && vite build",
     "render:launch": "node scripts/render-launch.mjs",
+    "campaign": "node scripts/campaign-workspace.mjs",
     "preview": "vite preview --host 0.0.0.0",
     "lint": "eslint .",
     "typecheck": "tsc -b --pretty false",

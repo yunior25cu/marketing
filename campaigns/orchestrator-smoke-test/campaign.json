@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "orchestrator-smoke-test",
+  "version": 1,
+  "status": "IN_REVIEW",
+  "createdAt": "2026-09-27T02:26:54.819Z",
+  "updatedAt": "2026-09-27T02:33:06.000Z",
+  "approvedAt": null,
+  "approvedBy": null,
+  "brief": {
+    "title": "Una venta deja rastro",
+    "objective": "mostrar que una venta actualiza existencias",
+    "audience": "pequeñas empresas",
+    "message": "mostrar que una venta actualiza existencias",
+    "duration": 6000,
+    "formats": ["16:9"],
+    "channel": "Digital genérico",
+    "cta": null,
+    "tone": "Preciso, sobrio y operativo",
+    "productCapabilities": [
+      {
+        "statement": "mostrar que una venta actualiza existencias",
+        "status": "UNVERIFIED",
+        "evidence": null
+      }
+    ],
+    "constraints": ["No publicar capacidades sin verificar", "Rotular datos de demostración"],
+    "references": [],
+    "campaignType": "conversion",
+    "audio": "optional",
+    "language": "es"
+  },
+  "concept": {
+    "idea": "Una venta deja rastro. Venta → inventario → cuenta por cobrar → registro.",
+    "visualMechanism": "Venta → inventario → cuenta por cobrar → registro",
+    "narrative": "Un evento activa una secuencia de estados y datos con origen visible.",
+    "closing": "EL CAMBIO TIENE ORIGEN.",
+    "originalityCheck": "La identidad depende de la coreografía de datos y de la retícula operativa Balaxys."
+  },
+  "storyboard": [
+    {
+      "id": "intro",
+      "from": 0,
+      "to": 1200,
+      "label": "Premisa",
+      "visual": "Tipografía cinética",
+      "copy": "UNA VENTA. VARIOS CAMBIOS."
+    },
+    {
+      "id": "event",
+      "from": 1200,
+      "to": 4800,
+      "label": "Demostración",
+      "visual": "Venta → inventario → cuenta por cobrar → registro",
+      "copy": "Datos de demostración"
+    },
+    {
+      "id": "close",
+      "from": 4800,
+      "to": 6000,
+      "label": "Resolución",
+      "visual": "Cierre tipográfico",
+      "copy": "EL CAMBIO TIENE ORIGEN."
+    }
+  ],
+  "copy": {
+    "introLines": ["UNA VENTA.", "VARIOS CAMBIOS."],
+    "closingLines": ["EL CAMBIO", "TIENE ORIGEN."],
+    "cta": null
+  },
+  "playback": {
+    "kind": "template",
+    "sceneId": "sale-flow",
+    "introMs": 1200,
+    "outroMs": 1200
+  },
+  "reviews": {
+    "brand": {
+      "status": "PASS",
+      "summary": "Prototipo consistente con la retícula, tipografía y señal del Brand OS; reutiliza la escena de venta como prueba de integración.",
+      "blocking": false
+    },
+    "quality": {
+      "status": "PASS",
+      "summary": "Secuencia de 6 segundos legible y datos de demostración rotulados; el claim funcional sigue bloqueado para publicación.",
+      "blocking": false
+    },
+    "performance": {
+      "status": "PASS",
+      "summary": "Build y vista de navegador completados sin bloqueo observado; no hay medición de FPS en hardware de gama baja.",
+      "blocking": false
+    },
+    "technical": {
+      "lint": true,
+      "typecheck": true,
+      "tests": true,
+      "build": true
+    }
+  }
+}

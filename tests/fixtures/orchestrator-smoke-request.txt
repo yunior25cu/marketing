@@ -1,0 +1,6 @@
+CREAR CAMPAÑA
+Tema: INVENTARIO
+Objetivo: mostrar que una venta actualiza existencias
+Público: pequeñas empresas
+Duración: 6 segundos
+Formato: 16:9
