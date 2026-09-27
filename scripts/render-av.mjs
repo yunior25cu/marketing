@@ -9,6 +9,8 @@ import {
   advancedAudioTimeline,
   audioStats,
   continuousAudioTimeline,
+  facturacionAudioTimeline,
+  facturacionAudioTimelineV2,
   encodeWav,
   renderAudio,
   validateAudioTimeline,
@@ -23,23 +25,48 @@ const options = Object.fromEntries(
   }),
 )
 const campaign = options.campaign ?? 'visual-engine-smoke-test'
-if (!['visual-engine-smoke-test', 'continuous-motion-smoke-test'].includes(campaign))
+if (
+  ![
+    'visual-engine-smoke-test',
+    'continuous-motion-smoke-test',
+    'facturacion-electronica-uy-01',
+  ].includes(campaign)
+)
   throw new Error('Campaña no disponible para exportación AV')
 const isContinuous = campaign === 'continuous-motion-smoke-test'
-const durationSeconds = isContinuous ? 10 : 8
-const audioTimeline = isContinuous ? continuousAudioTimeline : advancedAudioTimeline
+const isFacturacion = campaign === 'facturacion-electronica-uy-01'
+const audioVersion = String(options['audio-version'] ?? '1')
+if (!['1', '2'].includes(audioVersion)) throw new Error('Versión de audio inválida')
+const audioTimeline = isFacturacion
+  ? audioVersion === '2'
+    ? facturacionAudioTimelineV2
+    : facturacionAudioTimeline
+  : isContinuous
+    ? continuousAudioTimeline
+    : advancedAudioTimeline
+const durationSeconds = audioTimeline.duration / 1000
 const ratio = options.ratio ?? '16:9'
-const sizes = { '16:9': [1920, 1080], '9:16': [1080, 1920] }
+const sizes = {
+  '16:9': [1920, 1080],
+  '9:16': [1080, 1920],
+  ...(isFacturacion ? { '4:5': [1080, 1350], '1:1': [1080, 1080] } : {}),
+}
 if (!(ratio in sizes)) throw new Error('Ratio no disponible para esta campaña')
 const fps = Number(options.fps ?? 24)
 if (!Number.isInteger(fps) || fps < 1 || fps > 60) throw new Error('FPS inválido')
 const issues = validateAudioTimeline(audioTimeline)
 if (issues.length) throw new Error(issues.join('; '))
 if (!ffmpegPath) throw new Error('FFmpeg no disponible')
-const [width, height] = sizes[ratio]
+const [width, height] = options.draft ? [960, 540] : sizes[ratio]
 const output = resolve(
   root,
-  String(options.out ?? join('renders', `${campaign}-${ratio.replace(':', 'x')}-av.mp4`)),
+  String(
+    options.out ??
+      join(
+        'renders',
+        `${campaign}-${ratio.replace(':', 'x')}${isFacturacion && audioVersion === '2' ? '-audio-v2' : ''}${options.draft ? '-draft' : ''}-av.mp4`,
+      ),
+  ),
 )
 if (!output.startsWith(root + sep)) throw new Error('La salida debe estar dentro del proyecto')
 await mkdir(resolve(output, '..'), { recursive: true })
@@ -61,7 +88,11 @@ if (options.stems) {
   const stemDir = resolve(root, String(options.stems))
   if (!stemDir.startsWith(root + sep)) throw new Error('Stems fuera del proyecto')
   await mkdir(stemDir, { recursive: true })
-  for (const mode of ['sfx', 'ambience'])
+  for (const mode of [
+    'sfx',
+    'ambience',
+    ...(audioTimeline.tracks.some((track) => track.category === 'MUSIC') ? ['music'] : []),
+  ])
     await writeFile(join(stemDir, `${mode}.wav`), encodeWav(renderAudio(audioTimeline, { mode })))
 }
 const server = await preview({ preview: { host: '127.0.0.1', port: 4178 } })

@@ -11,6 +11,11 @@ export function useAudioPlayer(timeline: AudioTimeline | null) {
   const [muted, setMuted] = useState(false)
   const [volume, setVolume] = useState(0.7)
   const [mode, setMode] = useState<AudioMode>('mix')
+  const [layers, setLayers] = useState<Record<'SFX' | 'AMBIENCE' | 'MUSIC', boolean>>({
+    SFX: true,
+    AMBIENCE: true,
+    MUSIC: true,
+  })
   const [error, setError] = useState<string | null>(null)
 
   const stop = () => {
@@ -29,7 +34,16 @@ export function useAudioPlayer(timeline: AudioTimeline | null) {
       if (!context.current) context.current = new AudioContext({ sampleRate: 48000 })
       await context.current.resume()
       stop()
-      const samples = renderAudio(timeline, { sampleRate: context.current.sampleRate, mode })
+      const samples = renderAudio(timeline, {
+        sampleRate: context.current.sampleRate,
+        mode,
+        enabledCategories:
+          mode === 'mix'
+            ? Object.entries(layers)
+                .filter(([, enabled]) => enabled)
+                .map(([category]) => category as 'SFX' | 'AMBIENCE' | 'MUSIC')
+            : undefined,
+      })
       const buffer = context.current.createBuffer(1, samples.length, context.current.sampleRate)
       buffer.copyToChannel(new Float32Array(samples), 0)
       const next = context.current.createBufferSource()
@@ -56,5 +70,19 @@ export function useAudioPlayer(timeline: AudioTimeline | null) {
     },
     [],
   )
-  return { muted, setMuted, volume, setVolume, mode, setMode, error, playAt, stop }
+  const setLayerEnabled = (category: 'SFX' | 'AMBIENCE' | 'MUSIC', enabled: boolean) =>
+    setLayers((current) => ({ ...current, [category]: enabled }))
+  return {
+    muted,
+    setMuted,
+    volume,
+    setVolume,
+    mode,
+    setMode,
+    layers,
+    setLayerEnabled,
+    error,
+    playAt,
+    stop,
+  }
 }

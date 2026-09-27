@@ -54,6 +54,18 @@
   color: var(--mist);
   font-size: 0.8rem;
 }
+.music-lab-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin: 1rem 0;
+}
+.music-lab-filters label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--mist);
+  font: 600 0.68rem var(--font-mono);
+}
 .sound-grid__item em {
   color: var(--signal);
   font: 600 0.7rem var(--font-mono);

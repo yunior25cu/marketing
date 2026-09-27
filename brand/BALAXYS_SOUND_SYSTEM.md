@@ -1,23 +1,21 @@
-# Balaxys Sound System — v1 experimental
+# Balaxys Sound System
 
-## Filosofía
+## Principio
 
-El sonido hace legible una relación temporal: origen, propagación, confirmación y cierre. Debe sentirse preciso, técnico, limpio, sofisticado y discreto. El silencio separa ideas. Evitar estética de videojuego, casino, tráiler, techno agresivo, crypto y música corporativa genérica.
+El audio se diseña como parte de la coreografía audiovisual. Sound Director y Motion Designer comparten beats, transformaciones, energía y silencios antes de mezclar. Cada pieza obtiene una Sound Palette y un Audio Composition Plan; `NO_SOUND` es una decisión válida. Música sólo se incluye cuando mejora el relato.
 
-## Capas
+## Roles y formato
 
-- **SFX:** señales breves para eventos dominantes: pulse, connection, confirmation, warning y final impact. No sonorizar cada microacción.
-- **Ambience:** cama muy tenue que sostiene continuidad y deja respirar al copy.
-- **Music:** opcional; sólo si mejora narrativa o ritmo. No usarla por defecto ni para llenar silencio.
+Sound Designer actúa como Sound Director: interpreta concepto, copy, audiencia, MotionPlan y TransformationMap, busca por semántica y decide música, ambience, SFX y silencio. Audio Engineer ejecuta esa intención: timeline absoluta en ms, síntesis/edición, mixer, sincronía, FFmpeg, export WAV/MP4 y mediciones. AV Quality Auditor valora el resultado completo en reproducción.
 
-## Diseño y sincronía
+Los niveles son `NONE`, `SFX`, `SFX_AMBIENCE` y `FULL`. `FULL` admite SFX, ambience/sound bed y música cuando corresponda. Pistas disponibles: SFX, AMBIENCE y MUSIC con ganancia 0–1. Las beds aplican fade in/out y ducking moderado cuando el plan define un cue crítico. Un beat puede marcar silencio sin añadir un archivo mudo.
 
-Cada cue usa el mismo `timeMs` que el storyboard. Ataque corto, cola controlada y fade de salida antes del corte. SFX deben evitar enmascarar voz o información. Voz sólo cuando agrega claridad; prioridad de mezcla: voz → evento principal → ambiente/música. No se asume voz en una campaña.
+## Registro y gates
 
-## Mezcla y entrega
+`assets/audio/manifest.json` es la fuente del catálogo activo. Todo medio externo necesita fuente, URL, licencia concreta, permiso comercial y restricciones revisadas; sin esos datos no se incorpora. El gate de publicación exige commercialUse=true. Un asset ausente da `MISSING_AUDIO_ASSET` y nunca se reemplaza silenciosamente. El `audio-lock.json` fija versión e IDs para cada render.
 
-Para pruebas digitales, apuntar a pico verdadero conservador por debajo de −1 dBFS y nivel percibido razonable, sin perseguir volumen máximo. Medir peak, RMS, duración y clipping en cada exportación; escuchar el MP4 final antes de publicar. Exportar AAC dentro de MP4 y WAV PCM master opcional. Stems sólo para capas utilizadas. Audio y video terminan en el mismo instante; no dejar colas fuera de duración. Estas referencias no reemplazan requisitos de una plataforma de distribución específica.
+Los sonidos procedurales listados como originales se generan en tiempo de ejecución y no incluyen muestras externas. Su uso comercial queda registrado para revisión del titular; una propuesta de firma sonora no cambia la marca sin aprobación humana.
 
-## Origen y licencias
+## Revisión
 
-`assets/audio/manifest.json` registra nombre, fuente, licencia, autor, restricciones y ubicación de cada archivo incorporado. La primera biblioteca es síntesis procedural original, sin samples externos. Música comercial protegida y descargas arbitrarias quedan fuera. Cualquier asset generado por IA debe registrar su origen y condiciones de uso conocidas antes de integrarse.
+Técnica: duración, formato, peak/clipping, silencio, pistas, codec, sample rate, sincronía, fades y cola. Perceptual: RHYTHM, SYNC, DENSITY, MUSIC_FIT, SFX_FIT, BALANCE, FATIGUE, BRAND_FIT y FINAL_RESOLVE, cada uno `PASS`, `NEEDS_REVISION` o `FAIL`. RMS no sustituye escuchar la pieza completa. Sin escucha humana, AV perceptual queda `NEEDS_HUMAN_REVIEW`.

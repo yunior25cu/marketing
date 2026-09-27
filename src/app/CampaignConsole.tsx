@@ -8,6 +8,8 @@ import {
   activeAudioCues,
   advancedAudioTimeline,
   continuousAudioTimeline,
+  facturacionAudioTimeline,
+  facturacionAudioTimelineV2,
 } from '../../scripts/audio-core.mjs'
 import { useAudioPlayer } from '@/audio/useAudioPlayer'
 import { campaignDocument, campaignRecords } from '@/orchestrator/registry'
@@ -77,6 +79,7 @@ function ReviewText({ source }: { source: string }) {
 }
 
 function CampaignConsolePlayer({ record }: { record: CampaignRecord }) {
+  const [audioVersion, setAudioVersion] = useState<'V1' | 'V2'>('V1')
   const [ratio, setRatio] = useState<SceneRatio>(() => {
     const query = new URLSearchParams(window.location.search).get('ratio')
     return record.brief.formats.find((format) => format === query) ?? record.brief.formats[0]
@@ -85,13 +88,19 @@ function CampaignConsolePlayer({ record }: { record: CampaignRecord }) {
   const [copied, setCopied] = useState(false)
   const initialTime = Number(new URLSearchParams(window.location.search).get('t')) || 0
   const timeline = useTimeline(record.brief.duration, false, initialTime)
-  const hasAudio = ['advanced-smoke-v1', 'continuous-motion-v1'].includes(
-    record.audioTimelineId ?? '',
-  )
+  const hasAudio = [
+    'advanced-smoke-v1',
+    'continuous-motion-v1',
+    'facturacion-electronica-uy-01',
+  ].includes(record.audioTimelineId ?? '')
   const audioTimeline =
-    record.audioTimelineId === 'continuous-motion-v1'
-      ? continuousAudioTimeline
-      : advancedAudioTimeline
+    record.audioTimelineId === 'facturacion-electronica-uy-01'
+      ? audioVersion === 'V2'
+        ? facturacionAudioTimelineV2
+        : facturacionAudioTimeline
+      : record.audioTimelineId === 'continuous-motion-v1'
+        ? continuousAudioTimeline
+        : advancedAudioTimeline
   const audio = useAudioPlayer(hasAudio ? audioTimeline : null)
   const [inspect, setInspect] = useState(false)
   const frameMetrics = useFrameMetrics(inspect && import.meta.env.DEV)
@@ -212,13 +221,44 @@ function CampaignConsolePlayer({ record }: { record: CampaignRecord }) {
           </>
         )}
         <span>VISUAL / {record.visualLevel ?? 'STANDARD'}</span>
-        <span>AUDIO / {record.audioLevel ?? 'NONE'}</span>
+        <span>
+          AUDIO /{' '}
+          {record.audioTimelineId === 'facturacion-electronica-uy-01'
+            ? audioVersion === 'V2'
+              ? 'FULL'
+              : 'SFX'
+            : (record.audioLevel ?? 'NONE')}
+        </span>
         <span>CHECKPOINTS / {record.visualCheckpoints?.length ?? 0}</span>
       </div>
       {hasAudio && (
         <div className="campaign-console__audio">
-          <button className="button" onClick={() => audio.setMuted(!audio.muted)}>
-            {audio.muted ? 'Activar sonido' : 'Silenciar'}
+          {record.audioTimelineId === 'facturacion-electronica-uy-01' && (
+            <div role="group" aria-label="Comparar versiones de audio">
+              {(['V1', 'V2'] as const).map((version) => (
+                <button
+                  key={version}
+                  className={`button ${audioVersion === version ? 'button--signal' : ''}`}
+                  aria-pressed={audioVersion === version}
+                  onClick={() => {
+                    audio.stop()
+                    timeline.pause()
+                    audio.setMode('mix')
+                    setAudioVersion(version)
+                  }}
+                >
+                  AUDIO {version}
+                  {version === 'V1' ? ' · REFERENCIA' : ' · PROPUESTA'}
+                </button>
+              ))}
+            </div>
+          )}
+          <button
+            className="button"
+            onClick={() => audio.setMuted(!audio.muted)}
+            aria-pressed={!audio.muted}
+          >
+            {audio.muted ? 'MASTER AUDIO · OFF' : 'MASTER AUDIO · ON'}
           </button>
           <label>
             Volumen{' '}
@@ -243,12 +283,44 @@ function CampaignConsolePlayer({ record }: { record: CampaignRecord }) {
             >
               <option value="mix">Mezcla final</option>
               <option value="sfx">Solo SFX</option>
-              <option value="ambience">Solo ambiente</option>
-              <option value="music" disabled>
-                No hay música
-              </option>
+              {audioTimeline.tracks.some((track) => track.category === 'AMBIENCE') && (
+                <option value="ambience">Solo ambiente</option>
+              )}
+              {audioTimeline.tracks.some((track) => track.category === 'MUSIC') && (
+                <option value="music">Solo música</option>
+              )}
             </select>
           </label>
+          {!audioTimeline.tracks.some((track) => track.category === 'MUSIC') && (
+            <span className="micro-label">MUSIC · NONE / esta versión no usa música</span>
+          )}
+          {!audioTimeline.tracks.some((track) => track.category === 'AMBIENCE') && (
+            <span className="micro-label">AMBIENCE · NONE</span>
+          )}
+          {audio.mode === 'mix' &&
+            (['SFX', 'AMBIENCE', 'MUSIC'] as const).map((category) => {
+              const exists = audioTimeline.tracks.some((track) => track.category === category)
+              if (!exists)
+                return (
+                  <span key={category} className="micro-label">
+                    {category} · NONE
+                  </span>
+                )
+              return (
+                <label key={category}>
+                  <input
+                    type="checkbox"
+                    checked={audio.layers[category]}
+                    onChange={(event) => {
+                      audio.stop()
+                      timeline.pause()
+                      audio.setLayerEnabled(category, event.target.checked)
+                    }}
+                  />{' '}
+                  {category} · {audio.layers[category] ? 'ON' : 'OFF'}
+                </label>
+              )
+            })}
           {audio.error && <p role="alert">{audio.error}</p>}
         </div>
       )}

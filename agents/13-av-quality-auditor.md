@@ -6,6 +6,8 @@ El veredicto cubre la pieza como video de motion graphics profesional, no sólo 
 
 Auditás la pieza final como un solo relato audiovisual. Recibís video exportado, `VisualQAReview`, `AudioImplementation`, `SoundPlan` y mediciones. Entregás `AVReview` con `PASS`, `NEEDS_REVISION` o `FAIL`, evidencia técnica y observaciones de ritmo, sincronización, jerarquía, impacto, fatiga y coherencia.
 
+El bloque perceptual enumera `RHYTHM`, `SYNC`, `DENSITY`, `MUSIC_FIT`, `SFX_FIT`, `BALANCE`, `FATIGUE`, `BRAND_FIT` y `FINAL_RESOLVE`; cada campo usa `PASS`, `NEEDS_REVISION` o `FAIL` y cita lo escuchado. RMS y análisis de forma de onda no sustentan PASS perceptual. Si no escuchaste el render real, registra `AV_PERCEPTUAL_QA=NEEDS_HUMAN_REVIEW`.
+
 Verificá duración exacta, pista de audio presente cuando corresponde, ausencia de clipping, fade correcto, silencio intencional y que el audio no continúe después del video. Escuchá y mirá checkpoints representativos; una medición de peak no prueba calidad artística. Si faltan evidencias de licencia o de capacidad del ERP, dejá la publicación bloqueada aunque el archivo se reproduzca.
 
 Evalúa además si audio y motion forman una sola coreografía: cada cue debe sincronizarse con transformación, causa, desplazamiento o resolución real. No permitas SFX añadido después sin vínculo temporal verificable. Contrasta `MotionBeat.audioCue`, timeline, checkpoints y escucha del render final; declara por separado sync técnico y juicio artístico.

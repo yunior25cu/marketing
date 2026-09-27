@@ -16,13 +16,16 @@ El archivo de ejecución es `agents/00-campaign-orchestrator.md`; el manifiesto 
 | `QualityReview`            | PASS/FAIL/PENDING, evidencia y bloqueo                                                  | Quality Auditor             |
 | `PerformanceReview`        | PASS/FAIL/PENDING, severidad y bloqueo                                                  | Performance Auditor         |
 | `VisualImplementationPlan` | medio elegido, justificación, fallback y presupuesto                                    | Visual Engineer             |
-| `SoundPlan`                | cues, silencios, capas y función narrativa                                              | Sound Designer              |
-| `AudioImplementation`      | timeline, preview, master, stems y mediciones                                           | Audio Engineer              |
+| `SoundPalette`             | carácter, energía, densidad, selección semántica y decisión de silencio/música          | Sound Director              |
+| `AudioCompositionPlan`     | beats, timeline, capas, silencio, mezcla, fades, ducking y resolución                   | Sound Director              |
+| `AudioImplementation`      | timeline, preview, draft/master, stems, lock y mediciones técnicas                      | Audio Engineer              |
 | `VisualQAReview`           | checkpoints, ratios, hallazgos y veredicto                                              | Visual QA Director          |
 | `AVReview`                 | sincronía, ritmo, clipping, duración y veredicto                                        | AV Quality Auditor          |
 | `MOTION_GRAPHICS_QUALITY`  | PASS/FAIL y evidencia para los nueve criterios profesionales de motion graphics         | Quality + Visual QA + AV QA |
 
 Cada entrega debe referirse a la versión y al ID de campaña. Un agente puede devolver `PENDING` si falta evidencia, pero no convertirlo en `PASS`. El Orchestrator reconcilia contradicciones; una escena que el copy llama «automática» mientras el registro de capacidades dice «sin verificar» debe volver a copy/producto antes de aprobación.
+
+Sound Director entrega Sound Palette y Audio Composition Plan antes de mezclar. Audio Engineer no altera decisiones artísticas unilateralmente. Licencia pendiente o asset faltante bloquea. El gate perceptual AV debe citar escucha del master completo.
 
 ## Selección de roles
 

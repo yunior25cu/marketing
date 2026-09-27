@@ -69,8 +69,8 @@
       "id": "sound-designer",
       "prompt": "agents/10-sound-designer.md",
       "role": "dirección sonora y silencios",
-      "inputs": ["CampaignConcept", "MotionPlan"],
-      "outputs": ["SoundPlan"],
+      "inputs": ["CampaignConcept", "CampaignCopy", "MotionPlan", "TransformationMap"],
+      "outputs": ["SoundPalette", "AudioCompositionPlan", "SoundPlan"],
       "invokeFor": ["CREATE", "IMPROVE"]
     },
     {
@@ -78,7 +78,7 @@
       "prompt": "agents/11-audio-engineer.md",
       "role": "audio sincronizado y exportación",
       "inputs": ["SoundPlan", "MotionPlan"],
-      "outputs": ["AudioImplementation"],
+      "outputs": ["AudioImplementation", "AudioLock", "TechnicalAudioQA"],
       "invokeFor": ["CREATE", "IMPROVE", "ADAPT"]
     },
     {

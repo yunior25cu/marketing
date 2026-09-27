@@ -3,12 +3,24 @@ import { mkdir, writeFile } from 'node:fs/promises'
 import { join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import ffmpegPath from 'ffmpeg-static'
-import { advancedAudioTimeline, audioStats, continuousAudioTimeline } from './audio-core.mjs'
+import {
+  advancedAudioTimeline,
+  audioStats,
+  continuousAudioTimeline,
+  facturacionAudioTimeline,
+  facturacionAudioTimelineV2,
+} from './audio-core.mjs'
 
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)))
 const input = resolve(root, process.argv[2] ?? 'renders/visual-engine-smoke-test-16x9-av.mp4')
 const continuous = process.argv.includes('--continuous')
-const timeline = continuous ? continuousAudioTimeline : advancedAudioTimeline
+const timeline = process.argv.includes('--facturacion')
+  ? process.argv.includes('--audio-v2')
+    ? facturacionAudioTimelineV2
+    : facturacionAudioTimeline
+  : continuous
+    ? continuousAudioTimeline
+    : advancedAudioTimeline
 const expectedDuration = timeline.duration / 1000
 const probe = spawnSync(ffmpegPath, ['-hide_banner', '-i', input], { encoding: 'utf8' })
 const text = probe.stderr ?? ''
@@ -20,6 +32,8 @@ const duration = Number(
 )
 const videoTracks = (text.match(/Stream #0:\d+.*Video:/g) ?? []).length
 const audioTracks = (text.match(/Stream #0:\d+.*Audio:/g) ?? []).length
+const audioCodec = text.match(/Audio:\s*([^,\s]+)/)?.[1] ?? null
+const sampleRate = Number(text.match(/Audio:.*?(\d{4,6}) Hz/)?.[1] ?? NaN)
 const decode = spawnSync(
   ffmpegPath,
   [
@@ -57,24 +71,33 @@ const cueChecks = timeline.cues.map((cue) => ({
   at: cue.at,
   rms: rmsAround(cue.at + 30),
 }))
+const leadingSilenceRms = rmsAround(0, 100)
+const tailRms = rmsAround(expectedDuration * 1000 - 100, 100)
 const issues = []
 if (videoTracks !== 1 || audioTracks !== 1)
   issues.push(`pistas video/audio: ${videoTracks}/${audioTracks}`)
+if (audioCodec !== 'aac')
+  issues.push(`codec de audio esperado AAC; detectado ${audioCodec ?? 'NONE'}`)
+if (sampleRate !== 48000) issues.push(`sample rate esperado 48000; detectado ${sampleRate}`)
 if (Math.abs(duration - expectedDuration) > 0.05) issues.push(`duración contenedor: ${duration}`)
 if (Math.abs(stats.duration - expectedDuration) > 0.05)
   issues.push(`duración audio: ${stats.duration}`)
 if (stats.clipped || stats.peak > 0.99) issues.push(`peak/clipping: ${stats.peak}`)
 if (stats.rms < 0.002) issues.push('Audio casi silencioso')
+if (leadingSilenceRms > 0.01) issues.push(`Silencio inicial contaminado: ${leadingSilenceRms}`)
 for (const cue of cueChecks) if (cue.rms < 0.025) issues.push(`Cue inaudible: ${cue.id}`)
-if (rmsAround(expectedDuration * 1000 - 100) > 0.03)
-  issues.push('Audio final demasiado alto; revisar fade')
+if (tailRms > 0.03) issues.push('Audio final demasiado alto; revisar fade')
 const report = {
   file: input,
   duration,
   videoTracks,
   audioTracks,
+  audioCodec,
+  sampleRate,
   ...stats,
   cueChecks,
+  leadingSilenceRms,
+  tailRms,
   syncStatus: issues.length ? 'FAIL' : 'PASS',
   issues,
 }
