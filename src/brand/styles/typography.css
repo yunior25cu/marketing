@@ -1,0 +1,15 @@
+@import '@fontsource-variable/geist/index.css';
+@import '@fontsource-variable/geist-mono/index.css';
+
+body {
+  font-family: var(--font-sans);
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+}
+.mono,
+.eyebrow,
+.micro-label,
+.data-value,
+.timecode {
+  font-family: var(--font-mono);
+}
