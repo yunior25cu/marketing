@@ -1,5 +1,7 @@
 # Crear una campaña nueva
 
+Para el operador humano, el punto de entrada es `docs/CAMPAIGN_OPERATOR_GUIDE.md`. Esta guía describe la implementación técnica que el Campaign Orchestrator coordina internamente.
+
 1. Formular una única idea dominante en una oración operativa. Verificarla con `brand/BALAXYS_CREATIVE_CONSTITUTION.md` y `brand/BALAXYS_COPY_SYSTEM.md`.
 2. Elegir un evento real y escribir su cadena de consecuencias. Producto valida que Balaxys soporta cada paso. Rotular datos ficticios como demostrativos.
 3. Reutilizar una `SceneDefinition` o crear otra en `src/scenes/`. Definir `duration`, `viewport.ratios`, documento, nodos y eventos con tiempos dentro de la duración.
