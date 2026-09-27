@@ -3,3 +3,4 @@ dist/
 .cache/
 .pnpm-store/
 pnpm-lock.yaml
+renders/

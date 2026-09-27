@@ -249,6 +249,10 @@
   opacity: 1;
   transform: translateY(0);
 }
+.kinetic-text.is-active span:not(.is-visible) {
+  opacity: 0;
+  transform: translateY(0.12em);
+}
 @media (max-width: 650px) {
   .connection-graph {
     display: grid;

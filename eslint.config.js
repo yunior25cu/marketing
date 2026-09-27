@@ -19,4 +19,16 @@ export default tseslint.config(
       },
     },
   },
+  {
+    files: ['scripts/**/*.mjs'],
+    languageOptions: {
+      globals: {
+        process: 'readonly',
+        URL: 'readonly',
+        window: 'readonly',
+        document: 'readonly',
+        requestAnimationFrame: 'readonly',
+      },
+    },
+  },
 )

@@ -18,6 +18,8 @@ describe('scene engine', () => {
     expect(sceneState(saleFlow, 400).activeIndex).toBe(0)
     expect(sceneState(saleFlow, 1599).activeIndex).toBe(0)
     expect(sceneState(saleFlow, 1600).activeIndex).toBe(1)
+    expect(sceneState(saleFlow, 400).flowProgress).toBe(0)
+    expect(sceneState(saleFlow, 4300).flowProgress).toBe(1)
     expect(sceneState(saleFlow, 99999).activeIndex).toBe(3)
     expect(sceneState(saleFlow, 99999).time).toBe(6000)
   })

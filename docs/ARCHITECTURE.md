@@ -6,6 +6,8 @@ React + TypeScript + Vite + CSS moderno. pnpm fija dependencias; Git conserva de
 
 El motor es deliberadamente pequeño. `SceneDefinition` fija duración, viewport, ratio, documento, nodos y eventos. `sceneState(scene, t)` es puro y devuelve el estado de cualquier instante. `useTimeline` administra reproducción, pausa y búsqueda; se detiene al llegar al final. Una escena no lleva cuatro implementaciones: `SceneCanvas` cambia su composición con reglas CSS según el ratio. Los datos de demostración no representan capacidades confirmadas del producto.
 
+`scripts/render-launch.mjs` abre el build con Vite Preview, fija un viewport exacto, mueve el reloj a cada instante, captura el escenario con Playwright Core y codifica con FFmpeg. A 30 fps produce 300 fotogramas y un MP4 de 10 segundos exactos. El modo `?render=1` oculta controles y desactiva transiciones CSS para que cada fotograma dependa sólo del tiempo solicitado. Los archivos generados quedan en `renders/` y no se versionan.
+
 La jerarquía de animación es CSS → Web Animations/Motion → SVG → Canvas → WebGL. La implementación actual usa CSS y `requestAnimationFrame` para el reloj; Motion queda disponible cuando una pieza necesite interpolación controlada. Canvas y WebGL no están justificados en las escenas actuales.
 
 ## Ejecución

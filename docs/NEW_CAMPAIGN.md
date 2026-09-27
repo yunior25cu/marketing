@@ -14,4 +14,4 @@ En `launch-01`, 0–1700 ms presenta la premisa, 1700–7700 ms muestra `SaleFlo
 
 ## Exportación
 
-La campaña es una composición web determinista y admite scrub manual para revisar fotogramas. Para obtener un archivo de video final, capturar el viewport de campaña a la resolución objetivo con una herramienta de grabación controlada y codificarlo externamente. El repositorio no incluye todavía un exportador de MP4 ni un pipeline de audio; no llamar «video renderizado» al preview interactivo.
+`pnpm build` seguido de `pnpm render:launch -- --ratio=16:9` captura fotogramas deterministas a 30 fps y codifica un MP4 de 10 segundos exactos. Los otros valores de `--ratio` son `1:1`, `4:5` y `9:16`; `--fps=60` cambia la frecuencia. `--poster=5000` genera un PNG en lugar de MP4. El exportador requiere Chrome instalado, usa Playwright Core y FFmpeg estático, y guarda las salidas en `renders/`. No hay audio ni claim de capacidades del ERP verificado; la pieza sigue rotulada como demostración.

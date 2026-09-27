@@ -5,3 +5,4 @@ coverage/
 .pnpm-store/
 *.local
 *.tsbuildinfo
+renders/

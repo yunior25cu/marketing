@@ -39,10 +39,7 @@ export function SceneCanvas({ scene, timeMs, ratio = '16:9', compact = false }: 
         />
       </div>
       <div className="scene-canvas__track">
-        <FlowLine
-          progress={Math.max(0, Math.min(1, (state.activeIndex + 0.4) / scene.nodes.length))}
-          label="Secuencia de cambios"
-        />
+        <FlowLine progress={state.flowProgress} label="Secuencia de cambios" />
         <div className="scene-canvas__nodes">
           {scene.nodes.map((node, index) => (
             <EntityNode

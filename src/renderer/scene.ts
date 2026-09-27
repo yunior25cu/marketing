@@ -47,10 +47,14 @@ export function sceneState(scene: SceneDefinition, timeMs: number) {
     (last, node, index) => (time >= node.at ? index : last),
     -1,
   )
+  const first = scene.nodes[0]?.at ?? 0
+  const last = scene.nodes.at(-1)?.at ?? scene.duration
+  const flowProgress = Math.min(1, Math.max(0, (time - first) / Math.max(1, last - first)))
   return {
     time,
     activeIndex,
     progress: time / scene.duration,
+    flowProgress,
     activeEvents: scene.events.filter((event) => event.at <= time),
   }
 }

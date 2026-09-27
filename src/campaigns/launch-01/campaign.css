@@ -121,6 +121,62 @@
   font-size: 0.75rem;
   line-height: 1.5;
 }
+.campaign-page--render {
+  width: 100vw;
+  max-width: none;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+}
+.campaign-page--render .campaign-page__header,
+.campaign-page--render .campaign-page__title,
+.campaign-page--render .campaign-page__toolbar,
+.campaign-page--render .campaign-controls,
+.campaign-page--render .campaign-disclosure {
+  display: none;
+}
+.campaign-page--render .campaign-stage,
+.campaign-page--render .campaign-stage .scene-canvas,
+.campaign-page--render .campaign-stage__statement {
+  width: 100vw;
+  height: 100vh;
+  min-height: 0;
+  max-width: none;
+  max-height: none;
+  aspect-ratio: auto;
+  border: 0;
+}
+.campaign-page--render .campaign-stage *,
+.campaign-page--render .campaign-stage *::before,
+.campaign-page--render .campaign-stage *::after {
+  transition-duration: 0ms !important;
+  animation: none !important;
+}
+.campaign-page--render .scene-canvas--9-16 .scene-canvas__intro h3 {
+  font-size: 5.5rem;
+  max-width: 14ch;
+}
+.campaign-page--render .scene-canvas--9-16 .scene-canvas__lower {
+  display: block;
+  align-self: flex-start;
+  margin-top: 3rem;
+}
+.campaign-page--render .scene-canvas--9-16 .document-card {
+  width: 19rem;
+  max-width: none;
+}
+.campaign-page--render .scene-canvas--9-16 .scene-canvas__track {
+  margin-block: auto;
+}
+.campaign-page--render .scene-canvas--9-16 .entity-node {
+  padding-block: 1.4rem;
+}
+.campaign-page--render .scene-canvas--9-16 .metric-counter__row .data-value {
+  font-size: 2.6rem;
+}
+html:has(.campaign-page--render) {
+  overflow: hidden;
+}
 @media (max-width: 700px) {
   .campaign-page__title {
     display: block;

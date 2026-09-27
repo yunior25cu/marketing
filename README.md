@@ -11,6 +11,8 @@ pnpm dev
 
 Abrir `/` para la experiencia pública, `/lab` para tokens y primitives, y `/campaigns/launch-01` para la campaña de 10 segundos. En la campaña, `?ratio=9:16&t=4500` abre un formato y un instante concretos para revisión de fotogramas.
 
+Para exportar la campaña a MP4, primero ejecutar `pnpm build` y luego `pnpm render:launch -- --ratio=16:9`. Las opciones `1:1`, `4:5` y `9:16` generan las otras dimensiones. `--poster=5000` guarda un PNG del fotograma a 5 segundos. El exportador usa Chrome instalado y FFmpeg estático; guarda archivos en `renders/`.
+
 ## Calidad
 
 ```sh

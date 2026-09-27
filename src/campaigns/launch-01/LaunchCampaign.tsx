@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { formats, ratios } from '@/compositions/formats'
 import { KineticText } from '@/primitives/KineticText'
 import { SceneCanvas } from '@/renderer/SceneCanvas'
@@ -9,7 +9,14 @@ import { campaignPhase, launch01 } from './definition'
 import { seconds } from '@/utils/time'
 import './campaign.css'
 
+declare global {
+  interface Window {
+    __BALAXYS_RENDER?: { seek: (timeMs: number) => void }
+  }
+}
+
 export function LaunchCampaign() {
+  const renderMode = new URLSearchParams(window.location.search).get('render') === '1'
   const [ratio, setRatio] = useState<SceneRatio>(() => {
     const query = new URLSearchParams(window.location.search).get('ratio')
     return ratios.includes(query as SceneRatio) ? (query as SceneRatio) : '16:9'
@@ -20,9 +27,16 @@ export function LaunchCampaign() {
     false,
     Number.isFinite(initialTime) ? initialTime : 0,
   )
+  useEffect(() => {
+    if (!renderMode) return
+    window.__BALAXYS_RENDER = { seek: timeline.seek }
+    return () => {
+      delete window.__BALAXYS_RENDER
+    }
+  }, [renderMode, timeline.seek])
   const phase = campaignPhase(timeline.time)
   return (
-    <main className="campaign-page shell">
+    <main className={`campaign-page shell ${renderMode ? 'campaign-page--render' : ''}`}>
       <header className="campaign-page__header">
         <a href="/" className="wordmark">
           BALAXYS<span>✳</span>
@@ -63,12 +77,17 @@ export function LaunchCampaign() {
       </div>
       <div
         className={`campaign-stage campaign-stage--${ratio.replace(':', '-')}`}
+        data-render-stage
         aria-label="Campaña NO SON MÓDULOS de 10 segundos"
       >
         {phase === 'premise' && (
           <div className="campaign-stage__statement">
             <span className="eyebrow">BALAXYS / BUSINESS IN MOTION</span>
-            <KineticText lines={['NO SON', 'MÓDULOS.']} accent={1} />
+            <KineticText
+              lines={['NO SON', 'MÓDULOS.']}
+              accent={1}
+              visibleCount={timeline.time < 700 ? 1 : 2}
+            />
             <span className="micro-label">01 / LA PREMISA</span>
           </div>
         )}
@@ -78,7 +97,11 @@ export function LaunchCampaign() {
         {phase === 'resolution' && (
           <div className="campaign-stage__statement campaign-stage__statement--end">
             <span className="eyebrow">UNA OPERACIÓN / MÚLTIPLES CONSECUENCIAS</span>
-            <KineticText lines={['ES UNA', 'EMPRESA', 'EN MOVIMIENTO.']} accent={2} />
+            <KineticText
+              lines={['ES UNA', 'EMPRESA', 'EN MOVIMIENTO.']}
+              accent={2}
+              visibleCount={timeline.time < 8400 ? 1 : timeline.time < 9100 ? 2 : 3}
+            />
             <span className="campaign-stage__signature">
               BALAXYS <b>✳</b>
             </span>
