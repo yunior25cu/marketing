@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "id": "facturacion-electronica-uy-01",
-  "version": 1,
+  "version": 2.2,
   "status": "IN_REVIEW",
   "createdAt": "2026-09-27T15:43:06.899Z",
-  "updatedAt": "2026-09-27T16:03:50.844Z",
+  "updatedAt": "2026-09-27T19:11:15.994Z",
   "approvedAt": null,
   "approvedBy": null,
   "brief": {
@@ -12,7 +12,7 @@
     "objective": "Mostrar la facturaci?n electr?nica de Uruguay como parte de la operaci?n con Balaxys.",
     "audience": "Due?os, administradores y equipos comerciales de pymes uruguayas.",
     "message": "Facturar no deber?a ser un proceso aislado. En Balaxys, la facturaci?n electr?nica forma parte de la operaci?n.",
-    "duration": 10000,
+    "duration": 12000,
     "formats": ["16:9", "9:16", "4:5", "1:1"],
     "channel": "Digital genérico",
     "cta": null,
@@ -52,7 +52,7 @@
     "language": "es"
   },
   "visualLevel": "ADVANCED_2D",
-  "audioLevel": "SFX",
+  "audioLevel": "MUSIC_ONLY",
   "motionStyle": "CONTINUOUS",
   "powerpointRisk": "LOW",
   "motionContinuity": "NEEDS_REVISION",
@@ -86,7 +86,7 @@
       "from": 3500,
       "to": 6050,
       "label": "Intercambio",
-      "visual": "Firma, env?o y c?mara hacia el plano DGI",
+      "visual": "Camera push y travelling del documento; tres carriles de datos recorren una m?scara espacial y se comprimen en la llegada DGI.",
       "copy": "FIRMA / ENV?O / DGI"
     },
     {
@@ -94,7 +94,7 @@
       "from": 6050,
       "to": 7000,
       "label": "Retorno",
-      "visual": "La respuesta viaja al mismo documento sin check de aprobaci?n",
+      "visual": "Respiraci?n de procesamiento; ondas contenidas en DGI y respuesta que retorna al documento por continuidad de trayectoria.",
       "copy": "RESPUESTA"
     },
     {
@@ -128,17 +128,17 @@
   "reviews": {
     "brand": {
       "status": "PENDING",
-      "summary": "Identidad coherente en checkpoints; falta revisar video completo y gate MOTION_GRAPHICS_QUALITY.",
+      "summary": "La paleta y gram?tica siguen la constituci?n; falta ver el render V2.1 completo y juzgarlo perceptualmente.",
       "blocking": true
     },
     "quality": {
       "status": "PENDING",
-      "summary": "Claims limitados respaldados por fuentes oficiales y t?cnica correcta; veredicto creativo pendiente.",
+      "summary": "Claims y copy conservados; el veredicto de motion graphics y el gate profesional esperan revisi?n del draft completo.",
       "blocking": true
     },
     "performance": {
       "status": "PASS",
-      "summary": "Chrome headless local: alrededor de 59.7?59.9 FPS y p95 16.8 ms en los cuatro ratios; no equivale a garant?a en hardware real.",
+      "summary": "QA local V2.1 en cuatro ratios: p95 16.8?17.1 ms; rAF medio 45.7?59.9 FPS y outliers transitorios de 216?550 ms (18 intervalos >33 ms en 16:9). Sin bloqueo severo; hardware real no garantizado.",
       "blocking": false
     },
     "technical": {
@@ -149,21 +149,40 @@
     },
     "visual": {
       "status": "PENDING",
-      "summary": "68 checkpoints previstos en cuatro ratios, sin errores t?cnicos; falta inspecci?n del movimiento completo.",
+      "summary": "QA t?cnico PASS: 68 checkpoints en cuatro ratios, seek determinista y reduced motion sin errores. Juicio art?stico del video completo pendiente.",
       "blocking": true
     },
     "audio": {
-      "status": "PASS",
-      "summary": "Cuatro MP4: 10.005 s, video+AAC, once cues medibles, peak 0.397, sin clipping. La escucha perceptual pertenece a AV QA.",
-      "blocking": false
+      "status": "PENDING",
+      "summary": "MP3 12 s, recorte y export t?cnicos por verificar; true peak fuente +0.9 dBTP requiere atenuaci?n m?nima. Escucha humana y licencia comercial siguen pendientes.",
+      "blocking": true
     },
     "av": {
       "status": "PENDING",
-      "summary": "Sync t?cnico PASS en cuatro archivos; escucha y juicio audiovisual integral pendientes.",
+      "summary": "Integraci?n audiovisual y percepci?n profesional esperan inspecci?n del MP4 de 12 s; publicaci?n tambi?n bloqueada por comprobante de licencia.",
       "blocking": true
     }
   },
-  "audioTimelineId": "facturacion-electronica-uy-01",
+  "visualVersion": "2.1",
+  "visualChanged": false,
+  "audioTimelineId": "facturacion-electronica-rhythmmagnet-v1",
+  "currentAudio": {
+    "id": "bensound-rhythm-magnet",
+    "title": "Rhythm Magnet",
+    "filename": "bensound-rhythmmagnet.mp3",
+    "source": "Bensound",
+    "author": "Marcus P.",
+    "sourceStartMs": 8000,
+    "sourceEndMs": 20000,
+    "masterDurationMs": 12000,
+    "videoStartMs": 1000,
+    "videoEndMs": 11000,
+    "sfx": "NONE",
+    "ambience": "NONE",
+    "additionalAudio": "NONE",
+    "licenseStatus": "PENDING_PROOF",
+    "commercialUse": null
+  },
   "motionBeats": [
     {
       "id": "sale",
@@ -174,7 +193,7 @@
       "transformation": "Subrayado tipogr?fico segmentado",
       "camera": "Tracking al intercambio; pullback a relaciones, reposo final.",
       "transition": "TYPOGRAPHIC_TRANSFORMATION",
-      "audioCue": "sale-origin"
+      "audioCue": "continuous-music-only"
     },
     {
       "id": "document",
@@ -185,7 +204,7 @@
       "transformation": "Cinco segmentos pliegan el contorno CFE",
       "camera": "Tracking al intercambio; pullback a relaciones, reposo final.",
       "transition": "MORPH",
-      "audioCue": "document-outline, document-lines, cfe-form"
+      "audioCue": "continuous-music-only"
     },
     {
       "id": "exchange",
@@ -193,10 +212,10 @@
       "to": 6050,
       "label": "Intercambio",
       "persistentObjects": ["document", "fiscal-plane", "operational-links"],
-      "transformation": "Firma, env?o y c?mara hacia el plano DGI",
-      "camera": "Tracking al intercambio; pullback a relaciones, reposo final.",
+      "transformation": "El documento cruza una m?scara de datos; los carriles convergen en expansi?n de llegada DGI.",
+      "camera": "Anticipaci?n contenida, push a 4.3 s, travelling hacia DGI y compresi?n controlada en llegada.",
       "transition": "CARRY",
-      "audioCue": "signature-pass, outbound, dgi-arrival"
+      "audioCue": "continuous-music-only"
     },
     {
       "id": "response",
@@ -204,10 +223,10 @@
       "to": 7000,
       "label": "Retorno",
       "persistentObjects": ["document", "fiscal-plane", "operational-links"],
-      "transformation": "La respuesta viaja al mismo documento sin check de aprobaci?n",
-      "camera": "Tracking al intercambio; pullback a relaciones, reposo final.",
+      "transformation": "Ondas contenidas en la llegada; la respuesta vuelve por continuidad hacia el documento sin check fiscal.",
+      "camera": "Pausa de procesamiento seguida de release y salida hacia el pullback de relaciones.",
       "transition": "CONTINUATION",
-      "audioCue": "response-origin, response-return"
+      "audioCue": "continuous-music-only"
     },
     {
       "id": "relations",
@@ -218,7 +237,7 @@
       "transformation": "Pullback revela los v?nculos operativos existentes",
       "camera": "Tracking al intercambio; pullback a relaciones, reposo final.",
       "transition": "CAMERA_DISCOVERY",
-      "audioCue": "origin-link"
+      "audioCue": "continuous-music-only"
     },
     {
       "id": "resolution",
@@ -229,7 +248,7 @@
       "transformation": "M?scara tipogr?fica ligada al documento",
       "camera": "Tracking al intercambio; pullback a relaciones, reposo final.",
       "transition": "MASK_TRANSITION",
-      "audioCue": "brand-resolution"
+      "audioCue": "continuous-music-only"
     }
   ],
   "transformationMap": [
@@ -290,14 +309,32 @@
       "scale": 1.1
     },
     {
-      "at": 5200,
-      "x": -5,
-      "y": 0,
-      "scale": 0.94
+      "at": 4300,
+      "x": -3,
+      "y": -2,
+      "scale": 1.18
+    },
+    {
+      "at": 5350,
+      "x": -8,
+      "y": -7,
+      "scale": 1.08
+    },
+    {
+      "at": 5650,
+      "x": -7,
+      "y": -5,
+      "scale": 1.14
     },
     {
       "at": 6100,
       "x": -5,
+      "y": -5,
+      "scale": 1.02
+    },
+    {
+      "at": 6800,
+      "x": 0,
       "y": 0,
       "scale": 0.94
     },
@@ -315,8 +352,8 @@
     }
   ],
   "visualCheckpoints": [
-    350, 1400, 2000, 2150, 2900, 3750, 4450, 4900, 5350, 6050, 6150, 6700, 7600, 8500, 8850, 9200,
-    9999
+    350, 1400, 2000, 2150, 2900, 3750, 4100, 4450, 4700, 4900, 5200, 5350, 5600, 5900, 6050, 6150,
+    6400, 6700, 7000, 7600, 8500, 8850, 9200, 9999
   ],
   "transitionCheckpoints": [
     {
@@ -402,11 +439,11 @@
     },
     "dynamicComposition": {
       "pass": true,
-      "evidence": "El documento cambia de escala y posici?n; la c?mara hace push/tracking/pullout y recompone cada ratio."
+      "evidence": "Source a?ade push de c?mara, seguimiento a la ruta CFE?DGI, expansi?n de llegada y release. Falta inspecci?n del render a velocidad real."
     },
     "visualTransformation": {
       "pass": true,
-      "evidence": "Cinco segmentos de VENTA forman contorno; el documento viaja; el borde conduce la m?scara final."
+      "evidence": "Tres carriles de datos recorren el campo desde el documento y la llegada transforma su trayectoria en ondas de procesamiento/respuesta; se conserva el morph documental."
     },
     "temporalContinuity": {
       "pass": true,
@@ -414,7 +451,7 @@
     },
     "rhythm": {
       "pass": false,
-      "evidence": "Cues y holds planificados, pero falta inspecci?n perceptual del MP4 completo a velocidad real."
+      "evidence": "La curva est? dise?ada en source como anticipaci?n?aceleraci?n?impacto?respiraci?n?expansi?n?resoluci?n; falta juzgar el draft a velocidad real."
     },
     "expressiveTypographyShapesData": {
       "pass": true,
@@ -426,11 +463,11 @@
     },
     "audiovisualIntegration": {
       "pass": false,
-      "evidence": "11 cues sincronizados t?cnicamente y pista AAC presente en cuatro MP4; falta escucha cr?tica del montaje final."
+      "evidence": "La pista musical continua es la ?nica fuente de audio y ocupa el master de 12 s; falta escuchar el render final para evaluar sincron?a percibida y ajuste al ritmo visual."
     },
     "professionalMotionGraphicsExperience": {
       "pass": false,
-      "evidence": "No se ha juzgado el video completo en reproducci?n con audio; no corresponde certificar experiencia profesional por capturas y metadatos."
+      "evidence": "No se certifica calidad profesional antes de revisar el draft completo con audio y resolver hallazgos humanos."
     }
   }
 }

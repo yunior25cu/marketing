@@ -1,3 +1,5 @@
+> ARCHIVED: this audio plan is retained for traceability; V2.2 Rhythm Magnet is the only current audio version. See `review.md` and `sound-plan-v22.md`.
+
 # Sound Palette & Audio Composition Plan — V2
 
 **Audio V2 avanzada · propuesta en revisión · visual V1 idéntico.**

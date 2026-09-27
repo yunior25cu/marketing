@@ -223,6 +223,9 @@ export function approvalBlockers(record) {
 
 export function validateRecord(record) {
   const errors = []
+  const visualDuration = record.currentAudio
+    ? record.currentAudio.videoEndMs - record.currentAudio.videoStartMs
+    : record.brief.duration
   if (record.motionGraphicsQuality === 'PASS') {
     const requiredCriteria = [
       'artDirection',
@@ -255,19 +258,19 @@ export function validateRecord(record) {
     record.brief.formats.some((format) => !supportedFormats.includes(format))
   )
     errors.push('Formato inválido')
-  if (record.visualCheckpoints?.some((time) => time < 0 || time >= record.brief.duration))
+  if (record.visualCheckpoints?.some((time) => time < 0 || time >= visualDuration))
     errors.push('Checkpoint fuera de la campaña')
   if (record.motionStyle === 'CONTINUOUS' && record.motionBeats?.length) {
-    if (record.motionBeats[0].from !== 0 || record.motionBeats.at(-1).to !== record.brief.duration)
+    if (record.motionBeats[0].from !== 0 || record.motionBeats.at(-1).to !== visualDuration)
       errors.push('Los motion beats no cubren la duración')
     for (let index = 1; index < record.motionBeats.length; index++)
       if (record.motionBeats[index].from > record.motionBeats[index - 1].to)
         errors.push('Los motion beats tienen una discontinuidad temporal')
     if (!record.transformationMap?.length) errors.push('Falta Transformation Map')
   }
-  if (record.transitionCheckpoints?.some((item) => item.at < 0 || item.at >= record.brief.duration))
+  if (record.transitionCheckpoints?.some((item) => item.at < 0 || item.at >= visualDuration))
     errors.push('Transition checkpoint fuera de la campaña')
-  if (record.storyboard[0]?.from !== 0 || record.storyboard.at(-1)?.to !== record.brief.duration)
+  if (record.storyboard[0]?.from !== 0 || record.storyboard.at(-1)?.to !== visualDuration)
     errors.push('El storyboard no cubre la duración')
   for (let index = 1; index < record.storyboard.length; index++)
     if (record.storyboard[index].from !== record.storyboard[index - 1].to)

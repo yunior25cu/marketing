@@ -48,6 +48,31 @@ try {
   await page.locator('[data-render-stage][data-ratio="9:16"]').waitFor()
   if (!(await page.locator('.campaign-console__audio').count()))
     throw new Error('Audio de facturación ausente en consola')
+  await page.goto(`http://127.0.0.1:${port}/lab#campaign-console`, { waitUntil: 'networkidle' })
+  await page
+    .locator('#campaign-console .campaign-console__head select')
+    .selectOption('facturacion-electronica-uy-01')
+  const listenControl = page.getByRole('button', { name: 'Escuchar', exact: true })
+  if (!(await listenControl.isEnabled())) throw new Error('Control Escuchar deshabilitado')
+  for (const detail of [
+    'CURRENT AUDIO / RHYTHM MAGNET',
+    'SOURCE / bensound-rhythmmagnet.mp3',
+    'MASTER / 12.000 s',
+    'VIDEO / 1.000 → 11.000 s',
+    'SFX / NONE',
+    'AMBIENCE / NONE',
+    'LICENSE / PENDING PROOF',
+  ])
+    if (!(await page.getByText(detail, { exact: false }).count()))
+      throw new Error(`Metadato de audio vigente ausente: ${detail}`)
+  if (await page.getByRole('button', { name: /AUDIO [ABC]/ }).count())
+    throw new Error('Hay variantes de audio antiguas expuestas en la consola')
+  await listenControl.click()
+  await page.waitForFunction(() => {
+    const player = document.querySelector('#campaign-console audio')
+    return player?.tagName === 'AUDIO' && !player.paused && player.currentTime >= 8
+  })
+  await page.locator('.campaign-console__audio').getByRole('button', { name: 'Pausar' }).click()
   await page.goto(`http://127.0.0.1:${port}/lab`, { waitUntil: 'networkidle' })
   for (const selector of ['#visual-engine', '#sound-lab']) {
     await page.locator(selector).scrollIntoViewIfNeeded()

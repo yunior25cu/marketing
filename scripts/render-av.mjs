@@ -1,5 +1,5 @@
 import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
-import { spawn } from 'node:child_process'
+import { spawn, spawnSync } from 'node:child_process'
 import { join, resolve, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { chromium } from 'playwright-core'
@@ -11,6 +11,8 @@ import {
   continuousAudioTimeline,
   facturacionAudioTimeline,
   facturacionAudioTimelineV2,
+  facturacionAudioTimelineV21B,
+  facturacionAudioTimelineV21C,
   encodeWav,
   renderAudio,
   validateAudioTimeline,
@@ -36,14 +38,20 @@ if (
 const isContinuous = campaign === 'continuous-motion-smoke-test'
 const isFacturacion = campaign === 'facturacion-electronica-uy-01'
 const audioVersion = String(options['audio-version'] ?? '1')
-if (!['1', '2'].includes(audioVersion)) throw new Error('Versión de audio inválida')
+if (!['1', '2', '2.1b', '2.1c'].includes(audioVersion)) throw new Error('Versión de audio inválida')
 const audioTimeline = isFacturacion
-  ? audioVersion === '2'
-    ? facturacionAudioTimelineV2
-    : facturacionAudioTimeline
+  ? {
+      1: facturacionAudioTimeline,
+      2: facturacionAudioTimelineV2,
+      '2.1b': facturacionAudioTimelineV21B,
+      '2.1c': facturacionAudioTimelineV21C,
+    }[audioVersion]
   : isContinuous
     ? continuousAudioTimeline
     : advancedAudioTimeline
+const requestedLufs = options.lufs == null ? null : Number(options.lufs)
+if (requestedLufs != null && ![-23, -18, -16].includes(requestedLufs))
+  throw new Error('Loudness de draft admitido: -23, -18 o -16 LUFS')
 const durationSeconds = audioTimeline.duration / 1000
 const ratio = options.ratio ?? '16:9'
 const sizes = {
@@ -64,7 +72,7 @@ const output = resolve(
     options.out ??
       join(
         'renders',
-        `${campaign}-${ratio.replace(':', 'x')}${isFacturacion && audioVersion === '2' ? '-audio-v2' : ''}${options.draft ? '-draft' : ''}-av.mp4`,
+        `${campaign}-${ratio.replace(':', 'x')}${isFacturacion ? `-audio-${audioVersion.replace('.', '-')}` : ''}${options.draft ? '-draft' : ''}${requestedLufs == null ? '' : `-lufs-${String(requestedLufs).replace('-', '')}`}-av.mp4`,
       ),
   ),
 )
@@ -78,6 +86,34 @@ const stats = audioStats(samples, 48000)
 if (stats.clipped || Math.abs(stats.duration - durationSeconds) > 0.001)
   throw new Error('Audio inválido')
 await writeFile(master, encodeWav(samples))
+let loudnormFilter = ''
+if (requestedLufs != null) {
+  const measurement = spawnSync(
+    ffmpegPath,
+    [
+      '-hide_banner',
+      '-nostats',
+      '-i',
+      master,
+      '-af',
+      `loudnorm=I=${requestedLufs}:TP=-1.2:LRA=7:print_format=json`,
+      '-f',
+      'null',
+      '-',
+    ],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 },
+  )
+  const summaries = [...(measurement.stderr ?? '').matchAll(/\{\s*"input_i"[\s\S]*?\}/g)]
+  const summary = summaries.length ? JSON.parse(summaries.at(-1)[0]) : null
+  const measured =
+    summary &&
+    ['input_i', 'input_tp', 'input_lra', 'input_thresh', 'target_offset'].every((key) =>
+      Number.isFinite(Number(summary[key])),
+    )
+  if (measurement.status !== 0 || !measured)
+    throw new Error('No se pudieron medir los valores de entrada para loudnorm de dos pasadas')
+  loudnormFilter = `loudnorm=I=${requestedLufs}:TP=-1.2:LRA=7:measured_I=${summary.input_i}:measured_TP=${summary.input_tp}:measured_LRA=${summary.input_lra}:measured_thresh=${summary.input_thresh}:offset=${summary.target_offset}:linear=true:print_format=summary`
+}
 if (options.wav) {
   const wavPath = resolve(root, String(options.wav))
   if (!wavPath.startsWith(root + sep)) throw new Error('WAV fuera del proyecto')
@@ -168,7 +204,7 @@ try {
         '-b:a',
         '192k',
         '-af',
-        `atrim=0:${durationSeconds}`,
+        `atrim=0:${durationSeconds}${requestedLufs == null ? '' : `,${loudnormFilter},aresample=48000`}`,
         '-movflags',
         '+faststart',
         output,
@@ -181,7 +217,7 @@ try {
     )
   })
   process.stdout.write(
-    `AV exportado: ${output}; ${width}×${height}, ${fps} fps, ${durationSeconds} s; audio peak=${stats.peak.toFixed(3)}\n`,
+    `AV exportado: ${output}; ${width}×${height}, ${fps} fps, ${durationSeconds} s; audio peak=${stats.peak.toFixed(3)}${requestedLufs == null ? '' : `; loudnorm target=${requestedLufs} LUFS, TP≤-1.2 dBTP`}\n`,
   )
 } finally {
   if (browser) await browser.close()

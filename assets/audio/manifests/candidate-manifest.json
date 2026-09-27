@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "sourceReviewedAt": "2026-09-27",
-  "source": "Mixkit Stock Music",
+  "source": "Bensound and Mixkit Stock Music",
   "licensePolicy": "Candidate records are not cleared assets. Confirm exact item license, commercial rights, attribution and distribution restrictions before activation.",
   "candidates": [
     {
@@ -66,6 +66,24 @@
       "mood": ["relaxed", "hypnotic"],
       "status": "CANDIDATE_NOT_DOWNLOADED",
       "notes": "Genre-fit risk: audition for a techno edge before considering; do not assume the title indicates brand fit."
+    },
+    {
+      "id": "bensound-rhythm-magnet",
+      "title": "Rhythm Magnet",
+      "type": "MUSIC",
+      "filename": "music/bensound-rhythmmagnet.mp3",
+      "duration": 137.22,
+      "source": "Bensound; file manually supplied by campaign operator",
+      "sourceUrl": "https://www.bensound.com/royalty-free-music/track/rhythm-magnet-happy-organ",
+      "termsUrl": "https://www.bensound.com/terms-and-conditions",
+      "license": "PENDING_PROOF: exact download license/certificate/code not supplied",
+      "commercialUse": null,
+      "attributionRequired": null,
+      "author": "Marcus P.",
+      "downloadDate": null,
+      "sha256": "f453902b0ada15d10361a8bdc767ef9b4499a3dabac279e7b9121e299372dee1",
+      "status": "SELECTED_LICENSE_PENDING",
+      "notes": "Operator-provided file. The exact download license/certificate has not been supplied. Current Bensound terms limit the Free License to non-revenue projects; online commercial advertising requires an applicable Professional license, and client resale may require Business. Rights are not cleared for publication."
     }
   ]
 }

@@ -9,21 +9,51 @@ import {
   continuousAudioTimeline,
   facturacionAudioTimeline,
   facturacionAudioTimelineV2,
+  facturacionAudioTimelineV21B,
+  facturacionAudioTimelineV21C,
 } from './audio-core.mjs'
 
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)))
 const input = resolve(root, process.argv[2] ?? 'renders/visual-engine-smoke-test-16x9-av.mp4')
 const continuous = process.argv.includes('--continuous')
 const timeline = process.argv.includes('--facturacion')
-  ? process.argv.includes('--audio-v2')
-    ? facturacionAudioTimelineV2
-    : facturacionAudioTimeline
+  ? process.argv.includes('--audio-v21b')
+    ? facturacionAudioTimelineV21B
+    : process.argv.includes('--audio-v21c')
+      ? facturacionAudioTimelineV21C
+      : process.argv.includes('--audio-v2')
+        ? facturacionAudioTimelineV2
+        : facturacionAudioTimeline
   : continuous
     ? continuousAudioTimeline
     : advancedAudioTimeline
 const expectedDuration = timeline.duration / 1000
 const probe = spawnSync(ffmpegPath, ['-hide_banner', '-i', input], { encoding: 'utf8' })
 const text = probe.stderr ?? ''
+const loudnessProbe = spawnSync(
+  ffmpegPath,
+  [
+    '-hide_banner',
+    '-nostats',
+    '-i',
+    input,
+    '-filter_complex',
+    'ebur128=peak=true',
+    '-f',
+    'null',
+    '-',
+  ],
+  { encoding: 'utf8' },
+)
+const loudnessText = loudnessProbe.stderr ?? ''
+const lastMeasurement = (pattern) => {
+  const matches = [...loudnessText.matchAll(pattern)]
+  return matches.length ? Number(matches.at(-1)[1]) : null
+}
+const integratedLufs = lastMeasurement(/\bI:\s*(-?\d+(?:\.\d+)?)\s+LUFS/g)
+const truePeakDbtp = lastMeasurement(
+  /True peak:\s*\r?\n\s*Peak:\s*(-?\d+(?:\.\d+)?)\s*dB(?:TP|FS)/g,
+)
 const duration = Number(
   text
     .match(/Duration: (\d+):(\d+):(\d+\.\d+)/)
@@ -72,6 +102,11 @@ const cueChecks = timeline.cues.map((cue) => ({
   rms: rmsAround(cue.at + 30),
 }))
 const leadingSilenceRms = rmsAround(0, 100)
+const intentionalOpeningBed = timeline.tracks.some(
+  (track) =>
+    (track.category === 'AMBIENCE' && (track.start ?? 0) === 0) ||
+    (track.category === 'MUSIC' && (timeline.music?.start ?? 0) === 0),
+)
 const tailRms = rmsAround(expectedDuration * 1000 - 100, 100)
 const issues = []
 if (videoTracks !== 1 || audioTracks !== 1)
@@ -84,7 +119,12 @@ if (Math.abs(stats.duration - expectedDuration) > 0.05)
   issues.push(`duración audio: ${stats.duration}`)
 if (stats.clipped || stats.peak > 0.99) issues.push(`peak/clipping: ${stats.peak}`)
 if (stats.rms < 0.002) issues.push('Audio casi silencioso')
-if (leadingSilenceRms > 0.01) issues.push(`Silencio inicial contaminado: ${leadingSilenceRms}`)
+if (integratedLufs == null) issues.push('No se pudo medir loudness integrado (LUFS)')
+if (truePeakDbtp == null) issues.push('No se pudo medir true peak (dBTP)')
+if (truePeakDbtp != null && truePeakDbtp > -1)
+  issues.push(`True peak excede margen de -1 dBTP: ${truePeakDbtp}`)
+if (leadingSilenceRms > 0.01 && !intentionalOpeningBed)
+  issues.push(`Silencio inicial contaminado: ${leadingSilenceRms}`)
 for (const cue of cueChecks) if (cue.rms < 0.025) issues.push(`Cue inaudible: ${cue.id}`)
 if (tailRms > 0.03) issues.push('Audio final demasiado alto; revisar fade')
 const report = {
@@ -97,7 +137,10 @@ const report = {
   ...stats,
   cueChecks,
   leadingSilenceRms,
+  intentionalOpeningBed,
   tailRms,
+  integratedLufs,
+  truePeakDbtp,
   syncStatus: issues.length ? 'FAIL' : 'PASS',
   issues,
 }

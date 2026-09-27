@@ -12,9 +12,11 @@ export interface AudioTrack {
 }
 export interface AudioTimeline {
   id?: string
-  version?: number
+  version?: number | string
+  palette?: Record<string, unknown>
+  ambience?: { transmissionLift: number; liftStart: number; liftEnd: number }
   duration: number
-  tracks: AudioTrack[]
+  tracks: (AudioTrack & Record<string, unknown>)[]
   cues: AudioCue[]
   music?: {
     id: string
@@ -36,6 +38,15 @@ export const facturacionAudioTimeline: AudioTimeline & { id: 'facturacion-electr
 export const facturacionAudioTimelineV2: AudioTimeline & {
   id: 'facturacion-electronica-uy-01-v2'
   version: 2
+}
+export const facturacionAudioTimelineV21B: AudioTimeline & {
+  id: 'facturacion-electronica-uy-01-v2.1-b'
+  version: '2.1'
+}
+export const facturacionAudioTimelineV21C: AudioTimeline & {
+  id: 'facturacion-electronica-uy-01-v2.1-c'
+  version: '2.1'
+  music: NonNullable<AudioTimeline['music']> & { timbre: string }
 }
 export interface AudioAsset {
   id: string

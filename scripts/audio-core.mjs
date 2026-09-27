@@ -101,6 +101,47 @@ export const soundRegistry = {
   },
 }
 
+soundRegistry['transmission-sweep-v21'] = {
+  category: 'SFX',
+  semanticCategory: 'data',
+  tags: ['spatial', 'transmission', 'digital'],
+  energy: 'MEDIUM',
+  character: 'TEXTURAL',
+  duration: 0.74,
+  frequency: 620,
+  description: 'Procedural spatial data sweep',
+}
+soundRegistry['processing-tension-v21'] = {
+  category: 'SFX',
+  semanticCategory: 'transition',
+  tags: ['processing', 'tension', 'digital'],
+  energy: 'LOW',
+  character: 'TEXTURAL',
+  duration: 0.34,
+  frequency: 190,
+  description: 'Contained processing tension',
+}
+soundRegistry['response-impact-v21'] = {
+  category: 'SFX',
+  semanticCategory: 'confirmation',
+  tags: ['response', 'precise', 'tonal'],
+  energy: 'MEDIUM',
+  character: 'TONAL',
+  duration: 0.56,
+  frequency: 740,
+  description: 'Layered response, no fiscal approval implication',
+}
+soundRegistry['brand-resolve-v21'] = {
+  category: 'SFX',
+  semanticCategory: 'brand',
+  tags: ['brand', 'resolve', 'harmonic'],
+  energy: 'MEDIUM',
+  character: 'TONAL',
+  duration: 0.9,
+  frequency: 330,
+  description: 'Original layered procedural brand resolve',
+}
+
 const originalLicense = {
   source: 'Balaxys Brand OS',
   sourceUrl: null,
@@ -156,6 +197,38 @@ audioAssetRegistry['balaxys-tech-room-v1'] = {
   mood: ['controlled', 'modern'],
   ...originalLicense,
   notes: 'Low-level procedural tonal texture generated in memory.',
+}
+
+for (const id of [
+  'transmission-sweep-v21',
+  'processing-tension-v21',
+  'response-impact-v21',
+  'brand-resolve-v21',
+])
+  audioAssetRegistry[id].generatorVersion = '2.1'
+
+for (const [id, category] of [
+  ['transmission-sweep-v21', 'SFX'],
+  ['processing-tension-v21', 'SFX'],
+  ['response-impact-v21', 'SFX'],
+  ['brand-resolve-v21', 'SFX'],
+  ['balaxys-motion-bed-v21', 'MUSIC'],
+  ['balaxys-spatial-air-v21', 'AMBIENCE'],
+]) {
+  audioAssetRegistry[id] = {
+    id,
+    filename: null,
+    type: category,
+    category,
+    tags: ['original', 'procedural', 'motion-design'],
+    duration: 10,
+    energy: 'MEDIUM',
+    character: 'DIGITAL',
+    mood: ['precise', 'premium'],
+    ...originalLicense,
+    generatorVersion: '2.1',
+    notes: 'Síntesis procedural original de Balaxys; sin muestras ni grabaciones de terceros.',
+  }
 }
 
 export function searchAudioAssets(query = {}) {
@@ -409,6 +482,111 @@ export const facturacionAudioTimelineV2 = {
   },
 }
 
+// V2.1 A/B references. A remains the unchanged V2 mix; B and C share the
+// redesigned score, with C adding a purpose-built 104 BPM electronic bed.
+const facturacionAudioV21Base = {
+  id: 'facturacion-electronica-uy-01-v2.1',
+  version: '2.1',
+  duration: 10000,
+  palette: {
+    character: ['precise', 'digital', 'premium'],
+    energy: 'anticipation → acceleration → impact → release → resolve',
+    density: 'LOW, seven selected events',
+  },
+  tracks: [
+    { id: 'operation', category: 'SFX', gain: 0.538 },
+    { id: 'detail', category: 'SFX', gain: 0.336 },
+    { id: 'flow', category: 'SFX', gain: 0.516 },
+    {
+      id: 'ambience',
+      category: 'AMBIENCE',
+      gain: 0.073,
+      assetId: 'balaxys-spatial-air-v21',
+      start: 0,
+      end: 9950,
+      fadeIn: 500,
+      fadeOut: 650,
+    },
+  ],
+  cues: [
+    {
+      id: 'origin-trigger',
+      at: 350,
+      sound: 'signal-pulse',
+      track: 'operation',
+      event: 'VENTA:trigger',
+    },
+    {
+      id: 'document-morph',
+      at: 1680,
+      sound: 'line-build',
+      track: 'detail',
+      event: 'venta→CFE:morph',
+    },
+    {
+      id: 'cfe-resolve',
+      at: 2920,
+      sound: 'transaction-tick',
+      track: 'detail',
+      event: 'CFE:resolve',
+    },
+    {
+      id: 'transmission-acceleration',
+      at: 4240,
+      sound: 'transmission-sweep-v21',
+      track: 'flow',
+      event: 'CFE→DGI:spatial transmission',
+    },
+    {
+      id: 'processing-breath',
+      at: 5580,
+      sound: 'processing-tension-v21',
+      track: 'detail',
+      event: 'DGI:contained processing',
+    },
+    {
+      id: 'response-release',
+      at: 6200,
+      sound: 'response-impact-v21',
+      track: 'operation',
+      event: 'DGI:response return',
+    },
+    {
+      id: 'brand-resolve',
+      at: 9100,
+      sound: 'brand-resolve-v21',
+      track: 'operation',
+      event: 'BALAXYS:sonic resolve',
+    },
+  ],
+  ambience: { transmissionLift: 1.38, liftStart: 4.0, liftEnd: 7.6 },
+}
+
+const cloneTimeline = (timeline) => JSON.parse(JSON.stringify(timeline))
+export const facturacionAudioTimelineV21B = cloneTimeline(facturacionAudioV21Base)
+facturacionAudioTimelineV21B.id += '-b'
+facturacionAudioTimelineV21B.palette.music = 'NONE; SFX and spatial ambience only'
+
+export const facturacionAudioTimelineV21C = {
+  ...cloneTimeline(facturacionAudioV21Base),
+  id: `${facturacionAudioV21Base.id}-c`,
+  palette: { ...facturacionAudioV21Base.palette, bpm: 104, music: 'balaxys-motion-bed-v21' },
+  tracks: [
+    ...cloneTimeline(facturacionAudioV21Base.tracks),
+    { id: 'music', category: 'MUSIC', gain: 0.065, assetId: 'balaxys-motion-bed-v21' },
+  ],
+  music: {
+    id: 'balaxys-motion-bed-v21',
+    bpm: 104,
+    timbre: 'motion-v21',
+    start: 0.15,
+    end: 9.97,
+    fadeIn: 0.42,
+    fadeOut: 0.72,
+    ducking: { at: 5580, duration: 980, gain: 0.43 },
+  },
+}
+
 export function validateAudioTimeline(timeline) {
   const errors = []
   if (!Number.isInteger(timeline.duration) || timeline.duration <= 0)
@@ -458,6 +636,40 @@ function synthSample(sound, seconds) {
   const definition = soundRegistry[sound]
   const length = definition.duration
   const envelope = Math.min(1, seconds / 0.014) * Math.pow(Math.max(0, 1 - seconds / length), 2.2)
+  if (sound === 'transmission-sweep-v21') {
+    const p = seconds / length
+    const sweep = 360 + 1550 * p ** 1.5
+    const grain =
+      Math.sin(2 * Math.PI * sweep * seconds) * 0.5 +
+      Math.sin(2 * Math.PI * sweep * 1.73 * seconds) * 0.19
+    const body = Math.sin(2 * Math.PI * 92 * seconds) * Math.exp(-seconds * 5.5) * 0.22
+    return (grain + body) * envelope * Math.sin(Math.PI * p) ** 0.45
+  }
+  if (sound === 'processing-tension-v21') {
+    const p = seconds / length
+    return (
+      (Math.sin(2 * Math.PI * (190 - 55 * p) * seconds) * 0.44 +
+        Math.sin(2 * Math.PI * 920 * seconds) * 0.035) *
+      envelope
+    )
+  }
+  if (sound === 'response-impact-v21') {
+    const body = Math.sin(2 * Math.PI * 74 * seconds) * Math.exp(-seconds * 8.5) * 0.34
+    const mid =
+      Math.sin(2 * Math.PI * 740 * seconds) * 0.33 + Math.sin(2 * Math.PI * 1110 * seconds) * 0.2
+    const detail = Math.sin(2 * Math.PI * 3900 * seconds) * Math.exp(-seconds * 32) * 0.075
+    return (body + mid + detail) * envelope
+  }
+  if (sound === 'brand-resolve-v21') {
+    const attack = Math.exp(-seconds * 19)
+    const body = Math.sin(2 * Math.PI * (61 - 17 * seconds) * seconds) * attack * 0.34
+    const chord =
+      Math.sin(2 * Math.PI * 330 * seconds) * 0.35 +
+      Math.sin(2 * Math.PI * 495 * seconds) * 0.22 +
+      Math.sin(2 * Math.PI * 660 * seconds) * 0.15
+    const air = Math.sin(2 * Math.PI * 5200 * seconds) * Math.exp(-seconds * 29) * 0.035
+    return (body + chord + air) * envelope
+  }
   if (['data-glide', 'transaction-tick', 'soft-confirm', 'resolve-harmonic'].includes(sound)) {
     const progress = seconds / length
     const base = definition.frequency
@@ -541,13 +753,34 @@ export function renderAudio(
               ? music.ducking.gain
               : 1
           bed =
-            (Math.sin(2 * Math.PI * 110 * time) * 0.34 +
-              Math.sin(2 * Math.PI * 164.8 * time) * 0.19 +
-              Math.sin(2 * Math.PI * 220 * time) *
-                (0.1 + 0.08 * Math.max(0, Math.sin(2 * Math.PI * beat)))) *
-            duck
-        } else
-          bed = Math.sin(2 * Math.PI * 55 * time) * 0.55 + Math.sin(2 * Math.PI * 82.4 * time) * 0.3
+            music.timbre === 'motion-v21'
+              ? (Math.sin(2 * Math.PI * 82.4 * time) * 0.23 +
+                  Math.sin(2 * Math.PI * 123.47 * time) * 0.16 +
+                  Math.sin(2 * Math.PI * 164.8 * time) *
+                    (0.12 + 0.08 * Math.max(0, Math.sin(2 * Math.PI * beat))) +
+                  Math.sin(2 * Math.PI * 1040 * time) *
+                    0.014 *
+                    (0.5 + 0.5 * Math.sin(2 * Math.PI * beat)) +
+                  Math.sin(2 * Math.PI * 1780 * ((beat % 1) * (60 / music.bpm))) *
+                    Math.exp(-((beat % 1) * 42)) *
+                    0.045) *
+                duck
+              : (Math.sin(2 * Math.PI * 110 * time) * 0.34 +
+                  Math.sin(2 * Math.PI * 164.8 * time) * 0.19 +
+                  Math.sin(2 * Math.PI * 220 * time) *
+                    (0.1 + 0.08 * Math.max(0, Math.sin(2 * Math.PI * beat)))) *
+                duck
+        } else {
+          const lift =
+            timeline.ambience &&
+            time >= timeline.ambience.liftStart &&
+            time <= timeline.ambience.liftEnd
+              ? timeline.ambience.transmissionLift
+              : 1
+          bed =
+            (Math.sin(2 * Math.PI * 55 * time) * 0.55 + Math.sin(2 * Math.PI * 82.4 * time) * 0.3) *
+            lift
+        }
         samples[index] += bed * track.gain * Math.max(0, fade)
       }
     }

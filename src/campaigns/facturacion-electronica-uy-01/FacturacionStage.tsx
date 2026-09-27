@@ -16,6 +16,8 @@ export function FacturacionStage({ timeMs, ratio }: { timeMs: number; ratio: Sce
   const gate = ease(t, 3950, 4550) * (1 - ease(t, 6750, 7500))
   const outbound = t < 5600 ? ease(t, 4400, 4520) * (1 - ease(t, 5350, 5600)) : 0
   const inbound = ease(t, 5980, 6090) * (1 - ease(t, 6700, 6900))
+  const transmission = ease(t, 4050, 4550) * (1 - ease(t, 5350, 5900))
+  const arrival = ease(t, 5250, 5650) * (1 - ease(t, 5850, 6250))
   const sx = l.docX + (f.narrow ? 0 : 145)
   const sy = l.docY + (f.narrow ? 185 : 0)
   const gx = l.gateX
@@ -68,6 +70,36 @@ export function FacturacionStage({ timeMs, ratio }: { timeMs: number; ratio: Sce
           CFE / UY
         </text>
         <g transform={cam}>
+          <g aria-hidden="true" opacity={transmission * 0.78} data-object="transmission-field">
+            {[-1, 0, 1].map((lane, index) => {
+              const offset = lane * (f.narrow ? 52 : 74)
+              const endX = gx + offset
+              const startX = f.narrow ? sx + offset * 0.22 : sx + offset
+              const startY = f.narrow ? sy - 35 : sy + offset
+              const endY = f.narrow ? gy - 110 + offset * 0.1 : gy + offset * 0.42
+              return (
+                <path
+                  key={lane}
+                  d={`M ${startX} ${startY} C ${mix(startX, endX, 0.34)} ${startY - (f.narrow ? 45 : 15)} ${mix(startX, endX, 0.72)} ${endY + (f.narrow ? 60 : 15)} ${endX} ${endY}`}
+                  fill="none"
+                  stroke={index === 1 ? c.signal : c.mist}
+                  strokeWidth={index === 1 ? 2.5 : 1}
+                  strokeDasharray={index === 1 ? '1 1' : '2 14'}
+                  pathLength="1"
+                  strokeDashoffset={1 - f.send}
+                  opacity={index === 1 ? 0.9 : 0.42}
+                />
+              )
+            })}
+            <path
+              d={`M ${gx - 28} ${gy - (f.narrow ? 190 : 205)} L ${gx} ${gy - (f.narrow ? 225 : 240)} L ${gx + 28} ${gy - (f.narrow ? 190 : 205)}`}
+              fill="none"
+              stroke={c.signal}
+              strokeWidth="2"
+              opacity={arrival}
+              transform={`translate(0 ${mix(18, 0, arrival)})`}
+            />
+          </g>
           <g clipPath={`url(#${id}-sale)`}>
             <text
               x={l.docX}
@@ -145,6 +177,20 @@ export function FacturacionStage({ timeMs, ratio }: { timeMs: number; ratio: Sce
             <g transform={`translate(${routePoint(1 - f.response)})`} opacity={inbound}>
               <circle r="14" fill={c.bone} />
               <circle r="25" stroke={c.signal} strokeWidth="2" fill="none" />
+            </g>
+            <g opacity={arrival * 0.72} transform={`translate(${gx} ${gy})`} aria-hidden="true">
+              {[0, 1, 2].map((ring) => (
+                <ellipse
+                  key={ring}
+                  rx={mix(30, 132 + ring * 34, arrival)}
+                  ry={mix(14, 58 + ring * 14, arrival)}
+                  fill="none"
+                  stroke={ring === 0 ? c.signal : c.mist}
+                  strokeWidth={ring === 0 ? 2 : 1}
+                  opacity={1 - ring * 0.22}
+                  transform={`rotate(${f.narrow ? 0 : -10})`}
+                />
+              ))}
             </g>
             <text
               x={f.narrow ? l.docX + 190 : (l.docX + l.gateX) / 2}

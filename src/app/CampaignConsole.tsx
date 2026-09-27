@@ -8,10 +8,17 @@ import {
   activeAudioCues,
   advancedAudioTimeline,
   continuousAudioTimeline,
-  facturacionAudioTimeline,
-  facturacionAudioTimelineV2,
 } from '../../scripts/audio-core.mjs'
 import { useAudioPlayer } from '@/audio/useAudioPlayer'
+import { useSourceSegmentPlayer } from '@/audio/useSourceSegmentPlayer'
+import {
+  rhythmMagnetDurationMs,
+  rhythmMagnetSourceEndSeconds,
+  rhythmMagnetSourceStartSeconds,
+  rhythmMagnetSourceUrl,
+  rhythmMagnetVideoEndMs,
+  rhythmMagnetVideoStartMs,
+} from '@/audio/rhythmMagnet'
 import { campaignDocument, campaignRecords } from '@/orchestrator/registry'
 import type { CampaignRecord } from '@/orchestrator/contracts'
 import { useTimeline } from '@/renderer/useTimeline'
@@ -79,7 +86,7 @@ function ReviewText({ source }: { source: string }) {
 }
 
 function CampaignConsolePlayer({ record }: { record: CampaignRecord }) {
-  const [audioVersion, setAudioVersion] = useState<'V1' | 'V2'>('V1')
+  const currentMusic = record.audioTimelineId === 'facturacion-electronica-rhythmmagnet-v1'
   const [ratio, setRatio] = useState<SceneRatio>(() => {
     const query = new URLSearchParams(window.location.search).get('ratio')
     return record.brief.formats.find((format) => format === query) ?? record.brief.formats[0]
@@ -91,22 +98,29 @@ function CampaignConsolePlayer({ record }: { record: CampaignRecord }) {
   const hasAudio = [
     'advanced-smoke-v1',
     'continuous-motion-v1',
-    'facturacion-electronica-uy-01',
+    'facturacion-electronica-rhythmmagnet-v1',
   ].includes(record.audioTimelineId ?? '')
+  const campaignAudio = record.audioTimelineId === 'facturacion-electronica-uy-01'
   const audioTimeline =
-    record.audioTimelineId === 'facturacion-electronica-uy-01'
-      ? audioVersion === 'V2'
-        ? facturacionAudioTimelineV2
-        : facturacionAudioTimeline
-      : record.audioTimelineId === 'continuous-motion-v1'
-        ? continuousAudioTimeline
-        : advancedAudioTimeline
-  const audio = useAudioPlayer(hasAudio ? audioTimeline : null)
+    record.audioTimelineId === 'continuous-motion-v1'
+      ? continuousAudioTimeline
+      : advancedAudioTimeline
+  const audio = useAudioPlayer(hasAudio && !currentMusic ? audioTimeline : null)
+  const music = useSourceSegmentPlayer(
+    rhythmMagnetSourceStartSeconds,
+    rhythmMagnetSourceEndSeconds - rhythmMagnetSourceStartSeconds,
+  )
   const [inspect, setInspect] = useState(false)
   const frameMetrics = useFrameMetrics(inspect && import.meta.env.DEV)
   const prompt = `MEJORAR CAMPAÑA\nCampaña: ${record.id}\nCambios: [describí qué querés mejorar]`
   const blockers = record.brief.productCapabilities.filter((claim) => claim.status !== 'VERIFIED')
   const CustomStage = record.playback.kind === 'custom' ? customStages[record.id] : undefined
+  const visualTime = currentMusic
+    ? Math.max(0, Math.min(10000, timeline.time - rhythmMagnetVideoStartMs))
+    : timeline.time
+  useEffect(() => {
+    if (currentMusic && !timeline.playing) music.pause()
+  }, [currentMusic, timeline.playing, music.pause])
   return (
     <div className="campaign-console__body">
       <div className="campaign-console__meta">
@@ -160,8 +174,15 @@ function CampaignConsolePlayer({ record }: { record: CampaignRecord }) {
           >
             <AdvancedSmokeStage timeMs={timeline.time} ratio={ratio} reduced={timeline.reduced} />
           </Suspense>
+        ) : currentMusic && timeline.time < rhythmMagnetVideoStartMs ? (
+          <div
+            className="fe-stage"
+            style={{ aspectRatio: `${formats[ratio].width}/${formats[ratio].height}` }}
+            data-render-stage
+            data-ratio={ratio}
+          />
         ) : CustomStage ? (
-          <CustomStage timeMs={timeline.time} ratio={ratio} />
+          <CustomStage timeMs={visualTime} ratio={ratio} />
         ) : (
           <TemplateStage record={record} timeMs={timeline.time} ratio={ratio} />
         )}
@@ -176,9 +197,12 @@ function CampaignConsolePlayer({ record }: { record: CampaignRecord }) {
           onClick={() => {
             if (timeline.playing) {
               timeline.pause()
-              audio.stop()
+              if (currentMusic) music.pause()
+              else audio.stop()
             } else {
-              void audio.playAt(timeline.time >= record.brief.duration ? 0 : timeline.time)
+              const start = timeline.time >= record.brief.duration ? 0 : timeline.time
+              if (currentMusic) void music.playAtMaster(start)
+              else void audio.playAt(start)
               timeline.play()
             }
           }}
@@ -190,7 +214,8 @@ function CampaignConsolePlayer({ record }: { record: CampaignRecord }) {
           disabled={timeline.reduced}
           onClick={() => {
             timeline.replay()
-            void audio.playAt(0)
+            if (currentMusic) void music.playAtMaster(0)
+            else void audio.playAt(0)
           }}
         >
           Reiniciar
@@ -202,7 +227,8 @@ function CampaignConsolePlayer({ record }: { record: CampaignRecord }) {
           step={record.motionStyle === 'CONTINUOUS' ? '1' : '10'}
           value={timeline.time}
           onChange={(event) => {
-            audio.stop()
+            if (currentMusic) music.seekToMaster(Number(event.target.value))
+            else audio.stop()
             timeline.seek(Number(event.target.value))
           }}
           aria-label="Posición de la campaña"
@@ -222,106 +248,151 @@ function CampaignConsolePlayer({ record }: { record: CampaignRecord }) {
         )}
         <span>VISUAL / {record.visualLevel ?? 'STANDARD'}</span>
         <span>
-          AUDIO /{' '}
-          {record.audioTimelineId === 'facturacion-electronica-uy-01'
-            ? audioVersion === 'V2'
-              ? 'FULL'
-              : 'SFX'
-            : (record.audioLevel ?? 'NONE')}
+          AUDIO / {currentMusic ? 'CURRENT AUDIO / RHYTHM MAGNET' : (record.audioLevel ?? 'NONE')}
         </span>
         <span>CHECKPOINTS / {record.visualCheckpoints?.length ?? 0}</span>
       </div>
       {hasAudio && (
         <div className="campaign-console__audio">
-          {record.audioTimelineId === 'facturacion-electronica-uy-01' && (
+          {currentMusic ? (
+            <>
+              <audio
+                ref={music.element}
+                src={rhythmMagnetSourceUrl}
+                preload="auto"
+                hidden
+                aria-hidden="true"
+              />
+              <div className="micro-label">CURRENT AUDIO / RHYTHM MAGNET</div>
+              <span className="micro-label">SOURCE / bensound-rhythmmagnet.mp3</span>
+              <span className="micro-label">
+                USED RANGE / 00:{rhythmMagnetSourceStartSeconds.toFixed(3).padStart(6, '0')} → 00:
+                {rhythmMagnetSourceEndSeconds.toFixed(3).padStart(6, '0')}
+              </span>
+              <span className="micro-label">MASTER / 12.000 s</span>
+              <span className="micro-label">
+                VIDEO / {(rhythmMagnetVideoStartMs / 1000).toFixed(3)} →{' '}
+                {(rhythmMagnetVideoEndMs / 1000).toFixed(3)} s
+              </span>
+              <span className="micro-label">
+                SFX / NONE · AMBIENCE / NONE · ADDITIONAL AUDIO / NONE
+              </span>
+              <span className="micro-label">
+                LICENSE / PENDING PROOF · COMMERCIAL USE / NOT CLEARED
+              </span>
+              <button
+                className="button button--signal"
+                onClick={() => {
+                  if (music.playing || timeline.playing) {
+                    timeline.pause()
+                    music.pause()
+                  } else {
+                    const start = timeline.time >= rhythmMagnetDurationMs ? 0 : timeline.time
+                    void music.playAtMaster(start)
+                    if (!timeline.reduced) timeline.play()
+                  }
+                }}
+              >
+                {music.playing || timeline.playing ? 'Pausar' : 'Escuchar'}
+              </button>
+              <label>
+                Volumen{' '}
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value={music.volume}
+                  onChange={(event) => music.setVolume(Number(event.target.value))}
+                />
+              </label>
+              <button
+                className="button"
+                onClick={() => music.setMuted(!music.muted)}
+                aria-pressed={!music.muted}
+              >
+                {music.muted ? 'MUSIC · MUTED' : 'MUSIC · ON'}
+              </button>
+              {music.error && <p role="alert">{music.error}</p>}
+            </>
+          ) : campaignAudio ? (
             <div role="group" aria-label="Comparar versiones de audio">
-              {(['V1', 'V2'] as const).map((version) => (
-                <button
-                  key={version}
-                  className={`button ${audioVersion === version ? 'button--signal' : ''}`}
-                  aria-pressed={audioVersion === version}
-                  onClick={() => {
+              <span className="micro-label">Archived campaign audio is unavailable.</span>
+            </div>
+          ) : null}
+          {!currentMusic && (
+            <>
+              <button
+                className="button"
+                onClick={() => audio.setMuted(!audio.muted)}
+                aria-pressed={!audio.muted}
+              >
+                {audio.muted ? 'MASTER AUDIO · OFF' : 'MASTER AUDIO · ON'}
+              </button>
+              <label>
+                Volumen{' '}
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value={audio.volume}
+                  onChange={(event) => audio.setVolume(Number(event.target.value))}
+                />
+              </label>
+              <label>
+                Escuchar{' '}
+                <select
+                  value={audio.mode}
+                  onChange={(event) => {
                     audio.stop()
                     timeline.pause()
-                    audio.setMode('mix')
-                    setAudioVersion(version)
+                    audio.setMode(event.target.value as typeof audio.mode)
                   }}
                 >
-                  AUDIO {version}
-                  {version === 'V1' ? ' · REFERENCIA' : ' · PROPUESTA'}
-                </button>
-              ))}
-            </div>
-          )}
-          <button
-            className="button"
-            onClick={() => audio.setMuted(!audio.muted)}
-            aria-pressed={!audio.muted}
-          >
-            {audio.muted ? 'MASTER AUDIO · OFF' : 'MASTER AUDIO · ON'}
-          </button>
-          <label>
-            Volumen{' '}
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.05"
-              value={audio.volume}
-              onChange={(event) => audio.setVolume(Number(event.target.value))}
-            />
-          </label>
-          <label>
-            Escuchar{' '}
-            <select
-              value={audio.mode}
-              onChange={(event) => {
-                audio.stop()
-                timeline.pause()
-                audio.setMode(event.target.value as typeof audio.mode)
-              }}
-            >
-              <option value="mix">Mezcla final</option>
-              <option value="sfx">Solo SFX</option>
-              {audioTimeline.tracks.some((track) => track.category === 'AMBIENCE') && (
-                <option value="ambience">Solo ambiente</option>
+                  <option value="mix">Mezcla final</option>
+                  <option value="sfx">Solo SFX</option>
+                  {audioTimeline.tracks.some((track) => track.category === 'AMBIENCE') && (
+                    <option value="ambience">Solo ambiente</option>
+                  )}
+                  {audioTimeline.tracks.some((track) => track.category === 'MUSIC') && (
+                    <option value="music">Solo música</option>
+                  )}
+                </select>
+              </label>
+              {!audioTimeline.tracks.some((track) => track.category === 'MUSIC') && (
+                <span className="micro-label">MUSIC · NONE / esta versión no usa música</span>
               )}
-              {audioTimeline.tracks.some((track) => track.category === 'MUSIC') && (
-                <option value="music">Solo música</option>
+              {!audioTimeline.tracks.some((track) => track.category === 'AMBIENCE') && (
+                <span className="micro-label">AMBIENCE · NONE</span>
               )}
-            </select>
-          </label>
-          {!audioTimeline.tracks.some((track) => track.category === 'MUSIC') && (
-            <span className="micro-label">MUSIC · NONE / esta versión no usa música</span>
+              {audio.mode === 'mix' &&
+                (['SFX', 'AMBIENCE', 'MUSIC'] as const).map((category) => {
+                  const exists = audioTimeline.tracks.some((track) => track.category === category)
+                  if (!exists)
+                    return (
+                      <span key={category} className="micro-label">
+                        {category} · NONE
+                      </span>
+                    )
+                  return (
+                    <label key={category}>
+                      <input
+                        type="checkbox"
+                        checked={audio.layers[category]}
+                        onChange={(event) => {
+                          audio.stop()
+                          timeline.pause()
+                          audio.setLayerEnabled(category, event.target.checked)
+                        }}
+                      />{' '}
+                      {category} · {audio.layers[category] ? 'ON' : 'OFF'}
+                    </label>
+                  )
+                })}
+              {audio.error && <p role="alert">{audio.error}</p>}
+            </>
           )}
-          {!audioTimeline.tracks.some((track) => track.category === 'AMBIENCE') && (
-            <span className="micro-label">AMBIENCE · NONE</span>
-          )}
-          {audio.mode === 'mix' &&
-            (['SFX', 'AMBIENCE', 'MUSIC'] as const).map((category) => {
-              const exists = audioTimeline.tracks.some((track) => track.category === category)
-              if (!exists)
-                return (
-                  <span key={category} className="micro-label">
-                    {category} · NONE
-                  </span>
-                )
-              return (
-                <label key={category}>
-                  <input
-                    type="checkbox"
-                    checked={audio.layers[category]}
-                    onChange={(event) => {
-                      audio.stop()
-                      timeline.pause()
-                      audio.setLayerEnabled(category, event.target.checked)
-                    }}
-                  />{' '}
-                  {category} · {audio.layers[category] ? 'ON' : 'OFF'}
-                </label>
-              )
-            })}
-          {audio.error && <p role="alert">{audio.error}</p>}
         </div>
       )}
       {import.meta.env.DEV && (
@@ -348,11 +419,13 @@ function CampaignConsolePlayer({ record }: { record: CampaignRecord }) {
           </span>
           <span>
             cue=
-            {hasAudio
-              ? activeAudioCues(audioTimeline, timeline.time)
-                  .map((cue) => cue.id)
-                  .join(', ') || '—'
-              : '—'}
+            {currentMusic
+              ? 'continuous music only'
+              : hasAudio
+                ? activeAudioCues(audioTimeline, timeline.time)
+                    .map((cue) => cue.id)
+                    .join(', ') || '—'
+                : '—'}
           </span>
         </div>
       )}

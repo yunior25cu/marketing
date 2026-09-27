@@ -6,6 +6,8 @@ import {
   audioStats,
   facturacionAudioTimeline,
   facturacionAudioTimelineV2,
+  facturacionAudioTimelineV21B,
+  facturacionAudioTimelineV21C,
   renderAudio,
   searchAudioAssets,
   validateAudioLicenseGate,
@@ -33,25 +35,51 @@ describe('Balaxys audio system', () => {
     expect(audioAssetRegistry['balaxys-minimal-pulse-v1'].commercialUse).toBe(true)
   })
 
-  it('keeps stock candidates outside the active licensed catalog', async () => {
+  it('keeps unlicensed candidates outside the active licensed catalog', async () => {
     const candidates = JSON.parse(
       await readFile('assets/audio/manifests/candidate-manifest.json', 'utf8'),
     )
-    expect(candidates.candidates).toHaveLength(3)
+    expect(candidates.candidates).toHaveLength(4)
     expect(
-      candidates.candidates.every(
-        (item: { commercialUse: boolean | null; status: string }) =>
-          item.commercialUse === null && item.status === 'CANDIDATE_NOT_DOWNLOADED',
+      candidates.candidates.filter(
+        (item: { status: string }) => item.status === 'CANDIDATE_NOT_DOWNLOADED',
       ),
+    ).toHaveLength(3)
+    const rhythmMagnet = candidates.candidates.find(
+      (item: { id: string }) => item.id === 'bensound-rhythm-magnet',
+    )
+    expect(rhythmMagnet).toMatchObject({
+      status: 'SELECTED_LICENSE_PENDING',
+      commercialUse: null,
+      sha256: expect.stringMatching(/^[a-f0-9]{64}$/),
+    })
+    expect(
+      candidates.candidates
+        .filter((item: { id: string }) => item.id !== 'bensound-rhythm-magnet')
+        .every(
+          (item: { commercialUse: boolean | null; status: string }) =>
+            item.commercialUse === null && item.status === 'CANDIDATE_NOT_DOWNLOADED',
+        ),
     ).toBe(true)
   })
 
-  it('pins exact V1 and V2 assets and their deterministic definitions', async () => {
+  it('keeps only V2.2 active and archives prior deterministic definitions', async () => {
     const lock = JSON.parse(
       await readFile('campaigns/facturacion-electronica-uy-01/audio-lock.json', 'utf8'),
     )
-    expect(lock.versions.map((item: { version: number }) => item.version)).toEqual([1, 2])
-    for (const version of lock.versions)
+    expect(lock.versions.map((item: { version: number | string }) => item.version)).toEqual(['2.2'])
+    expect(lock.versions[0]).toMatchObject({
+      type: 'EXTERNAL_TRACK',
+      sourceStartMs: 8000,
+      sourceEndMs: 20000,
+      masterDurationMs: 12000,
+      videoStartMs: 1000,
+      videoEndMs: 11000,
+    })
+    expect(lock.archivedVersions.map((item: { version: number | string }) => item.version)).toEqual(
+      [1, 2, '2.1-A', '2.1-B', '2.1-C'],
+    )
+    for (const version of lock.archivedVersions)
       for (const entry of version.assets) {
         expect(audioAssetRegistry[entry.id], `MISSING_AUDIO_ASSET: ${entry.id}`).toBeTruthy()
         expect(
@@ -83,5 +111,20 @@ describe('Balaxys audio system', () => {
     expect(renderAudio(facturacionAudioTimelineV2, { mode: 'music' })).not.toEqual(
       renderAudio(facturacionAudioTimelineV2, { mode: 'sfx' }),
     )
+  })
+
+  it('provides comparable seven-cue V2.1 B/C mixes with music isolated to C', () => {
+    expect(facturacionAudioTimelineV21B.cues).toHaveLength(7)
+    expect(facturacionAudioTimelineV21C.cues).toHaveLength(7)
+    expect(facturacionAudioTimelineV21B.tracks.some((track) => track.category === 'MUSIC')).toBe(
+      false,
+    )
+    expect(facturacionAudioTimelineV21C.tracks.some((track) => track.category === 'MUSIC')).toBe(
+      true,
+    )
+    expect(validateAudioTimeline(facturacionAudioTimelineV21B)).toEqual([])
+    expect(validateAudioTimeline(facturacionAudioTimelineV21C)).toEqual([])
+    expect(audioStats(renderAudio(facturacionAudioTimelineV21B), 48000).duration).toBe(10)
+    expect(audioStats(renderAudio(facturacionAudioTimelineV21C), 48000).duration).toBe(10)
   })
 })

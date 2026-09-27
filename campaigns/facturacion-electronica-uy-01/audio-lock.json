@@ -1,8 +1,25 @@
 {
   "schemaVersion": 1,
   "campaignId": "facturacion-electronica-uy-01",
-  "note": "Stable serialized procedural definitions; regeneration changes the lock and requires review.",
+  "note": "Only version 2.2 is active. Prior campaign audio versions remain archived here for traceability; do not activate them in Campaign Console.",
   "versions": [
+    {
+      "version": "2.2",
+      "type": "EXTERNAL_TRACK",
+      "assetId": "bensound-rhythm-magnet",
+      "sha256": "f453902b0ada15d10361a8bdc767ef9b4499a3dabac279e7b9121e299372dee1",
+      "sourceStartMs": 8000,
+      "sourceEndMs": 20000,
+      "masterStartMs": 0,
+      "masterDurationMs": 12000,
+      "videoStartMs": 1000,
+      "videoEndMs": 11000,
+      "gainDb": -1.9,
+      "processing": "AAC encoding and 48 kHz resampling; -1.9 dB attenuation to bring source true peak +0.9 dBTP to approximately -1.0 dBTP; no fade, tempo, pitch, or creative effects",
+      "licenseStatus": "PENDING_PROOF"
+    }
+  ],
+  "archivedVersions": [
     {
       "version": 1,
       "timelineSha256": "9645fd2d11d759aced20fe0659c83a9e07f26cb1bd10a2f475467ed876f500f3",
@@ -23,7 +40,8 @@
           "id": "final-impact",
           "sha256": "fb18cbd34321168ad43e7dd8c79e82bee173fc171a4cdec50d2dee3338d1bb2a"
         }
-      ]
+      ],
+      "status": "ARCHIVED"
     },
     {
       "version": 2,
@@ -61,7 +79,129 @@
           "id": "balaxys-minimal-pulse-v1",
           "sha256": "7f2784d4731a2ba1f8c7b3dcc422c60bbca4f5956c93530e8551ca98cd127172"
         }
-      ]
+      ],
+      "status": "ARCHIVED"
+    },
+    {
+      "version": "2.1-A",
+      "timelineSha256": "8e32d54c72ac2495c67d1b6b299034f7830b91f8450bd4ababadfd0b3f59e5c4",
+      "assets": [
+        {
+          "id": "signal-pulse",
+          "sha256": "11e052b2912800c21dd164ae6aac40349922b66fc30baa7a0dfa8b6f3d8f3cc7"
+        },
+        {
+          "id": "line-build",
+          "sha256": "4388f91f0519d8bb4469246aa1601638091249e07b55e1605ceecf70369a3202"
+        },
+        {
+          "id": "transaction-tick",
+          "sha256": "bcc92d8ea2a4ee94a4668f716d349795cad8116ffd82bcd5b0b6dbf8d8747009"
+        },
+        {
+          "id": "data-glide",
+          "sha256": "d93a823136380158c3d4b5fc43b152c657f89bd9ce15f2e3b168160642f4d672"
+        },
+        {
+          "id": "soft-confirm",
+          "sha256": "b7c36e06978a09f71bc46ed5257ea017807ffe51469fcad79ac26a1b25b06053"
+        },
+        {
+          "id": "resolve-harmonic",
+          "sha256": "3b769a4d7f3e9a4bb0d3893f0960bedce32db898a85044b0a33bde430c578ef4"
+        },
+        {
+          "id": "balaxys-tech-room-v1",
+          "sha256": "2ae6040a8666254a978cd039052485ffdc711a6e41ae14708756fb229aa52cf8"
+        },
+        {
+          "id": "balaxys-minimal-pulse-v1",
+          "sha256": "7f2784d4731a2ba1f8c7b3dcc422c60bbca4f5956c93530e8551ca98cd127172"
+        }
+      ],
+      "status": "ARCHIVED"
+    },
+    {
+      "version": "2.1-B",
+      "timelineSha256": "9466e96077690d643e470011185f7925b60b9122ccfc36196e896688018a8a55",
+      "assets": [
+        {
+          "id": "signal-pulse",
+          "sha256": "11e052b2912800c21dd164ae6aac40349922b66fc30baa7a0dfa8b6f3d8f3cc7"
+        },
+        {
+          "id": "line-build",
+          "sha256": "4388f91f0519d8bb4469246aa1601638091249e07b55e1605ceecf70369a3202"
+        },
+        {
+          "id": "transaction-tick",
+          "sha256": "bcc92d8ea2a4ee94a4668f716d349795cad8116ffd82bcd5b0b6dbf8d8747009"
+        },
+        {
+          "id": "transmission-sweep-v21",
+          "sha256": "ae375d122db7ea06b56192eba68d9abd30741facc798952a9286894f399aa00a"
+        },
+        {
+          "id": "processing-tension-v21",
+          "sha256": "e6e20eb487c69a97b4367e3c33e78ea338f9d77eada11bd455b2047cb41df442"
+        },
+        {
+          "id": "response-impact-v21",
+          "sha256": "4d69a7711d85c21b65f1ac1357410c93800464977d0da593c3b46525b00d8d2e"
+        },
+        {
+          "id": "brand-resolve-v21",
+          "sha256": "eb7d3398b0456204e2b6826b12fd194526b3014ed9559bc895cf3a76f4d4f9e4"
+        },
+        {
+          "id": "balaxys-spatial-air-v21",
+          "sha256": "2118d72e66143e409487f4392aa7dc9eb688375d09b22b0201653ea66827adc7"
+        }
+      ],
+      "status": "ARCHIVED"
+    },
+    {
+      "version": "2.1-C",
+      "timelineSha256": "70ea8f9cea4a9d6e6b79ce656ad65195de2d6af58759f53a5ab61f9fb8f4e51d",
+      "assets": [
+        {
+          "id": "signal-pulse",
+          "sha256": "11e052b2912800c21dd164ae6aac40349922b66fc30baa7a0dfa8b6f3d8f3cc7"
+        },
+        {
+          "id": "line-build",
+          "sha256": "4388f91f0519d8bb4469246aa1601638091249e07b55e1605ceecf70369a3202"
+        },
+        {
+          "id": "transaction-tick",
+          "sha256": "bcc92d8ea2a4ee94a4668f716d349795cad8116ffd82bcd5b0b6dbf8d8747009"
+        },
+        {
+          "id": "transmission-sweep-v21",
+          "sha256": "ae375d122db7ea06b56192eba68d9abd30741facc798952a9286894f399aa00a"
+        },
+        {
+          "id": "processing-tension-v21",
+          "sha256": "e6e20eb487c69a97b4367e3c33e78ea338f9d77eada11bd455b2047cb41df442"
+        },
+        {
+          "id": "response-impact-v21",
+          "sha256": "4d69a7711d85c21b65f1ac1357410c93800464977d0da593c3b46525b00d8d2e"
+        },
+        {
+          "id": "brand-resolve-v21",
+          "sha256": "eb7d3398b0456204e2b6826b12fd194526b3014ed9559bc895cf3a76f4d4f9e4"
+        },
+        {
+          "id": "balaxys-spatial-air-v21",
+          "sha256": "2118d72e66143e409487f4392aa7dc9eb688375d09b22b0201653ea66827adc7"
+        },
+        {
+          "id": "balaxys-motion-bed-v21",
+          "sha256": "333372425553cb1981051fdb051da38b1734c4a97469bf97d772f7f40326b98b"
+        }
+      ],
+      "status": "ARCHIVED"
     }
   ]
 }

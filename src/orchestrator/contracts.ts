@@ -77,7 +77,7 @@ export interface CampaignRecord {
   storyboard: CampaignPhase[]
   copy: CampaignCopy
   visualLevel?: 'STANDARD' | 'ADVANCED_2D' | 'CANVAS' | 'THREE_D' | 'SHADER'
-  audioLevel?: 'NONE' | 'SFX' | 'SFX_AMBIENCE' | 'FULL'
+  audioLevel?: 'NONE' | 'SFX' | 'SFX_AMBIENCE' | 'MUSIC_ONLY' | 'FULL'
   visualCheckpoints?: number[]
   transitionCheckpoints?: {
     at: number
@@ -93,6 +93,23 @@ export interface CampaignRecord {
   cameraPath?: CameraKeyframe[]
   transformationMap?: { from: string; transition: SemanticTransition; to: string; at: number }[]
   audioTimelineId?: string
+  currentAudio?: {
+    id: string
+    title: string
+    filename: string
+    source: string
+    author: string
+    sourceStartMs: number
+    sourceEndMs: number
+    masterDurationMs: number
+    videoStartMs: number
+    videoEndMs: number
+    sfx: 'NONE'
+    ambience: 'NONE'
+    additionalAudio: 'NONE'
+    licenseStatus: 'PENDING_PROOF' | 'CLEARED'
+    commercialUse: boolean | null
+  }
   playback: {
     kind: 'launch-01' | 'template' | 'custom'
     sceneId: string

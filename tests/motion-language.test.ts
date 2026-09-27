@@ -23,8 +23,30 @@ const root = process.cwd()
 const campaign = JSON.parse(
   readFileSync(join(root, 'campaigns/continuous-motion-smoke-test/campaign.json'), 'utf8'),
 )
+const facturacionCampaign = JSON.parse(
+  readFileSync(join(root, 'campaigns/facturacion-electronica-uy-01/campaign.json'), 'utf8'),
+)
 
 describe('Balaxys continuous transformation language', () => {
+  it('keeps the ten-second visual map intact inside the twelve-second music master', () => {
+    expect(facturacionCampaign.version).toBe(2.2)
+    expect(facturacionCampaign.brief.duration).toBe(12000)
+    expect(facturacionCampaign.visualVersion).toBe('2.1')
+    expect(facturacionCampaign.visualChanged).toBe(false)
+    expect(facturacionCampaign.currentAudio).toMatchObject({
+      sourceStartMs: 8000,
+      sourceEndMs: 20000,
+      masterDurationMs: 12000,
+      videoStartMs: 1000,
+      videoEndMs: 11000,
+      sfx: 'NONE',
+      ambience: 'NONE',
+      additionalAudio: 'NONE',
+    })
+    expect(facturacionCampaign.storyboard.at(-1).to).toBe(10000)
+    expect(validateRecord(facturacionCampaign)).toEqual([])
+  })
+
   it('requires evidence for all nine professional motion graphics criteria', () => {
     const review = Object.fromEntries(
       [
