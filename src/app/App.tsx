@@ -21,6 +21,11 @@ const ContinuousMotionCampaign = lazy(() =>
     default: module.ContinuousMotionCampaign,
   })),
 )
+const FacturacionCampaign = lazy(() =>
+  import('@/campaigns/facturacion-electronica-uy-01/FacturacionCampaign').then((module) => ({
+    default: module.FacturacionCampaign,
+  })),
+)
 
 export function App() {
   const path = window.location.pathname.replace(/\/$/, '') || '/'
@@ -52,6 +57,8 @@ export function App() {
         <AdvancedCampaign />
       ) : path === '/campaigns/continuous-motion-smoke-test' ? (
         <ContinuousMotionCampaign />
+      ) : path === '/campaigns/facturacion-electronica-uy-01' ? (
+        <FacturacionCampaign />
       ) : (
         <Home />
       )}

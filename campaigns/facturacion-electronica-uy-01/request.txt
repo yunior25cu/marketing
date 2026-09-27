@@ -1,0 +1,406 @@
+CREAR CAMPAÑA
+
+## CAMPAÑA
+
+Tema:
+Facturación Electrónica en Uruguay con Balaxys ERP.
+
+Objetivo:
+Crear una pieza audiovisual de motion graphics profesional que comunique de forma clara, moderna y visual que Balaxys permite integrar la facturación electrónica uruguaya dentro del flujo normal de operación de una empresa.
+
+La campaña debe transmitir principalmente esta idea:
+
+> FACTURAR NO DEBERÍA SER UN PROCESO AISLADO.
+> EN BALAXYS, LA FACTURACIÓN ELECTRÓNICA FORMA PARTE DE LA OPERACIÓN.
+
+No quiero una lista de funcionalidades ni una explicación técnica de DGI.
+
+Quiero mostrar visualmente cómo una operación comercial se transforma en un documento electrónico, atraviesa el proceso fiscal correspondiente y continúa conectada con el resto de la empresa.
+
+---
+
+## PÚBLICO
+
+Dueños, administradores, responsables comerciales y responsables administrativos de pequeñas y medianas empresas uruguayas.
+
+Personas que entienden qué es una factura electrónica, pero no necesariamente conocen técnicamente CFE, XML, firma electrónica, CAE o web services.
+
+---
+
+## DURACIÓN
+
+10 segundos.
+
+---
+
+## FORMATOS
+
+Crear master:
+
+16:9.
+
+Preparar adaptación real, no simple escalado, para:
+
+9:16
+4:5
+1:1
+
+---
+
+## TIPO DE PIEZA
+
+Motion graphics audiovisual profesional.
+
+NO:
+
+- presentación;
+- slideshow;
+- demo tradicional de software;
+- grabación de pantalla;
+- dashboard con zoom;
+- secuencia de cards;
+- explicación técnica;
+- tutorial;
+- infografía estática animada.
+
+Debe sentirse como una pieza de motion design creada específicamente para Balaxys.
+
+---
+
+# CONCEPTO CENTRAL
+
+Partir de una operación extremadamente simple:
+
+VENTA
+
+y hacer que esa operación se transforme visualmente.
+
+Posible viaje narrativo:
+
+VENTA
+→ DOCUMENTO
+→ CFE
+→ FIRMA
+→ ENVÍO
+→ DGI
+→ RESPUESTA
+→ EMPRESA ACTUALIZADA
+
+Pero NO representar estos pasos como ocho cajas independientes.
+
+Deben formar parte de UNA SOLA TRANSFORMACIÓN AUDIOVISUAL.
+
+La composición debe evolucionar continuamente.
+
+---
+
+# DIRECCIÓN CREATIVA
+
+Usar:
+
+BALAXYS BRAND OS
+
+BALAXYS CONTINUOUS MOTION LANGUAGE
+
+Visual Engine
+
+Sound System
+
+y todos los sistemas existentes.
+
+El Campaign Orchestrator debe decidir qué agentes especializados necesita e invocarlos.
+
+Como mínimo evaluar la participación de:
+
+- Campaign Director;
+- Creative Director;
+- Copywriter;
+- Motion Designer;
+- Visual Engineer;
+- Sound Designer;
+- Audio Engineer;
+- Frontend Engineer;
+- Brand Guardian;
+- Visual QA Director;
+- AV Quality Auditor;
+- Performance Auditor.
+
+No necesito interactuar manualmente con ellos.
+
+El Orchestrator coordina todo el proceso.
+
+---
+
+# MECANISMO VISUAL
+
+Quiero una transformación continua.
+
+Ejemplo conceptual, NO obligatorio:
+
+Una cifra de venta aparece como elemento gráfico.
+
+La cifra se integra en una estructura documental.
+
+Las líneas del documento se reorganizan y forman un CFE.
+
+Un pulso atraviesa el documento representando firma/procesamiento.
+
+El documento se desplaza por un espacio visual y atraviesa una referencia abstracta a DGI.
+
+No representar DGI como un edificio ni inventar interfaces oficiales.
+
+Una respuesta regresa mediante el mismo flujo.
+
+La composición se expande y revela que la operación continúa conectada con:
+
+VENTA
+CONTABILIDAD
+CUENTA DEL CLIENTE
+INVENTARIO
+
+solamente cuando esas relaciones hayan sido verificadas como capacidades reales de Balaxys.
+
+El movimiento debe contar la historia.
+
+---
+
+# MOTION GRAPHICS
+
+Priorizar:
+
+- transformation;
+- morphing;
+- kinetic typography;
+- shape animation;
+- line animation;
+- masks;
+- visual continuity;
+- match cuts;
+- camera choreography;
+- 2.5D;
+- spatial movement;
+- parallax cuando aporte;
+- procedural motion cuando aporte;
+- data choreography;
+- motion typography.
+
+No basarse principalmente en:
+
+fade-in
+fade-out
+cards
+stagger
+slide transitions.
+
+---
+
+# DIRECCIÓN DE CÁMARA
+
+La cámara debe participar de la narrativa.
+
+Puede:
+
+seguir el documento;
+atravesar información;
+acercarse a detalles;
+alejarse para revelar el sistema;
+usar profundidad moderada.
+
+Debe sentirse diseñado como video.
+
+No como viewport de una aplicación.
+
+---
+
+# PROPUESTA DE ESTRUCTURA TEMPORAL
+
+No tratar estos tiempos como diapositivas.
+
+Son beats de una misma composición.
+
+## 0.0–1.5 s
+
+Una operación comercial nace.
+
+Texto mínimo:
+
+VENTA
+
+El importe o el documento comienza a construirse.
+
+---
+
+## 1.5–3.5 s
+
+La propia operación se transforma en documento electrónico.
+
+Introducir visualmente:
+
+CFE
+
+No detener la composición para explicarlo.
+
+El espectador debe comprenderlo por transformación.
+
+---
+
+## 3.5–5.5 s
+
+Representar procesamiento fiscal:
+
+firma
+→ envío
+→ DGI
+
+mediante señales, transformación, movimiento y respuesta.
+
+NO mostrar código XML salvo que el Creative Director encuentre una manera extremadamente breve y estéticamente útil.
+
+---
+
+## 5.5–7.0 s
+
+Regresa una respuesta.
+
+Representar únicamente estados reales y verificables.
+
+No inventar wording oficial.
+
+La confirmación debe producir un cambio visual claro.
+
+---
+
+## 7.0–8.5 s
+
+La cámara se abre.
+
+Descubrimos que el documento no estaba aislado.
+
+La operación continúa conectada con otros procesos reales de Balaxys.
+
+---
+
+## 8.5–10.0 s
+
+Resolución de marca.
+
+Explorar un cierre como:
+
+FACTURACIÓN ELECTRÓNICA
+SIN SACARLA DE TU OPERACIÓN.
+
+BALAXYS
+
+Pero el Copywriter debe evaluar y mejorar esta frase.
+
+No considerar este copy obligatorio.
+
+La resolución debe surgir visualmente de la composición anterior.
+
+No colocar simplemente una placa final independiente.
+
+---
+
+# COPY
+
+Muy poco texto.
+
+No sobreexplicar.
+
+Priorizar frases de máximo impacto.
+
+Evitar:
+
+"Facturá fácil y rápido."
+
+"Todo en un solo lugar."
+
+"Transformá tu negocio."
+
+"Facturación inteligente."
+
+"Potenciá tu empresa."
+
+El Copywriter debe generar una propuesta propia alineada con Balaxys.
+
+---
+
+# URUGUAY
+
+La campaña debe sentirse inequívocamente relacionada con Uruguay.
+
+Pero evitar clichés como:
+
+bandera gigante;
+mapa decorativo;
+mate;
+Montevideo;
+colores patrióticos sin función.
+
+La relación con Uruguay debe surgir principalmente de:
+
+DGI
+CFE
+e-Factura
+terminología fiscal real.
+
+
+IN_REVIEW.
+
+
+---
+
+# SONIDO
+
+La pieza debe incluir sound design.
+
+No necesito música obligatoriamente.
+
+Quiero que el Sound Designer decida si aporta.
+
+Priorizar:
+
+- pulso inicial;
+- construcción documental;
+- desplazamiento/flujo;
+- firma o confirmación;
+- transmisión;
+- respuesta;
+- resolución final.
+
+El sonido debe seguir el movimiento.
+
+No colocar SFX después de terminar la animación como decoración.
+
+Motion y audio deben diseñarse conjuntamente.
+
+---
+
+# NIVEL VISUAL
+
+Quiero una pieza más ambiciosa que una animación UI.
+
+El Visual Engineer debe evaluar libremente:
+
+SVG
+Canvas
+Three.js
+2.5D
+WebGL
+shaders
+
+pero elegir únicamente lo que realmente mejore el concepto.
+
+No usar Three.js simplemente para decir que usamos 3D.
+
+---
+
+# IDENTIDAD
+
+Debe reconocerse como Balaxys incluso antes del wordmark final.
+
+Mantener:
+
+- paleta;
+- tipografía;
+- motion

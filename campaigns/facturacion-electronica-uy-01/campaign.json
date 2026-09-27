@@ -1,0 +1,436 @@
+{
+  "schemaVersion": 1,
+  "id": "facturacion-electronica-uy-01",
+  "version": 1,
+  "status": "IN_REVIEW",
+  "createdAt": "2026-09-27T15:43:06.899Z",
+  "updatedAt": "2026-09-27T16:03:50.844Z",
+  "approvedAt": null,
+  "approvedBy": null,
+  "brief": {
+    "title": "Facturaci?n electr?nica. Parte de tu operaci?n.",
+    "objective": "Mostrar la facturaci?n electr?nica de Uruguay como parte de la operaci?n con Balaxys.",
+    "audience": "Due?os, administradores y equipos comerciales de pymes uruguayas.",
+    "message": "Facturar no deber?a ser un proceso aislado. En Balaxys, la facturaci?n electr?nica forma parte de la operaci?n.",
+    "duration": 10000,
+    "formats": ["16:9", "9:16", "4:5", "1:1"],
+    "channel": "Digital genérico",
+    "cta": null,
+    "tone": "Preciso, sobrio y operativo",
+    "productCapabilities": [
+      {
+        "statement": "Emisi?n de CFE desde el flujo comercial",
+        "status": "VERIFIED",
+        "evidence": "https://www.balaxys.com/ ? consultado 2026-09-27; documentaci?n p?blica del proveedor, alcance en product-evidence.md."
+      },
+      {
+        "statement": "Documentaci?n comercial vinculada al cliente y su cuenta corriente",
+        "status": "VERIFIED",
+        "evidence": "https://www.balaxys.com/modulos/facturacion ? consultado 2026-09-27; documentaci?n p?blica del proveedor, alcance en product-evidence.md."
+      },
+      {
+        "statement": "Contabilidad vinculada a la operaci?n, seg?n configuraci?n",
+        "status": "VERIFIED",
+        "evidence": "https://www.balaxys.com/modulos/contabilidad ? consultado 2026-09-27; documentaci?n p?blica del proveedor, alcance en product-evidence.md."
+      },
+      {
+        "statement": "Firma digital y habilitaci?n para emitir CFE",
+        "status": "VERIFIED",
+        "evidence": "https://www.balaxys.com/solucion ? consultado 2026-09-27; documentaci?n p?blica del proveedor, alcance en product-evidence.md."
+      }
+    ],
+    "constraints": [
+      "Motion graphics continuo de diez segundos",
+      "Sin interfaz ni estados fiscales inventados",
+      "Funciones seg?n plan y configuraci?n",
+      "Representaci?n conceptual del intercambio; no promete tiempos reales",
+      "No atribuir los v?nculos operativos a la respuesta DGI"
+    ],
+    "references": ["request.txt", "product-evidence.md"],
+    "campaignType": "awareness",
+    "audio": "required",
+    "language": "es"
+  },
+  "visualLevel": "ADVANCED_2D",
+  "audioLevel": "SFX",
+  "motionStyle": "CONTINUOUS",
+  "powerpointRisk": "LOW",
+  "motionContinuity": "NEEDS_REVISION",
+  "motionGraphicsQuality": "FAIL",
+  "concept": {
+    "idea": "El documento conserva su origen.",
+    "visualMechanism": "El subrayado de VENTA se divide y pliega en documento; sus l?neas viajan y regresan. La c?mara revela relaciones operativas existentes.",
+    "narrative": "Venta ? documento CFE ? firma ? env?o ? DGI ? respuesta ? v?nculos operativos ? resoluci?n.",
+    "closing": "FACTURACI?N ELECTR?NICA. PARTE DE TU OPERACI?N.",
+    "originalityCheck": "El Signal Lime recorre la causalidad y el documento conserva estructura e identidad durante todo el intercambio; la ret?cula y tipograf?a Balaxys preceden a la firma."
+  },
+  "storyboard": [
+    {
+      "id": "sale",
+      "from": 0,
+      "to": 1500,
+      "label": "Origen",
+      "visual": "Subrayado tipogr?fico segmentado",
+      "copy": "VENTA"
+    },
+    {
+      "id": "document",
+      "from": 1500,
+      "to": 3500,
+      "label": "Documento",
+      "visual": "Cinco segmentos pliegan el contorno CFE",
+      "copy": "e-FACTURA / CFE"
+    },
+    {
+      "id": "exchange",
+      "from": 3500,
+      "to": 6050,
+      "label": "Intercambio",
+      "visual": "Firma, env?o y c?mara hacia el plano DGI",
+      "copy": "FIRMA / ENV?O / DGI"
+    },
+    {
+      "id": "response",
+      "from": 6050,
+      "to": 7000,
+      "label": "Retorno",
+      "visual": "La respuesta viaja al mismo documento sin check de aprobaci?n",
+      "copy": "RESPUESTA"
+    },
+    {
+      "id": "relations",
+      "from": 7000,
+      "to": 8150,
+      "label": "Relaciones",
+      "visual": "Pullback revela los v?nculos operativos existentes",
+      "copy": "VENTA / CONTABILIDAD / CUENTA CLIENTE"
+    },
+    {
+      "id": "resolution",
+      "from": 8150,
+      "to": 10000,
+      "label": "Resoluci?n",
+      "visual": "M?scara tipogr?fica ligada al documento",
+      "copy": "FACTURACI?N ELECTR?NICA. PARTE DE TU OPERACI?N."
+    }
+  ],
+  "copy": {
+    "introLines": ["VENTA"],
+    "closingLines": ["FACTURACI?N ELECTR?NICA.", "PARTE DE TU OPERACI?N.", "BALAXYS"],
+    "cta": null
+  },
+  "playback": {
+    "kind": "custom",
+    "sceneId": "facturacion-electronica-uy-01",
+    "introMs": 1500,
+    "outroMs": 1850
+  },
+  "reviews": {
+    "brand": {
+      "status": "PENDING",
+      "summary": "Identidad coherente en checkpoints; falta revisar video completo y gate MOTION_GRAPHICS_QUALITY.",
+      "blocking": true
+    },
+    "quality": {
+      "status": "PENDING",
+      "summary": "Claims limitados respaldados por fuentes oficiales y t?cnica correcta; veredicto creativo pendiente.",
+      "blocking": true
+    },
+    "performance": {
+      "status": "PASS",
+      "summary": "Chrome headless local: alrededor de 59.7?59.9 FPS y p95 16.8 ms en los cuatro ratios; no equivale a garant?a en hardware real.",
+      "blocking": false
+    },
+    "technical": {
+      "lint": true,
+      "typecheck": true,
+      "tests": true,
+      "build": true
+    },
+    "visual": {
+      "status": "PENDING",
+      "summary": "68 checkpoints previstos en cuatro ratios, sin errores t?cnicos; falta inspecci?n del movimiento completo.",
+      "blocking": true
+    },
+    "audio": {
+      "status": "PASS",
+      "summary": "Cuatro MP4: 10.005 s, video+AAC, once cues medibles, peak 0.397, sin clipping. La escucha perceptual pertenece a AV QA.",
+      "blocking": false
+    },
+    "av": {
+      "status": "PENDING",
+      "summary": "Sync t?cnico PASS en cuatro archivos; escucha y juicio audiovisual integral pendientes.",
+      "blocking": true
+    }
+  },
+  "audioTimelineId": "facturacion-electronica-uy-01",
+  "motionBeats": [
+    {
+      "id": "sale",
+      "from": 0,
+      "to": 1500,
+      "label": "Origen",
+      "persistentObjects": ["document", "fiscal-plane", "operational-links"],
+      "transformation": "Subrayado tipogr?fico segmentado",
+      "camera": "Tracking al intercambio; pullback a relaciones, reposo final.",
+      "transition": "TYPOGRAPHIC_TRANSFORMATION",
+      "audioCue": "sale-origin"
+    },
+    {
+      "id": "document",
+      "from": 1500,
+      "to": 3500,
+      "label": "Documento",
+      "persistentObjects": ["document", "fiscal-plane", "operational-links"],
+      "transformation": "Cinco segmentos pliegan el contorno CFE",
+      "camera": "Tracking al intercambio; pullback a relaciones, reposo final.",
+      "transition": "MORPH",
+      "audioCue": "document-outline, document-lines, cfe-form"
+    },
+    {
+      "id": "exchange",
+      "from": 3500,
+      "to": 6050,
+      "label": "Intercambio",
+      "persistentObjects": ["document", "fiscal-plane", "operational-links"],
+      "transformation": "Firma, env?o y c?mara hacia el plano DGI",
+      "camera": "Tracking al intercambio; pullback a relaciones, reposo final.",
+      "transition": "CARRY",
+      "audioCue": "signature-pass, outbound, dgi-arrival"
+    },
+    {
+      "id": "response",
+      "from": 6050,
+      "to": 7000,
+      "label": "Retorno",
+      "persistentObjects": ["document", "fiscal-plane", "operational-links"],
+      "transformation": "La respuesta viaja al mismo documento sin check de aprobaci?n",
+      "camera": "Tracking al intercambio; pullback a relaciones, reposo final.",
+      "transition": "CONTINUATION",
+      "audioCue": "response-origin, response-return"
+    },
+    {
+      "id": "relations",
+      "from": 7000,
+      "to": 8150,
+      "label": "Relaciones",
+      "persistentObjects": ["document", "fiscal-plane", "operational-links"],
+      "transformation": "Pullback revela los v?nculos operativos existentes",
+      "camera": "Tracking al intercambio; pullback a relaciones, reposo final.",
+      "transition": "CAMERA_DISCOVERY",
+      "audioCue": "origin-link"
+    },
+    {
+      "id": "resolution",
+      "from": 8150,
+      "to": 10000,
+      "label": "Resoluci?n",
+      "persistentObjects": ["document", "fiscal-plane", "operational-links"],
+      "transformation": "M?scara tipogr?fica ligada al documento",
+      "camera": "Tracking al intercambio; pullback a relaciones, reposo final.",
+      "transition": "MASK_TRANSITION",
+      "audioCue": "brand-resolution"
+    }
+  ],
+  "transformationMap": [
+    {
+      "from": "sale",
+      "to": "document",
+      "transition": "MORPH",
+      "at": 1500
+    },
+    {
+      "from": "document",
+      "to": "exchange",
+      "transition": "CARRY",
+      "at": 3500
+    },
+    {
+      "from": "exchange",
+      "to": "response",
+      "transition": "CONTINUATION",
+      "at": 6050
+    },
+    {
+      "from": "response",
+      "to": "relations",
+      "transition": "CAMERA_DISCOVERY",
+      "at": 7000
+    },
+    {
+      "from": "relations",
+      "to": "resolution",
+      "transition": "MASK_TRANSITION",
+      "at": 8150
+    }
+  ],
+  "cameraPath": [
+    {
+      "at": 0,
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    {
+      "at": 1400,
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    {
+      "at": 2950,
+      "x": 0,
+      "y": 0,
+      "scale": 1.1
+    },
+    {
+      "at": 3750,
+      "x": 0,
+      "y": 0,
+      "scale": 1.1
+    },
+    {
+      "at": 5200,
+      "x": -5,
+      "y": 0,
+      "scale": 0.94
+    },
+    {
+      "at": 6100,
+      "x": -5,
+      "y": 0,
+      "scale": 0.94
+    },
+    {
+      "at": 8050,
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    {
+      "at": 10000,
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    }
+  ],
+  "visualCheckpoints": [
+    350, 1400, 2000, 2150, 2900, 3750, 4450, 4900, 5350, 6050, 6150, 6700, 7600, 8500, 8850, 9200,
+    9999
+  ],
+  "transitionCheckpoints": [
+    {
+      "at": 1350,
+      "transition": "MORPH",
+      "moment": "before"
+    },
+    {
+      "at": 1700,
+      "transition": "MORPH",
+      "moment": "during"
+    },
+    {
+      "at": 2100,
+      "transition": "MORPH",
+      "moment": "after"
+    },
+    {
+      "at": 3350,
+      "transition": "CARRY",
+      "moment": "before"
+    },
+    {
+      "at": 3700,
+      "transition": "CARRY",
+      "moment": "during"
+    },
+    {
+      "at": 4100,
+      "transition": "CARRY",
+      "moment": "after"
+    },
+    {
+      "at": 5900,
+      "transition": "CONTINUATION",
+      "moment": "before"
+    },
+    {
+      "at": 6250,
+      "transition": "CONTINUATION",
+      "moment": "during"
+    },
+    {
+      "at": 6650,
+      "transition": "CONTINUATION",
+      "moment": "after"
+    },
+    {
+      "at": 6850,
+      "transition": "CAMERA_DISCOVERY",
+      "moment": "before"
+    },
+    {
+      "at": 7200,
+      "transition": "CAMERA_DISCOVERY",
+      "moment": "during"
+    },
+    {
+      "at": 7600,
+      "transition": "CAMERA_DISCOVERY",
+      "moment": "after"
+    },
+    {
+      "at": 8000,
+      "transition": "MASK_TRANSITION",
+      "moment": "before"
+    },
+    {
+      "at": 8350,
+      "transition": "MASK_TRANSITION",
+      "moment": "during"
+    },
+    {
+      "at": 8750,
+      "transition": "MASK_TRANSITION",
+      "moment": "after"
+    }
+  ],
+  "motionGraphicsReview": {
+    "artDirection": {
+      "pass": true,
+      "evidence": "Capturas de cuatro ratios: Obsidian/Bone, se?al lima funcional, Geist y ret?cula coherentes."
+    },
+    "dynamicComposition": {
+      "pass": true,
+      "evidence": "El documento cambia de escala y posici?n; la c?mara hace push/tracking/pullout y recompone cada ratio."
+    },
+    "visualTransformation": {
+      "pass": true,
+      "evidence": "Cinco segmentos de VENTA forman contorno; el documento viaja; el borde conduce la m?scara final."
+    },
+    "temporalContinuity": {
+      "pass": true,
+      "evidence": "Objetos document/fiscal-plane/operational-links/resolution permanecen montados; seek repetido fue id?ntico en cuatro ratios."
+    },
+    "rhythm": {
+      "pass": false,
+      "evidence": "Cues y holds planificados, pero falta inspecci?n perceptual del MP4 completo a velocidad real."
+    },
+    "expressiveTypographyShapesData": {
+      "pass": true,
+      "evidence": "Subrayado de VENTA adquiere forma de CFE; l?neas, se?al de respuesta y tipograf?a de cierre tienen funci?n narrativa."
+    },
+    "designedTransitions": {
+      "pass": true,
+      "evidence": "Morph de segmentos, recorrido espacial, retorno por trayectoria, camera discovery y m?scara ligada al borde."
+    },
+    "audiovisualIntegration": {
+      "pass": false,
+      "evidence": "11 cues sincronizados t?cnicamente y pista AAC presente en cuatro MP4; falta escucha cr?tica del montaje final."
+    },
+    "professionalMotionGraphicsExperience": {
+      "pass": false,
+      "evidence": "No se ha juzgado el video completo en reproducci?n con audio; no corresponde certificar experiencia profesional por capturas y metadatos."
+    }
+  }
+}

@@ -17,6 +17,8 @@ try {
     '/lab/campaigns/visual-engine-smoke-test',
     '/campaigns/continuous-motion-smoke-test',
     '/lab/campaigns/inventario-01',
+    '/campaigns/facturacion-electronica-uy-01',
+    '/lab/campaigns/facturacion-electronica-uy-01',
   ]
   for (const path of paths) {
     const response = await page.goto(`http://127.0.0.1:${port}${path}`, {
@@ -38,10 +40,22 @@ try {
     throw new Error('Motion graphics quality gate ausente')
   if (!(await page.getByText('Composición dinámica').count()))
     throw new Error('Criterios de motion graphics ausentes')
+  await page.goto(`http://127.0.0.1:${port}/lab/campaigns/facturacion-electronica-uy-01`, {
+    waitUntil: 'networkidle',
+  })
+  await page.locator('[data-render-stage][data-ratio="16:9"]').waitFor()
+  await page.getByRole('button', { name: '9:16', exact: true }).click()
+  await page.locator('[data-render-stage][data-ratio="9:16"]').waitFor()
+  if (!(await page.locator('.campaign-console__audio').count()))
+    throw new Error('Audio de facturación ausente en consola')
   await page.goto(`http://127.0.0.1:${port}/lab`, { waitUntil: 'networkidle' })
   for (const selector of ['#visual-engine', '#sound-lab']) {
     await page.locator(selector).scrollIntoViewIfNeeded()
-    await page.locator(selector).locator('section').waitFor({ state: 'visible' })
+    await page
+      .locator(
+        selector === '#sound-lab' ? '#sound-lab > section.lab-section' : `${selector} section`,
+      )
+      .waitFor({ state: 'visible' })
   }
   if (errors.length) throw new Error(errors.join('; '))
   await page.goto(`http://127.0.0.1:${port}/campaigns/continuous-motion-smoke-test?render=1&t=3000`)

@@ -14,6 +14,8 @@
     "qa:continuous-visual": "node scripts/continuous-motion-qa.mjs",
     "qa:continuous-motion": "node scripts/motion-qa.mjs continuous-motion-smoke-test && node scripts/continuous-motion-qa.mjs",
     "qa:av": "node scripts/verify-av.mjs",
+    "qa:audio-library": "node scripts/audio-library-validate.mjs",
+    "qa:av:v2": "node scripts/verify-av.mjs renders/facturacion-electronica-uy-01-16x9-audio-v2-av.mp4 --facturacion --audio-v2",
     "qa:regression": "node scripts/regression-check.mjs",
     "campaign": "node scripts/campaign-workspace.mjs",
     "preview": "vite preview --host 0.0.0.0",
