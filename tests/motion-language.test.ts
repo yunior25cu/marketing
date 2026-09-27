@@ -8,6 +8,7 @@ import {
   detectPowerpointPattern,
   morphNumber,
   scoreMotionContinuity,
+  scoreMotionGraphicsQuality,
 } from '@/motion/continuous'
 import { KineticText } from '@/primitives/KineticText'
 import {
@@ -24,6 +25,26 @@ const campaign = JSON.parse(
 )
 
 describe('Balaxys continuous transformation language', () => {
+  it('requires evidence for all nine professional motion graphics criteria', () => {
+    const review = Object.fromEntries(
+      [
+        'artDirection',
+        'dynamicComposition',
+        'visualTransformation',
+        'temporalContinuity',
+        'rhythm',
+        'expressiveTypographyShapesData',
+        'designedTransitions',
+        'audiovisualIntegration',
+        'professionalMotionGraphicsExperience',
+      ].map((criterion) => [criterion, { pass: true, evidence: `Inspected ${criterion}` }]),
+    )
+    expect(scoreMotionGraphicsQuality(review).status).toBe('PASS')
+    expect(scoreMotionGraphicsQuality(undefined).status).toBe('FAIL')
+    delete review.rhythm
+    expect(scoreMotionGraphicsQuality(review).failedCriteria).toContain('rhythm')
+  })
+
   it('interpolates camera deterministically, clamps edges and exposes Canvas/Three adapters', async () => {
     const { canvasCameraPose, threeCameraPose } = await import('@/motion/continuous')
     const start = cameraAt(continuousCameraPath, 0)
@@ -83,7 +104,7 @@ describe('Balaxys continuous transformation language', () => {
     expect(detectPowerpointPattern(slides).risk).toBe('HIGH')
   })
 
-  it('blocks approval until continuity review passes', () => {
+  it('blocks approval until both continuity and professional motion graphics pass', () => {
     const incomplete = {
       ...campaign,
       reviews: {
@@ -101,8 +122,10 @@ describe('Balaxys continuous transformation language', () => {
         productCapabilities: [{ statement: 'demo', status: 'VERIFIED', evidence: 'test' }],
       },
       motionContinuity: 'NEEDS_REVISION',
+      motionGraphicsQuality: 'FAIL',
     }
     expect(approvalBlockers(incomplete)).toContain('MOTION_CONTINUITY NEEDS_REVISION')
+    expect(approvalBlockers(incomplete)).toContain('MOTION_GRAPHICS_QUALITY=FAIL')
   })
 
   it('renders word-level kinetic type with a complete accessible text alternative', () => {

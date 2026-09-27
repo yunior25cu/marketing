@@ -145,8 +145,7 @@ export function selectedAgentIds(intent, manifest, request = '') {
       : /audio|sonido|sfx|m[uú]sica|mezcla|av\b/i.test(request)
   return selected.filter((id) => {
     if (id === 'visual-engineer' && !advanced) return false
-    if (['sound-designer', 'audio-engineer', 'av-quality-auditor'].includes(id) && !sound)
-      return false
+    if (id === 'audio-engineer' && !sound) return false
     if (
       intent === 'IMPROVE' &&
       !/copy|texto|mensaje|concepto|idea/i.test(request) &&
@@ -162,14 +161,17 @@ export function interpretMotionDirection(request) {
   const slideLike = /slides|diapositivas|powerpoint|presentación|dashboard/.test(text)
   return {
     motionStyle: 'CONTINUOUS',
+    creativeStandard: 'PROFESSIONAL_MOTION_GRAPHICS',
+    motionGraphicsQuality: 'FAIL',
     reviseSlideRisk: slideLike,
     actions: [
-      'reduce_fade_stack',
-      'increase_object_permanence',
-      'design_causal_transformations',
-      'choreograph_virtual_camera',
-      'review_master_composition',
-      'capture_transition_checkpoints',
+      'set_audiovisual_art_direction',
+      'design_dynamic_graphic_composition',
+      'choreograph_visual_transformations',
+      'design_kinetic_type_and_shape_animation',
+      'compose_transitions_and_camera_choreography',
+      'set_cinematic_rhythm_and_sound_design',
+      'review_professional_motion_graphics_quality',
     ],
     requestedMotion: request.trim(),
   }
@@ -186,6 +188,25 @@ export function approvalBlockers(record) {
     blockers.push('Visual QA no aprobó la pieza')
   if (record.motionContinuity && record.motionContinuity !== 'PASS')
     blockers.push(`MOTION_CONTINUITY ${record.motionContinuity}`)
+  if (record.motionGraphicsQuality !== 'PASS')
+    blockers.push(`MOTION_GRAPHICS_QUALITY=${record.motionGraphicsQuality ?? 'FAIL'}`)
+  else {
+    for (const criterion of [
+      'artDirection',
+      'dynamicComposition',
+      'visualTransformation',
+      'temporalContinuity',
+      'rhythm',
+      'expressiveTypographyShapesData',
+      'designedTransitions',
+      'audiovisualIntegration',
+      'professionalMotionGraphicsExperience',
+    ]) {
+      const item = record.motionGraphicsReview?.[criterion]
+      if (item?.pass !== true || !item.evidence?.trim())
+        blockers.push(`MOTION_GRAPHICS_QUALITY sin evidencia: ${criterion}`)
+    }
+  }
   if (record.powerpointRisk === 'HIGH') blockers.push('POWERPOINT_RISK alto')
   if (record.audioLevel && record.audioLevel !== 'NONE') {
     if (record.reviews.audio?.status !== 'PASS') blockers.push('Audio QA no aprobó la pieza')
@@ -202,6 +223,29 @@ export function approvalBlockers(record) {
 
 export function validateRecord(record) {
   const errors = []
+  if (record.motionGraphicsQuality === 'PASS') {
+    const requiredCriteria = [
+      'artDirection',
+      'dynamicComposition',
+      'visualTransformation',
+      'temporalContinuity',
+      'rhythm',
+      'expressiveTypographyShapesData',
+      'designedTransitions',
+      'audiovisualIntegration',
+      'professionalMotionGraphicsExperience',
+    ]
+    for (const criterion of requiredCriteria) {
+      const evidence = record.motionGraphicsReview?.[criterion]
+      if (evidence?.pass !== true || !evidence.evidence?.trim())
+        errors.push(`MOTION_GRAPHICS_QUALITY PASS requiere evidencia: ${criterion}`)
+    }
+  }
+  if (
+    record.motionGraphicsQuality !== undefined &&
+    !['PASS', 'FAIL'].includes(record.motionGraphicsQuality)
+  )
+    errors.push('MOTION_GRAPHICS_QUALITY debe ser PASS o FAIL')
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(record.id)) errors.push('ID inválido')
   if (!statuses.includes(record.status)) errors.push('Estado inválido')
   if (!Number.isInteger(record.brief.duration) || record.brief.duration <= 0)
@@ -252,6 +296,7 @@ export function createRecord(id, brief, now) {
     motionStyle: 'CONTINUOUS',
     powerpointRisk: 'MEDIUM',
     motionContinuity: 'NEEDS_REVISION',
+    motionGraphicsQuality: 'FAIL',
     concept: {
       idea: `${template.title}. ${template.mechanism}.`,
       visualMechanism: template.mechanism,

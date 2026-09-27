@@ -11,3 +11,8 @@
 - Registrado estado IN_REVIEW y claims pendientes.
 - No se modificó el diseño de la campaña.
 - Campaign Console muestra la pieza original; el fotograma 16:9 de 5.0 s conservó el mismo hash de imagen tras la extracción del escenario.
+
+## Dirección creativa — 2026-09-27
+
+- Motion Graphics Quality pasa a ser un gate obligatorio de nueve criterios profesionales.
+- `launch-01` queda con `MOTION_GRAPHICS_QUALITY=FAIL` y bloqueada hasta evolucionar su composición audiovisual. No se cambiaron escena, copy ni render.

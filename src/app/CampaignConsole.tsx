@@ -3,6 +3,7 @@ import { formats, ratios } from '@/compositions/formats'
 import { LaunchStage } from '@/campaigns/launch-01/LaunchStage'
 import { TemplateStage } from '@/campaigns/TemplateStage'
 import { customStages } from '@/campaigns/stages'
+import { motionGraphicsCriteria, motionGraphicsCriterionLabels } from '@/motion/continuous'
 import {
   activeAudioCues,
   advancedAudioTimeline,
@@ -203,6 +204,7 @@ function CampaignConsolePlayer({ record }: { record: CampaignRecord }) {
       </div>
       <div className="campaign-console__av-meta">
         <span>MOTION STYLE / {record.motionStyle ?? 'DISCRETE'}</span>
+        <span>MOTION GRAPHICS QUALITY / {record.motionGraphicsQuality ?? 'FAIL'}</span>
         {record.motionStyle === 'CONTINUOUS' && (
           <>
             <span>POWERPOINT RISK / {record.powerpointRisk ?? 'PENDING'}</span>
@@ -341,6 +343,29 @@ function CampaignConsolePlayer({ record }: { record: CampaignRecord }) {
         )}
         {tab === 'review' && (
           <div className="campaign-console__review">
+            <section
+              className="campaign-console__motion-quality"
+              aria-label="Motion graphics quality"
+            >
+              <span className="micro-label">MOTION_GRAPHICS_QUALITY</span>
+              <strong className={record.motionGraphicsQuality === 'PASS' ? 'signal-text' : ''}>
+                {record.motionGraphicsQuality ?? 'FAIL'}
+              </strong>
+              <ol>
+                {motionGraphicsCriteria.map((criterion) => {
+                  const evidence = record.motionGraphicsReview?.[criterion]
+                  return (
+                    <li key={criterion}>
+                      <span>{motionGraphicsCriterionLabels[criterion]}</span>
+                      <strong>
+                        {evidence?.pass && evidence.evidence?.trim() ? 'PASS' : 'FAIL'}
+                      </strong>
+                      <p>{evidence?.evidence || 'Pendiente de evidencia e inspección.'}</p>
+                    </li>
+                  )
+                })}
+              </ol>
+            </section>
             <div className="campaign-console__audits">
               {(['brand', 'quality', 'performance'] as const).map((agent) => (
                 <div key={agent}>

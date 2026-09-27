@@ -11,3 +11,4 @@
 - Pipeline comprobado con la vista 16:9 de seis segundos y revisiones de marca, calidad y performance del prototipo.
 - Formato, lint, typecheck, tests y build pasaron.
 - Estado IN_REVIEW. El claim funcional permanece UNVERIFIED y bloquea aprobación comercial.
+- 2026-09-27: Motion Graphics Quality incorporado al contrato de aprobación; estado FAIL hasta documentar evidencia para los nueve criterios.

@@ -17,6 +17,14 @@ La identidad comunica precisión, seguridad y sofisticación técnica. Debe sent
 5. **Pocas superficies.** Preferir rieles, divisiones y espacios a acumulaciones de tarjetas.
 6. **Una sola gramática.** Tokens, tipografía y ritmos compartidos en todos los formatos.
 
+## Mandato audiovisual: Motion Graphics profesional
+
+Toda campaña audiovisual se diseña y produce como una pieza profesional de motion graphics. La dirección de arte define una composición gráfica dinámica que evoluciona mediante transformación continua, kinetic/motion typography, shape animation, morphing, máscaras y reveals, transiciones diseñadas, camera choreography, cambios de escala/espacio, match cuts, visualización gráfica de datos, ritmo cinematográfico y sonido sincronizado. Profundidad 2.5D/3D y parallax se usan cuando aportan significado.
+
+Los elementos pueden dividirse, fusionarse, viajar, construir objetos, convertirse en tipografía/datos/geometría, revelar composiciones y conducir al siguiente momento. Una campaña no es una colección de pantallas ni una UI con animaciones. Su estándar principal es: **¿se siente y se ve como motion graphics profesional?** Si no, iterar.
+
+Toda revisión declara `MOTION_GRAPHICS_QUALITY=PASS|FAIL` con evidencia para dirección de arte, composición dinámica, transformación, continuidad temporal, ritmo, uso expresivo de tipografía/formas/datos, transiciones diseñadas, integración audiovisual y experiencia profesional global. Sólo nueve criterios demostrados permiten PASS.
+
 ## Lenguaje visual
 
 La retícula sugiere estructura, no espectáculo. Líneas muestran relaciones. Nodos muestran estados. Un pulso marca un evento activo. Documentos son objetos con origen, identidad y estado. Tipografía cinética transforma la premisa en secuencia. Todo movimiento responde a una causa.
@@ -51,13 +59,15 @@ El wordmark tipográfico `BALAXYS` y la marca de actividad provisional `✳` ide
 
 Azul corporativo SaaS, degradado azul-violeta, bancos visuales, crypto, videojuegos, glassmorphism gratuito, dashboards flotantes sin narrativa, partículas, confetti, iconos decorativos, esferas arbitrarias, exceso de tarjetas, gráficos falsos, listados de módulos y slogans vacíos. «Todo en un solo lugar», «potencia tu negocio», «transforma tu negocio» y equivalentes se rechazan.
 
-### Antipatrones de motion
+### Antipatrones secundarios de motion
+
+El patrón PowerPoint es un anti-pattern secundario. Detectarlo no demuestra por sí solo calidad profesional.
 
 - **PowerPoint pattern:** title → card → card → card → logo. FAIL.
 - **SaaS hero pattern:** headline centrado + tres tarjetas + glow + líneas + CTA. FAIL para campañas audiovisuales salvo justificación explícita.
 - **Fade stack:** fade out → fade in repetido como estructura narrativa. FAIL.
 - **Component parade:** mostrar componentes sucesivamente sin que generen el siguiente beat. FAIL.
-- **UI demo disfrazada de motion graphics:** dashboard + zoom + cursor + tarjetas flotantes sin transformación. FAIL salvo que demostrar producto sea el objetivo explícito.
+- **UI demo disfrazada de motion graphics:** dashboard + zoom + cursor + tarjetas flotantes sin transformación. FAIL. Si la demostración literal del producto es necesaria, su dirección de arte y coreografía aún deben cumplir el estándar profesional de motion graphics.
 
 Consultar `brand/BALAXYS_CONTINUOUS_MOTION_LANGUAGE.md` para coreografía semántica, continuidad y cámara.
 
@@ -69,4 +79,4 @@ Consultar `brand/BALAXYS_CONTINUOUS_MOTION_LANGUAGE.md` para coreografía semán
 
 ## Criterio de aceptación
 
-Una pieza pasa si: tiene una idea dominante; muestra causa y efecto; todos los datos significan algo y sus claims están verificados; la animación añade comprensión; usa tokens; se reconoce como Balaxys sin logo; funciona en 16:9, 1:1, 4:5 y 9:16 cuando aplica; conserva la narrativa con reduced motion; cumple contraste y rendimiento. **Si se puede sustituir BALAXYS por cualquier ERP sin que la pieza pierda su sentido, falla.**
+Una pieza audiovisual además requiere `MOTION_GRAPHICS_QUALITY=PASS` basado en los nueve criterios anteriores y una inspección del render en movimiento. Un resultado limpio, animado o libre de patrón PowerPoint no es suficiente. También debe tener idea dominante, causa y efecto, datos con significado, claims verificados, tokens, reconocimiento Balaxys, formatos pedidos, narrativa accesible con reduced motion, contraste y rendimiento. **Si se puede sustituir BALAXYS por cualquier ERP sin que la pieza pierda su sentido, falla.**

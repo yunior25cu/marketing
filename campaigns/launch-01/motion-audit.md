@@ -1,6 +1,8 @@
-# Motion audit — launch-01 (sin modificar)
+# Motion audit — launch-01
 
-Auditoría estática del código actual `src/campaigns/launch-01/LaunchStage.tsx`, `definition.ts`, `campaign.css` y `campaigns/launch-01/campaign.json`. No se cambió ningún archivo de la campaña original.
+Auditoría estática del código actual `src/campaigns/launch-01/LaunchStage.tsx`, `definition.ts`, `campaign.css` y `campaigns/launch-01/campaign.json`. Se dejó intacta la implementación; la metadata del registro ahora refleja el gate de calidad actualizado.
+
+`MOTION_GRAPHICS_QUALITY=FAIL` con el estándar profesional actualizado: faltan dirección de arte y composición motion unificadas, transformaciones entre beats, cámara compartida, ritmo demostrado como pieza audiovisual y evidencia de los nueve criterios. La metadata de calidad del registro se actualizó para bloquear aprobación; el código, copy y render de `launch-01` siguen intactos. Su patrón PowerPoint es un diagnóstico secundario.
 
 | Criterio          | Hallazgo                                                                                                                                                                                            |
 | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

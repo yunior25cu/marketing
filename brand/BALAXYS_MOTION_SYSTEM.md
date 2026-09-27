@@ -1,5 +1,11 @@
 # Sistema de motion de Balaxys
 
+## Estándar principal
+
+Toda campaña audiovisual es una pieza profesional de motion graphics con dirección de arte, composición en movimiento y evolución durante toda su duración. Combina transformaciones, kinetic typography, shape animation/morphing, máscaras/reveals, transiciones diseñadas, coreografía de cámara, espacio 2.5D/3D y parallax cuando aporten, match cuts, visualización de datos como lenguaje gráfico, ritmo cinematográfico y sound design sincronizado. Los objetos pueden construir el siguiente momento. «Evitar PowerPoint» es sólo una revisión anti-pattern secundaria.
+
+La aprobación exige `MOTION_GRAPHICS_QUALITY=PASS` con evidencia en los nueve criterios de `BALAXYS_CONTINUOUS_MOTION_LANGUAGE.md`; cualquier duda, falta de inspección o criterio fallido implica FAIL e iteración.
+
 Autoridad complementaria: [`BALAXYS_CONTINUOUS_MOTION_LANGUAGE.md`](BALAXYS_CONTINUOUS_MOTION_LANGUAGE.md). Una campaña es una master composition continua; beats son estados narrativos, `scenes/` sigue nombrando unidades técnicas reutilizables.
 
 La unidad narrativa es `evento → propagación → estado → registro → resolución`. Ningún cambio visual puede anticipar su causa. Los tiempos son absolutos en milisegundos; keyframes y acciones pueden solaparse siempre que el resultado para un `timeMs` sea determinista.

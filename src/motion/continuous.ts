@@ -108,6 +108,51 @@ export interface ContinuityEvidence {
   explicitProductDemo?: boolean
 }
 
+export const motionGraphicsCriteria = [
+  'artDirection',
+  'dynamicComposition',
+  'visualTransformation',
+  'temporalContinuity',
+  'rhythm',
+  'expressiveTypographyShapesData',
+  'designedTransitions',
+  'audiovisualIntegration',
+  'professionalMotionGraphicsExperience',
+] as const
+
+export type MotionGraphicsCriterion = (typeof motionGraphicsCriteria)[number]
+export type MotionGraphicsReview = Record<
+  MotionGraphicsCriterion,
+  { pass: boolean; evidence: string }
+>
+export const motionGraphicsCriterionLabels: Record<MotionGraphicsCriterion, string> = {
+  artDirection: 'Dirección de arte coherente',
+  dynamicComposition: 'Composición dinámica',
+  visualTransformation: 'Transformación visual',
+  temporalContinuity: 'Continuidad temporal',
+  rhythm: 'Ritmo',
+  expressiveTypographyShapesData: 'Tipografía, formas y datos expresivos',
+  designedTransitions: 'Transiciones diseñadas',
+  audiovisualIntegration: 'Integración audiovisual',
+  professionalMotionGraphicsExperience: 'Experiencia profesional de motion graphics',
+}
+
+export function scoreMotionGraphicsQuality(review: Partial<MotionGraphicsReview> | undefined) {
+  const criteria = Object.fromEntries(
+    motionGraphicsCriteria.map((id) => {
+      const item = review?.[id]
+      const pass = item?.pass === true && Boolean(item.evidence?.trim())
+      return [id, { pass, evidence: item?.evidence ?? '' }]
+    }),
+  ) as MotionGraphicsReview
+  const failedCriteria = motionGraphicsCriteria.filter((id) => !criteria[id].pass)
+  return {
+    status: failedCriteria.length === 0 ? ('PASS' as const) : ('FAIL' as const),
+    criteria,
+    failedCriteria,
+  }
+}
+
 export function scoreMotionContinuity(evidence: ContinuityEvidence) {
   const failures: string[] = []
   if (evidence.persistentObjectCount < 2) failures.push('Pocos objetos persisten entre beats')

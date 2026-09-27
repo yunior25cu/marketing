@@ -92,5 +92,6 @@
       "blocking": false
     },
     "technical": { "lint": true, "typecheck": true, "tests": true, "build": true }
-  }
+  },
+  "motionGraphicsQuality": "FAIL"
 }

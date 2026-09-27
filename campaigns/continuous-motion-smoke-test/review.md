@@ -2,6 +2,8 @@
 
 **Estado técnico:** PASS · **Motion continuity:** PASS · **PowerPoint risk:** LOW · **AV artístico:** pendiente de escucha humana.
 
+**MOTION_GRAPHICS_QUALITY=PASS.** Se documentó evidencia para los nueve criterios en `campaign.json`. El gate de aprobación sigue bloqueado hasta que AV Quality complete la escucha artística y los demás requisitos de publicación.
+
 ## Hallazgos y correcciones de QA
 
 - El primer pase mostró una descripción accesible visible como texto de escena. Se añadió el patrón `sr-only` de recorte visual manteniendo el nombre accesible.

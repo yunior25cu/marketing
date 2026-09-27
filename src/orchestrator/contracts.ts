@@ -1,5 +1,10 @@
 import type { SceneRatio } from '@/renderer/scene'
-import type { CameraKeyframe, MotionBeat, SemanticTransition } from '@/motion/continuous'
+import type {
+  CameraKeyframe,
+  MotionBeat,
+  MotionGraphicsReview,
+  SemanticTransition,
+} from '@/motion/continuous'
 
 export type CampaignIntent = 'CREATE' | 'IMPROVE' | 'ADAPT' | 'EVOLVE' | 'APPROVE'
 export type CampaignStatus = 'DRAFT' | 'IN_REVIEW' | 'NEEDS_CHANGES' | 'APPROVED' | 'ARCHIVED'
@@ -82,6 +87,8 @@ export interface CampaignRecord {
   motionStyle?: 'CONTINUOUS' | 'DISCRETE'
   powerpointRisk?: 'LOW' | 'MEDIUM' | 'HIGH'
   motionContinuity?: 'PASS' | 'NEEDS_REVISION' | 'FAIL'
+  motionGraphicsQuality?: 'PASS' | 'FAIL'
+  motionGraphicsReview?: MotionGraphicsReview
   motionBeats?: MotionBeat[]
   cameraPath?: CameraKeyframe[]
   transformationMap?: { from: string; transition: SemanticTransition; to: string; at: number }[]

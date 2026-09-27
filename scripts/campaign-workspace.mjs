@@ -135,7 +135,7 @@ async function create() {
   )
   await writeFile(
     join(target, 'review.md'),
-    `# Revisión — ${record.brief.title}\n\n**Estado:** DRAFT / Borrador.\n\n## Qué comunica\n\n${record.concept.idea}\n\n## Qué sucede\n\n${record.storyboard.map((phase) => `- ${(phase.from / 1000).toFixed(1)}–${(phase.to / 1000).toFixed(1)} s: ${phase.label.toLowerCase()}; ${phase.visual.toLowerCase()}.`).join('\n')}\n\n**Formatos:** ${record.brief.formats.join(', ')}.\n\n## Claims\n\n${claimText}\n\n## Validaciones\n\n- Brand Guardian: PENDING.\n- Quality Auditor: PENDING.\n- Performance Auditor: PENDING.\n- Lint, typecheck, tests y build: pendientes para esta revisión.\n\n## Revisión humana necesaria\n\nValidar capacidades del ERP y el resultado visual antes de solicitar aprobación. Vista: /lab/campaigns/${id}.\n`,
+    `# Revisión — ${record.brief.title}\n\n**Estado:** DRAFT / Borrador.\n\n**MOTION_GRAPHICS_QUALITY=FAIL** hasta revisar el render y adjuntar evidencia para los nueve criterios del Motion Language. PowerPoint detection es secundaria.\n\n## Qué comunica\n\n${record.concept.idea}\n\n## Qué sucede\n\n${record.storyboard.map((phase) => `- ${(phase.from / 1000).toFixed(1)}–${(phase.to / 1000).toFixed(1)} s: ${phase.label.toLowerCase()}; ${phase.visual.toLowerCase()}.`).join('\n')}\n\n**Formatos:** ${record.brief.formats.join(', ')}.\n\n## Claims\n\n${claimText}\n\n## Validaciones\n\n- Brand Guardian: PENDING.\n- Quality Auditor: PENDING.\n- Performance Auditor: PENDING.\n- Lint, typecheck, tests y build: pendientes para esta revisión.\n\n## Revisión humana necesaria\n\nValidar capacidades del ERP y la calidad profesional de motion graphics antes de solicitar aprobación. Vista: /lab/campaigns/${id}.\n`,
     'utf8',
   )
   await writeFile(
@@ -229,6 +229,8 @@ async function adapt() {
     record.motionContinuity = 'NEEDS_REVISION'
     record.powerpointRisk = 'MEDIUM'
   }
+  record.motionGraphicsQuality = 'FAIL'
+  delete record.motionGraphicsReview
   await saveRecord(record)
   await appendChangelog(
     id,
@@ -265,6 +267,8 @@ async function improve() {
     record.motionContinuity = 'NEEDS_REVISION'
     record.powerpointRisk = 'MEDIUM'
   }
+  record.motionGraphicsQuality = 'FAIL'
+  delete record.motionGraphicsReview
   await saveRecord(record)
   await writeFile(
     join(workspace(id), `revision-v${record.version}.md`),

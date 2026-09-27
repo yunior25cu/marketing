@@ -34,6 +34,10 @@ try {
   await page.getByRole('button', { name: 'Reiniciar' }).first().click()
   await page.getByRole('tab', { name: 'Review' }).click()
   if (!(await page.getByText('VISUAL QA').count())) throw new Error('Review avanzado ausente')
+  if (!(await page.getByText('MOTION_GRAPHICS_QUALITY').count()))
+    throw new Error('Motion graphics quality gate ausente')
+  if (!(await page.getByText('Composición dinámica').count()))
+    throw new Error('Criterios de motion graphics ausentes')
   await page.goto(`http://127.0.0.1:${port}/lab`, { waitUntil: 'networkidle' })
   for (const selector of ['#visual-engine', '#sound-lab']) {
     await page.locator(selector).scrollIntoViewIfNeeded()

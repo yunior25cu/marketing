@@ -1,5 +1,7 @@
 # Campañas audiovisuales avanzadas
 
+El estándar principal de toda campaña audiovisual es ser una pieza profesional de motion graphics. La revisión exige `MOTION_GRAPHICS_QUALITY=PASS` con evidencia de dirección de arte, composición dinámica, transformación, continuidad, ritmo, tipografía/formas/datos expresivos, transiciones diseñadas, integración audiovisual y experiencia profesional. Inspeccionar el video completo; build, limpieza o ausencia de PowerPoint no bastan.
+
 1. Definir objetivo comercial, evento, consecuencia y storyboard. Verificar cada capacidad del ERP antes de afirmarla.
 2. Pedir `VisualDecision` al Visual Engineer. Elegir DOM/SVG/Canvas/Three/shader por claridad, con fallback y presupuesto medible.
 3. Definir `SoundPlan`: unos pocos cues dominantes, silencio, SFX/ambiente/música y origen de assets. `AudioTimeline` comparte los tiempos visuales.

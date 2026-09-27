@@ -6,6 +6,8 @@ export function parseFormats(request: string): string[]
 export function inferIntent(request: string): CampaignIntent
 export function interpretMotionDirection(request: string): {
   motionStyle: 'CONTINUOUS'
+  creativeStandard: 'PROFESSIONAL_MOTION_GRAPHICS'
+  motionGraphicsQuality: 'FAIL'
   reviseSlideRisk: boolean
   actions: string[]
   requestedMotion: string

@@ -56,7 +56,11 @@ describe('Campaign Orchestrator', () => {
     )
     expect(motionDirection.motionStyle).toBe('CONTINUOUS')
     expect(motionDirection.reviseSlideRisk).toBe(true)
-    expect(motionDirection.actions).toContain('increase_object_permanence')
+    expect(motionDirection.creativeStandard).toBe('PROFESSIONAL_MOTION_GRAPHICS')
+    expect(motionDirection.actions).toContain('set_audiovisual_art_direction')
+    expect(selectedAgentIds('CREATE', manifest, 'Quiero una campaña sin sonido')).toContain(
+      'av-quality-auditor',
+    )
     expect(selectedAgentIds('ADAPT', manifest)).not.toContain('copywriter')
     expect(selectedAgentIds('IMPROVE', manifest, 'acelerar el inicio')).not.toContain(
       'creative-director',
@@ -90,7 +94,10 @@ describe('Campaign Orchestrator', () => {
     ])
     expect(launch.reviews.brand.status).toBe('PASS')
     expect(launch.reviews.quality.status).toBe('PASS')
-    expect(approvalBlockers(launch)).toEqual(['Hay un claim de producto sin verificar'])
+    expect(approvalBlockers(launch)).toEqual([
+      'MOTION_GRAPHICS_QUALITY=FAIL',
+      'Hay un claim de producto sin verificar',
+    ])
   })
 
   it('creates the smoke campaign, gates approval, and freezes an approved version', () => {
@@ -109,6 +116,11 @@ describe('Campaign Orchestrator', () => {
     expect(record.playback.sceneId).toBe('sale-flow')
     expect(record.motionStyle).toBe('CONTINUOUS')
     expect(record.motionContinuity).toBe('NEEDS_REVISION')
+    expect(record.motionGraphicsQuality).toBe('FAIL')
+    expect(approvalBlockers(record)).toContain('MOTION_GRAPHICS_QUALITY=FAIL')
+    expect(validateRecord({ ...record, motionGraphicsQuality: 'PASS' })).toContain(
+      'MOTION_GRAPHICS_QUALITY PASS requiere evidencia: artDirection',
+    )
     expect(record.brief.productCapabilities[0].status).toBe('UNVERIFIED')
     expect(() => cli('approve', '--id=orchestrator-smoke-test', '--by=Prueba')).toThrow()
 
@@ -120,6 +132,20 @@ describe('Campaign Orchestrator', () => {
     record.audioLevel = 'NONE'
     record.motionContinuity = 'PASS'
     record.powerpointRisk = 'LOW'
+    record.motionGraphicsQuality = 'PASS'
+    record.motionGraphicsReview = Object.fromEntries(
+      [
+        'artDirection',
+        'dynamicComposition',
+        'visualTransformation',
+        'temporalContinuity',
+        'rhythm',
+        'expressiveTypographyShapesData',
+        'designedTransitions',
+        'audiovisualIntegration',
+        'professionalMotionGraphicsExperience',
+      ].map((criterion) => [criterion, { pass: true, evidence: `Verified ${criterion}` }]),
+    ) as NonNullable<CampaignRecord['motionGraphicsReview']>
     record.brief.productCapabilities[0] = {
       ...record.brief.productCapabilities[0],
       status: 'VERIFIED',
@@ -142,6 +168,8 @@ describe('Campaign Orchestrator', () => {
     const revised = JSON.parse(readFileSync(recordPath, 'utf8')) as CampaignRecord
     expect(revised.version).toBe(2)
     expect(revised.status).toBe('NEEDS_CHANGES')
+    expect(revised.motionGraphicsQuality).toBe('FAIL')
+    expect(revised.motionGraphicsReview).toBeUndefined()
     expect(revised.reviews.brand.status).toBe('PENDING')
     expect(revised.reviews.technical.tests).toBe(false)
     expect(
@@ -150,6 +178,7 @@ describe('Campaign Orchestrator', () => {
     const adapted = JSON.parse(readFileSync(recordPath, 'utf8')) as CampaignRecord
     expect(adapted.brief.formats).toEqual(['16:9', '1:1', '9:16'])
     expect(adapted.status).toBe('DRAFT')
+    expect(adapted.motionGraphicsQuality).toBe('FAIL')
     expect(readFileSync(join(releasePath, 'copy.md'))).toEqual(frozenCopy)
     expect(smokeRequest).toContain('INVENTARIO')
   })

@@ -86,7 +86,7 @@
       "prompt": "agents/02-brand-guardian.md",
       "role": "autoridad visual",
       "inputs": ["CampaignImplementation", "CampaignConcept"],
-      "outputs": ["BrandReview"],
+      "outputs": ["BrandReview", "MOTION_GRAPHICS_QUALITY"],
       "invokeFor": ["CREATE", "IMPROVE", "ADAPT", "EVOLVE"]
     },
     {
@@ -94,7 +94,7 @@
       "prompt": "agents/07-quality-auditor.md",
       "role": "calidad y claims",
       "inputs": ["CampaignImplementation", "BrandReview"],
-      "outputs": ["QualityReview"],
+      "outputs": ["QualityReview", "MOTION_GRAPHICS_QUALITY"],
       "invokeFor": ["CREATE", "IMPROVE", "ADAPT"]
     },
     {
@@ -102,15 +102,15 @@
       "prompt": "agents/12-visual-qa-director.md",
       "role": "revisión de checkpoints y composición",
       "inputs": ["CampaignImplementation", "CampaignPlan"],
-      "outputs": ["VisualQAReview"],
+      "outputs": ["VisualQAReview", "MOTION_GRAPHICS_QUALITY evidence"],
       "invokeFor": ["CREATE", "IMPROVE", "ADAPT"]
     },
     {
       "id": "av-quality-auditor",
       "prompt": "agents/13-av-quality-auditor.md",
-      "role": "revisión conjunta de video y audio",
+      "role": "auditoría de motion graphics y composición audiovisual profesional",
       "inputs": ["CampaignImplementation", "AudioImplementation", "VisualQAReview"],
-      "outputs": ["AVReview"],
+      "outputs": ["AVReview", "MOTION_GRAPHICS_QUALITY verdict"],
       "invokeFor": ["CREATE", "IMPROVE", "ADAPT"]
     },
     {
@@ -123,9 +123,9 @@
     }
   ],
   "selectionRules": {
-    "CREATE": "Por defecto Motion Designer crea una master composition continua con beats, transformación y permanencia. Usar escenas discretas sólo con justificación explícita.",
-    "IMPROVE": "Traducir pedidos como slides/dashboard/estático/orgánico/cámara a permanencia, transformaciones causales, coreografía de cámara y transition checkpoints. Invocar concepto/copy sólo si cambia idea o mensaje; siempre auditar el resultado.",
-    "ADAPT": "Conservar concepto y copy; revisar composición, implementación y calidad por ratio.",
+    "CREATE": "Toda campaña audiovisual se dirige y produce como motion graphics profesional. Creative Director y Motion Designer fijan arte audiovisual, composición dinámica, transformación, tipografía/formas/datos, transiciones, cámara, ritmo y sonido. Quality, Visual QA y AV QA exigen MOTION_GRAPHICS_QUALITY=PASS con evidencia para los nueve criterios; PowerPoint detection es secundaria.",
+    "IMPROVE": "Primero alcanzar calidad profesional de motion graphics: iterar dirección de arte, composición y coreografía según los nueve criterios. Invocar concepto/copy sólo si cambia idea o mensaje; siempre observar el render completo. La detección PowerPoint es un anti-pattern secundario.",
+    "ADAPT": "Conservar concepto y copy; rediseñar la composición para el ratio y volver a validar MOTION_GRAPHICS_QUALITY en el render adaptado.",
     "EVOLVE": "Propuesta de marca y Brand Guardian; nunca aplicar cambios permanentes automáticamente."
   }
 }

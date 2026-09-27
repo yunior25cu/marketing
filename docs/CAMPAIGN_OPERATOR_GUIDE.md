@@ -1,5 +1,7 @@
 # Guía para operar campañas Balaxys
 
+Toda campaña audiovisual se diseña y produce como pieza profesional de motion graphics. La aprobación exige `MOTION_GRAPHICS_QUALITY=PASS` con evidencia en los nueve criterios de `brand/BALAXYS_CONTINUOUS_MOTION_LANGUAGE.md`. La detección PowerPoint es una revisión secundaria de anti-pattern.
+
 Hablá con **Balaxys Campaign Orchestrator** en el chat de este proyecto. Contale qué querés comunicar; el agente organiza diseño, texto, movimiento, implementación y revisión. No tenés que elegir especialistas ni explicar cómo se programa la pieza. Podés escribir una frase o usar estas plantillas.
 
 ## Crear una campaña

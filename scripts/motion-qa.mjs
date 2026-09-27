@@ -1,7 +1,11 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { detectPowerpointPattern, scoreMotionContinuity } from '../src/motion/continuous.ts'
+import {
+  detectPowerpointPattern,
+  scoreMotionContinuity,
+  scoreMotionGraphicsQuality,
+} from '../src/motion/continuous.ts'
 
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)))
 const id = process.argv[2] ?? 'continuous-motion-smoke-test'
@@ -25,6 +29,7 @@ const evidence = {
 }
 const continuity = scoreMotionContinuity(evidence)
 const powerpoint = detectPowerpointPattern(evidence)
+const motionGraphics = scoreMotionGraphicsQuality(record.motionGraphicsReview)
 const checkpoints = record.transitionCheckpoints ?? []
 const transitionCoverage = Object.groupBy(checkpoints, (item) => item.transition)
 const missingTriples = Object.entries(transitionCoverage)
@@ -39,6 +44,8 @@ const issues = [...continuity.failures]
 if (powerpoint.risk !== 'LOW') issues.push(`POWERPOINT_RISK=${powerpoint.risk}`)
 if (record.motionContinuity !== continuity.status)
   issues.push('Metadata MOTION_CONTINUITY no coincide con evidencia')
+if (record.motionGraphicsQuality !== motionGraphics.status)
+  issues.push('Metadata MOTION_GRAPHICS_QUALITY no coincide con los nueve criterios')
 if (record.powerpointRisk !== powerpoint.risk)
   issues.push('Metadata POWERPOINT_RISK no coincide con detector')
 if (missingTriples.length)
@@ -50,6 +57,9 @@ const report = {
   evidence,
   motionContinuity: continuity.status,
   continuityFailures: continuity.failures,
+  motionGraphicsQuality: motionGraphics.status,
+  motionGraphicsCriteria: motionGraphics.criteria,
+  motionGraphicsFailures: motionGraphics.failedCriteria,
   powerpoint,
   transitionCheckpointCount: checkpoints.length,
   missingTriples,

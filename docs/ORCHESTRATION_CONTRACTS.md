@@ -4,22 +4,23 @@ El archivo de ejecución es `agents/00-campaign-orchestrator.md`; el manifiesto 
 
 ## Objetos de intercambio
 
-| Objeto                     | Contenido mínimo                                                                        | Responsable         |
-| -------------------------- | --------------------------------------------------------------------------------------- | ------------------- |
-| `CampaignBrief`            | objetivo, público, mensaje, duración, formatos, canal, CTA, capacidades y restricciones | Orchestrator        |
-| `CampaignPlan`             | objetivo, storyboard y formatos                                                         | Campaign Director   |
-| `CampaignConcept`          | idea dominante, mecanismo visual, narrativa, cierre y prueba de originalidad            | Creative Director   |
-| `CampaignCopy`             | líneas de apertura/cierre y CTA                                                         | Copywriter          |
-| `MotionPlan`               | duración y cues absolutos con evento y efecto                                           | Motion Designer     |
-| `CampaignImplementation`   | escena, ruta de preview y formatos                                                      | Frontend Engineer   |
-| `BrandReview`              | PASS/FAIL/PENDING, evidencia y bloqueo                                                  | Brand Guardian      |
-| `QualityReview`            | PASS/FAIL/PENDING, evidencia y bloqueo                                                  | Quality Auditor     |
-| `PerformanceReview`        | PASS/FAIL/PENDING, severidad y bloqueo                                                  | Performance Auditor |
-| `VisualImplementationPlan` | medio elegido, justificación, fallback y presupuesto                                    | Visual Engineer     |
-| `SoundPlan`                | cues, silencios, capas y función narrativa                                              | Sound Designer      |
-| `AudioImplementation`      | timeline, preview, master, stems y mediciones                                           | Audio Engineer      |
-| `VisualQAReview`           | checkpoints, ratios, hallazgos y veredicto                                              | Visual QA Director  |
-| `AVReview`                 | sincronía, ritmo, clipping, duración y veredicto                                        | AV Quality Auditor  |
+| Objeto                     | Contenido mínimo                                                                        | Responsable                 |
+| -------------------------- | --------------------------------------------------------------------------------------- | --------------------------- |
+| `CampaignBrief`            | objetivo, público, mensaje, duración, formatos, canal, CTA, capacidades y restricciones | Orchestrator                |
+| `CampaignPlan`             | objetivo, storyboard y formatos                                                         | Campaign Director           |
+| `CampaignConcept`          | idea dominante, mecanismo visual, narrativa, cierre y prueba de originalidad            | Creative Director           |
+| `CampaignCopy`             | líneas de apertura/cierre y CTA                                                         | Copywriter                  |
+| `MotionPlan`               | duración y cues absolutos con evento y efecto                                           | Motion Designer             |
+| `CampaignImplementation`   | escena, ruta de preview y formatos                                                      | Frontend Engineer           |
+| `BrandReview`              | PASS/FAIL/PENDING, evidencia y bloqueo                                                  | Brand Guardian              |
+| `QualityReview`            | PASS/FAIL/PENDING, evidencia y bloqueo                                                  | Quality Auditor             |
+| `PerformanceReview`        | PASS/FAIL/PENDING, severidad y bloqueo                                                  | Performance Auditor         |
+| `VisualImplementationPlan` | medio elegido, justificación, fallback y presupuesto                                    | Visual Engineer             |
+| `SoundPlan`                | cues, silencios, capas y función narrativa                                              | Sound Designer              |
+| `AudioImplementation`      | timeline, preview, master, stems y mediciones                                           | Audio Engineer              |
+| `VisualQAReview`           | checkpoints, ratios, hallazgos y veredicto                                              | Visual QA Director          |
+| `AVReview`                 | sincronía, ritmo, clipping, duración y veredicto                                        | AV Quality Auditor          |
+| `MOTION_GRAPHICS_QUALITY`  | PASS/FAIL y evidencia para los nueve criterios profesionales de motion graphics         | Quality + Visual QA + AV QA |
 
 Cada entrega debe referirse a la versión y al ID de campaña. Un agente puede devolver `PENDING` si falta evidencia, pero no convertirlo en `PASS`. El Orchestrator reconcilia contradicciones; una escena que el copy llama «automática» mientras el registro de capacidades dice «sin verificar» debe volver a copy/producto antes de aprobación.
 
@@ -41,7 +42,7 @@ El manifiesto es una ruta recomendada, no evidencia de que agentes externos haya
 
 La aprobación copia `concept.md`, `storyboard.md` y `copy.md` a `releases/vN/` y registra SHA-256, fecha y operador. Una revisión posterior incrementa versión y conserva el snapshot aprobado. La memoria visual sólo cambia después de aprobación humana explícita de un aprendizaje permanente.
 
-Cuando la campaña declara audio, Audio QA y AV QA deben estar en PASS antes de aprobación. Visual QA revisa los checkpoints declarados. La selección de Visual Engineer y audio depende del concepto; la capacidad nueva no obliga a usar 3D o música. Ver `docs/AV_CAMPAIGN_GUIDE.md`.
+`MOTION_GRAPHICS_QUALITY=PASS` es un gate obligatorio para toda campaña audiovisual. Los nueve criterios están en `brand/BALAXYS_CONTINUOUS_MOTION_LANGUAGE.md`; falta de evidencia equivale a FAIL e iteración. AV Quality Auditor participa en toda pieza audiovisual y evalúa el render completo, incluido el diseño intencional de audio o silencio. Visual QA revisa checkpoints y movimiento real. La selección de Visual Engineer y tecnologías depende del concepto; el estándar profesional no obliga a usar 3D o música. PowerPoint detection es sólo anti-pattern secundario. Ver `docs/AV_CAMPAIGN_GUIDE.md`.
 
 ## Validación del orquestador
 

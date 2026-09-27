@@ -96,5 +96,6 @@
       "tests": true,
       "build": true
     }
-  }
+  },
+  "motionGraphicsQuality": "FAIL"
 }

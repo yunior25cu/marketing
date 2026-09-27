@@ -118,5 +118,6 @@
       "tests": false,
       "build": false
     }
-  }
+  },
+  "motionGraphicsQuality": "FAIL"
 }
