@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "entryPoint": "agents/00-campaign-orchestrator.md",
+  "recommendedOrder": [
+    "campaign-director",
+    "creative-director",
+    "copywriter",
+    "motion-designer",
+    "frontend-engineer",
+    "brand-guardian",
+    "quality-auditor",
+    "performance-auditor"
+  ],
+  "agents": [
+    {
+      "id": "campaign-director",
+      "prompt": "agents/06-campaign-director.md",
+      "role": "estrategia y storyboard",
+      "inputs": ["CampaignBrief"],
+      "outputs": ["CampaignPlan"],
+      "invokeFor": ["CREATE", "IMPROVE"]
+    },
+    {
+      "id": "creative-director",
+      "prompt": "agents/01-creative-director.md",
+      "role": "idea dominante y originalidad",
+      "inputs": ["CampaignBrief", "CampaignPlan"],
+      "outputs": ["CampaignConcept"],
+      "invokeFor": ["CREATE", "IMPROVE", "EVOLVE"]
+    },
+    {
+      "id": "copywriter",
+      "prompt": "agents/03-copywriter.md",
+      "role": "copy verificable",
+      "inputs": ["CampaignConcept", "CampaignBrief"],
+      "outputs": ["CampaignCopy"],
+      "invokeFor": ["CREATE", "IMPROVE"]
+    },
+    {
+      "id": "motion-designer",
+      "prompt": "agents/04-motion-designer.md",
+      "role": "tiempos y coreografía",
+      "inputs": ["CampaignConcept", "CampaignCopy"],
+      "outputs": ["MotionPlan"],
+      "invokeFor": ["CREATE", "IMPROVE", "ADAPT"]
+    },
+    {
+      "id": "frontend-engineer",
+      "prompt": "agents/05-frontend-engineer.md",
+      "role": "implementación y formatos",
+      "inputs": ["MotionPlan", "CampaignCopy"],
+      "outputs": ["CampaignImplementation"],
+      "invokeFor": ["CREATE", "IMPROVE", "ADAPT"]
+    },
+    {
+      "id": "brand-guardian",
+      "prompt": "agents/02-brand-guardian.md",
+      "role": "autoridad visual",
+      "inputs": ["CampaignImplementation", "CampaignConcept"],
+      "outputs": ["BrandReview"],
+      "invokeFor": ["CREATE", "IMPROVE", "ADAPT", "EVOLVE"]
+    },
+    {
+      "id": "quality-auditor",
+      "prompt": "agents/07-quality-auditor.md",
+      "role": "calidad y claims",
+      "inputs": ["CampaignImplementation", "BrandReview"],
+      "outputs": ["QualityReview"],
+      "invokeFor": ["CREATE", "IMPROVE", "ADAPT"]
+    },
+    {
+      "id": "performance-auditor",
+      "prompt": "agents/08-performance-auditor.md",
+      "role": "rendimiento",
+      "inputs": ["CampaignImplementation"],
+      "outputs": ["PerformanceReview"],
+      "invokeFor": ["CREATE", "IMPROVE", "ADAPT"]
+    }
+  ],
+  "selectionRules": {
+    "CREATE": "Campaña completa: todos los roles necesarios para concepto, implementación y revisión.",
+    "IMPROVE": "Invocar concepto/copy sólo cuando el cambio afecte idea o mensaje; siempre auditar el resultado.",
+    "ADAPT": "Conservar concepto y copy; revisar composición, implementación y calidad por ratio.",
+    "EVOLVE": "Propuesta de marca y Brand Guardian; nunca aplicar cambios permanentes automáticamente."
+  }
+}
