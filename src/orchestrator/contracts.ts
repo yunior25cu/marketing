@@ -70,7 +70,16 @@ export interface CampaignRecord {
   concept: CampaignConcept
   storyboard: CampaignPhase[]
   copy: CampaignCopy
-  playback: { kind: 'launch-01' | 'template'; sceneId: string; introMs: number; outroMs: number }
+  visualLevel?: 'STANDARD' | 'ADVANCED_2D' | 'CANVAS' | 'THREE_D' | 'SHADER'
+  audioLevel?: 'NONE' | 'SFX' | 'SFX_AMBIENCE' | 'FULL'
+  visualCheckpoints?: number[]
+  audioTimelineId?: string
+  playback: {
+    kind: 'launch-01' | 'template'
+    sceneId: string
+    introMs: number
+    outroMs: number
+  }
   reviews: {
     brand: AgentReview
     quality: AgentReview

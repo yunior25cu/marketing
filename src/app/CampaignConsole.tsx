@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { formats, ratios } from '@/compositions/formats'
 import { LaunchStage } from '@/campaigns/launch-01/LaunchStage'
 import { TemplateStage } from '@/campaigns/TemplateStage'
+import { activeAudioCues, advancedAudioTimeline } from '../../scripts/audio-core.mjs'
+import { useAudioPlayer } from '@/audio/useAudioPlayer'
 import { campaignDocument, campaignRecords } from '@/orchestrator/registry'
 import type { CampaignRecord } from '@/orchestrator/contracts'
 import { useTimeline } from '@/renderer/useTimeline'
@@ -9,12 +11,43 @@ import type { SceneRatio } from '@/renderer/scene'
 import { seconds } from '@/utils/time'
 import './console.css'
 
+const AdvancedSmokeStage = lazy(() =>
+  import('@/campaigns/visual-engine-smoke-test/AdvancedSmokeStage').then((module) => ({
+    default: module.AdvancedSmokeStage,
+  })),
+)
+
 const statusLabels = {
   DRAFT: 'Borrador',
   IN_REVIEW: 'Lista para revisión',
   NEEDS_CHANGES: 'Necesita cambios',
   APPROVED: 'Aprobada',
   ARCHIVED: 'Archivada',
+}
+
+function useFrameMetrics(enabled: boolean) {
+  const [metrics, setMetrics] = useState({ fps: 0, frameMs: 0 })
+  useEffect(() => {
+    if (!enabled) return
+    let frame = 0
+    let last = performance.now()
+    let count = 0
+    const tick = (now: number) => {
+      count++
+      if (now - last >= 500) {
+        setMetrics({
+          fps: Math.round((count * 1000) / (now - last)),
+          frameMs: Number(((now - last) / count).toFixed(1)),
+        })
+        count = 0
+        last = now
+      }
+      frame = requestAnimationFrame(tick)
+    }
+    frame = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(frame)
+  }, [enabled])
+  return metrics
 }
 
 function ReviewText({ source }: { source: string }) {
@@ -33,11 +66,18 @@ function ReviewText({ source }: { source: string }) {
 }
 
 function CampaignConsolePlayer({ record }: { record: CampaignRecord }) {
-  const [ratio, setRatio] = useState<SceneRatio>(record.brief.formats[0])
+  const [ratio, setRatio] = useState<SceneRatio>(() => {
+    const query = new URLSearchParams(window.location.search).get('ratio')
+    return record.brief.formats.find((format) => format === query) ?? record.brief.formats[0]
+  })
   const [tab, setTab] = useState<'brief' | 'storyboard' | 'review'>('brief')
   const [copied, setCopied] = useState(false)
   const initialTime = Number(new URLSearchParams(window.location.search).get('t')) || 0
   const timeline = useTimeline(record.brief.duration, false, initialTime)
+  const hasAudio = record.audioTimelineId === 'advanced-smoke-v1'
+  const audio = useAudioPlayer(hasAudio ? advancedAudioTimeline : null)
+  const [inspect, setInspect] = useState(false)
+  const frameMetrics = useFrameMetrics(inspect && import.meta.env.DEV)
   const prompt = `MEJORAR CAMPAÑA\nCampaña: ${record.id}\nCambios: [describí qué querés mejorar]`
   const blockers = record.brief.productCapabilities.filter((claim) => claim.status !== 'VERIFIED')
   return (
@@ -76,22 +116,48 @@ function CampaignConsolePlayer({ record }: { record: CampaignRecord }) {
           {formats[ratio].width} × {formats[ratio].height}
         </span>
       </div>
-      <div className="campaign-console__stage">
+      <div
+        className={`campaign-console__stage ${inspect && import.meta.env.DEV ? 'campaign-console__stage--inspect' : ''}`}
+      >
         {record.playback.kind === 'launch-01' ? (
           <LaunchStage timeMs={timeline.time} ratio={ratio} />
+        ) : record.id === 'visual-engine-smoke-test' ? (
+          <Suspense
+            fallback={<div className="campaign-console__stage-loading">Cargando vista…</div>}
+          >
+            <AdvancedSmokeStage timeMs={timeline.time} ratio={ratio} reduced={timeline.reduced} />
+          </Suspense>
         ) : (
           <TemplateStage record={record} timeMs={timeline.time} ratio={ratio} />
+        )}
+        {inspect && import.meta.env.DEV && (
+          <div className="campaign-console__safe-area" aria-hidden="true" />
         )}
       </div>
       <div className="campaign-console__controls">
         <button
           className="button button--signal"
           disabled={timeline.reduced}
-          onClick={timeline.playing ? timeline.pause : timeline.play}
+          onClick={() => {
+            if (timeline.playing) {
+              timeline.pause()
+              audio.stop()
+            } else {
+              void audio.playAt(timeline.time >= record.brief.duration ? 0 : timeline.time)
+              timeline.play()
+            }
+          }}
         >
           {timeline.playing ? 'Pausar' : 'Reproducir'}
         </button>
-        <button className="button" disabled={timeline.reduced} onClick={timeline.replay}>
+        <button
+          className="button"
+          disabled={timeline.reduced}
+          onClick={() => {
+            timeline.replay()
+            void audio.playAt(0)
+          }}
+        >
           Reiniciar
         </button>
         <input
@@ -100,13 +166,90 @@ function CampaignConsolePlayer({ record }: { record: CampaignRecord }) {
           max={record.brief.duration}
           step="10"
           value={timeline.time}
-          onChange={(event) => timeline.seek(Number(event.target.value))}
+          onChange={(event) => {
+            audio.stop()
+            timeline.seek(Number(event.target.value))
+          }}
           aria-label="Posición de la campaña"
         />
         <span className="timecode">
           {seconds(timeline.time)} / {seconds(record.brief.duration)}
         </span>
       </div>
+      <div className="campaign-console__av-meta">
+        <span>VISUAL / {record.visualLevel ?? 'STANDARD'}</span>
+        <span>AUDIO / {record.audioLevel ?? 'NONE'}</span>
+        <span>CHECKPOINTS / {record.visualCheckpoints?.length ?? 0}</span>
+      </div>
+      {hasAudio && (
+        <div className="campaign-console__audio">
+          <button className="button" onClick={() => audio.setMuted(!audio.muted)}>
+            {audio.muted ? 'Activar sonido' : 'Silenciar'}
+          </button>
+          <label>
+            Volumen{' '}
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.05"
+              value={audio.volume}
+              onChange={(event) => audio.setVolume(Number(event.target.value))}
+            />
+          </label>
+          <label>
+            Escuchar{' '}
+            <select
+              value={audio.mode}
+              onChange={(event) => {
+                audio.stop()
+                timeline.pause()
+                audio.setMode(event.target.value as typeof audio.mode)
+              }}
+            >
+              <option value="mix">Mezcla final</option>
+              <option value="sfx">Solo SFX</option>
+              <option value="ambience">Solo ambiente</option>
+              <option value="music" disabled>
+                No hay música
+              </option>
+            </select>
+          </label>
+          {audio.error && <p role="alert">{audio.error}</p>}
+        </div>
+      )}
+      {import.meta.env.DEV && (
+        <button
+          className="button campaign-console__inspect-button"
+          onClick={() => setInspect(!inspect)}
+        >
+          Inspect {inspect ? 'ON' : 'OFF'}
+        </button>
+      )}
+      {inspect && import.meta.env.DEV && (
+        <div className="campaign-console__inspect">
+          <span>t={timeline.time.toFixed(0)} ms</span>
+          <span>ratio={ratio}</span>
+          <span>
+            {frameMetrics.fps} FPS / {frameMetrics.frameMs} ms
+          </span>
+          <span>escena={record.playback.sceneId}</span>
+          <span>
+            fase=
+            {record.storyboard.find(
+              (phase) => timeline.time >= phase.from && timeline.time < phase.to,
+            )?.id ?? 'close'}
+          </span>
+          <span>
+            cue=
+            {hasAudio
+              ? activeAudioCues(advancedAudioTimeline, timeline.time)
+                  .map((cue) => cue.id)
+                  .join(', ') || '—'
+              : '—'}
+          </span>
+        </div>
+      )}
       {timeline.reduced && (
         <p className="campaign-console__notice">
           Movimiento reducido: se muestra el estado final de la historia.
@@ -176,6 +319,20 @@ function CampaignConsolePlayer({ record }: { record: CampaignRecord }) {
                   <p>{record.reviews[agent].summary}</p>
                 </div>
               ))}
+              {(['visual', 'audio', 'av'] as const).map(
+                (agent) =>
+                  record.reviews[agent] && (
+                    <div key={agent}>
+                      <span className="micro-label">{agent.toUpperCase()} QA</span>
+                      <strong
+                        className={record.reviews[agent]?.status === 'PASS' ? 'signal-text' : ''}
+                      >
+                        {record.reviews[agent]?.status}
+                      </strong>
+                      <p>{record.reviews[agent]?.summary}</p>
+                    </div>
+                  ),
+              )}
             </div>
             <ReviewText source={campaignDocument(record.id, 'review')} />
           </div>
