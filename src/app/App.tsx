@@ -11,6 +11,11 @@ const LaunchCampaign = lazy(() =>
 const CampaignConsole = lazy(() =>
   import('./CampaignConsole').then((module) => ({ default: module.CampaignConsole })),
 )
+const AdvancedCampaign = lazy(() =>
+  import('@/campaigns/visual-engine-smoke-test/AdvancedCampaign').then((module) => ({
+    default: module.AdvancedCampaign,
+  })),
+)
 
 export function App() {
   const path = window.location.pathname.replace(/\/$/, '') || '/'
@@ -38,6 +43,8 @@ export function App() {
         </main>
       ) : path === '/campaigns/launch-01' ? (
         <LaunchCampaign />
+      ) : path === '/campaigns/visual-engine-smoke-test' ? (
+        <AdvancedCampaign />
       ) : (
         <Home />
       )}

@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "id": "visual-engine-smoke-test",
+  "version": 1,
+  "status": "IN_REVIEW",
+  "createdAt": "2026-09-27T03:29:30.731Z",
+  "updatedAt": "2026-09-27T03:29:30.731Z",
+  "approvedAt": null,
+  "approvedBy": null,
+  "visualLevel": "THREE_D",
+  "audioLevel": "SFX_AMBIENCE",
+  "visualCheckpoints": [0, 1600, 3200, 4800, 6400, 7990],
+  "audioTimelineId": "advanced-smoke-v1",
+  "brief": {
+    "title": "UNA OPERACIÓN SE PROPAGA.",
+    "objective": "mostrar una transacción inicial que se relaciona con inventario, finanzas y registro",
+    "audience": "pequeñas y medianas empresas",
+    "message": "una operación conecta estados de varias áreas con un origen visible",
+    "duration": 8000,
+    "formats": ["16:9", "9:16"],
+    "channel": "digital genérico",
+    "cta": null,
+    "tone": "Preciso, sobrio y operativo",
+    "productCapabilities": [
+      {
+        "statement": "una operación conecta estados de varias áreas con un origen visible",
+        "status": "UNVERIFIED",
+        "evidence": null
+      }
+    ],
+    "constraints": ["No publicar capacidades sin verificar", "Rotular datos de demostración"],
+    "references": [],
+    "campaignType": "conversion",
+    "audio": "optional",
+    "language": "es"
+  },
+  "concept": {
+    "idea": "Una operación se propaga desde un documento de venta hacia tres áreas relacionadas.",
+    "visualMechanism": "Cuatro nodos espaciales se iluminan en orden y una señal los conecta.",
+    "narrative": "Origen visible, propagación de inventario a finanzas y registro, convergencia final.",
+    "closing": "UNA OPERACIÓN SE PROPAGA.",
+    "originalityCheck": "La identidad depende de la coreografía de datos y de la retícula operativa Balaxys."
+  },
+  "storyboard": [
+    {
+      "id": "intro",
+      "from": 0,
+      "to": 1600,
+      "label": "Premisa",
+      "visual": "Tipografía cinética",
+      "copy": "UNA OPERACIÓN SE PROPAGA."
+    },
+    {
+      "id": "event",
+      "from": 1600,
+      "to": 6400,
+      "label": "Demostración",
+      "visual": "Red espacial: venta → inventario → finanzas → registro",
+      "copy": "Datos de demostración"
+    },
+    {
+      "id": "close",
+      "from": 6400,
+      "to": 8000,
+      "label": "Resolución",
+      "visual": "Cierre tipográfico",
+      "copy": "Una transacción. Cuatro áreas conectadas."
+    }
+  ],
+  "copy": {
+    "introLines": ["UNA OPERACIÓN", "SE PROPAGA."],
+    "closingLines": ["CUATRO ÁREAS", "CONECTADAS."],
+    "cta": null
+  },
+  "playback": {
+    "kind": "custom",
+    "sceneId": "spatial-network",
+    "introMs": 1600,
+    "outroMs": 1600
+  },
+  "reviews": {
+    "brand": {
+      "status": "PASS",
+      "summary": "Retícula, tipografía y señal conservan la identidad; la profundidad queda al servicio de relaciones entre áreas.",
+      "blocking": false
+    },
+    "quality": {
+      "status": "PASS",
+      "summary": "La pieza está rotulada como demostración conceptual; el claim funcional sigue sin verificarse y bloquea publicación.",
+      "blocking": false
+    },
+    "performance": {
+      "status": "PASS",
+      "summary": "8 draw calls, 50 triángulos, sin texturas; geometrías y renderer se liberan al desmontar. Render de exportación concluyó sin error.",
+      "blocking": false
+    },
+    "visual": {
+      "status": "PASS",
+      "summary": "12 checkpoints en 16:9/9:16, 0 problemas; fallback WebGL ausente y reduced motion comprobados.",
+      "blocking": false
+    },
+    "audio": {
+      "status": "PASS",
+      "summary": "MP4 decodificado: pista presente, 8 s, peak 0.59, sin clipping y cinco cues medibles.",
+      "blocking": false
+    },
+    "av": {
+      "status": "PENDING",
+      "summary": "Mediciones y sincronización técnicas pasan. Falta escuchar en parlantes/teléfono para cerrar el juicio artístico.",
+      "blocking": false
+    },
+    "technical": {
+      "lint": true,
+      "typecheck": true,
+      "tests": true,
+      "build": true
+    }
+  }
+}

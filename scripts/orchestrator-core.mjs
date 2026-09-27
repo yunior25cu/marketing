@@ -122,13 +122,35 @@ export function normalizeBrief(request) {
 }
 
 export function selectedAgentIds(intent, manifest, request = '') {
-  if (intent === 'APPROVE') return ['brand-guardian', 'quality-auditor', 'performance-auditor']
+  if (intent === 'APPROVE')
+    return [
+      'brand-guardian',
+      'visual-qa-director',
+      'quality-auditor',
+      'av-quality-auditor',
+      'performance-auditor',
+    ]
   const selected = manifest.recommendedOrder.filter((id) =>
     manifest.agents.find((agent) => agent.id === id)?.invokeFor.includes(intent),
   )
-  if (intent === 'IMPROVE' && !/copy|texto|mensaje|concepto|idea/i.test(request))
-    return selected.filter((id) => !['creative-director', 'copywriter'].includes(id))
-  return selected
+  const advanced =
+    /profundidad|espacial|c[aá]mara|canvas|three|shader|part[ií]culas|procedural/i.test(request)
+  const sound =
+    intent === 'CREATE'
+      ? !/sin sonido|sin audio|silencio total/i.test(request)
+      : /audio|sonido|sfx|m[uú]sica|mezcla|av\b/i.test(request)
+  return selected.filter((id) => {
+    if (id === 'visual-engineer' && !advanced) return false
+    if (['sound-designer', 'audio-engineer', 'av-quality-auditor'].includes(id) && !sound)
+      return false
+    if (
+      intent === 'IMPROVE' &&
+      !/copy|texto|mensaje|concepto|idea/i.test(request) &&
+      ['creative-director', 'copywriter'].includes(id)
+    )
+      return false
+    return true
+  })
 }
 
 export function approvalBlockers(record) {
@@ -138,6 +160,12 @@ export function approvalBlockers(record) {
   if (record.reviews.quality.status !== 'PASS') blockers.push('Quality Auditor no aprobó la pieza')
   if (record.reviews.performance.blocking || record.reviews.performance.status === 'FAIL')
     blockers.push('Performance detectó un problema grave')
+  if (record.reviews.visual && record.reviews.visual.status !== 'PASS')
+    blockers.push('Visual QA no aprobó la pieza')
+  if (record.audioLevel && record.audioLevel !== 'NONE') {
+    if (record.reviews.audio?.status !== 'PASS') blockers.push('Audio QA no aprobó la pieza')
+    if (record.reviews.av?.status !== 'PASS') blockers.push('AV Quality no aprobó la pieza')
+  }
   for (const [check, passed] of Object.entries(record.reviews.technical))
     if (!passed) blockers.push(`Falta validación técnica: ${check}`)
   if (
@@ -158,6 +186,8 @@ export function validateRecord(record) {
     record.brief.formats.some((format) => !supportedFormats.includes(format))
   )
     errors.push('Formato inválido')
+  if (record.visualCheckpoints?.some((time) => time < 0 || time >= record.brief.duration))
+    errors.push('Checkpoint fuera de la campaña')
   if (record.storyboard[0]?.from !== 0 || record.storyboard.at(-1)?.to !== record.brief.duration)
     errors.push('El storyboard no cubre la duración')
   for (let index = 1; index < record.storyboard.length; index++)
@@ -182,6 +212,8 @@ export function createRecord(id, brief, now) {
     approvedAt: null,
     approvedBy: null,
     brief: publicBrief,
+    visualLevel: 'STANDARD',
+    audioLevel: 'SFX',
     concept: {
       idea: `${template.title}. ${template.mechanism}.`,
       visualMechanism: template.mechanism,

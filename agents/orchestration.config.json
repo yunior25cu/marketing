@@ -6,9 +6,14 @@
     "creative-director",
     "copywriter",
     "motion-designer",
+    "visual-engineer",
+    "sound-designer",
     "frontend-engineer",
+    "audio-engineer",
     "brand-guardian",
+    "visual-qa-director",
     "quality-auditor",
+    "av-quality-auditor",
     "performance-auditor"
   ],
   "agents": [
@@ -53,6 +58,30 @@
       "invokeFor": ["CREATE", "IMPROVE", "ADAPT"]
     },
     {
+      "id": "visual-engineer",
+      "prompt": "agents/09-visual-engineer.md",
+      "role": "selección de medio y visuales avanzados",
+      "inputs": ["CampaignConcept", "MotionPlan", "VisualDecision"],
+      "outputs": ["VisualImplementationPlan"],
+      "invokeFor": ["CREATE", "IMPROVE", "ADAPT"]
+    },
+    {
+      "id": "sound-designer",
+      "prompt": "agents/10-sound-designer.md",
+      "role": "dirección sonora y silencios",
+      "inputs": ["CampaignConcept", "MotionPlan"],
+      "outputs": ["SoundPlan"],
+      "invokeFor": ["CREATE", "IMPROVE"]
+    },
+    {
+      "id": "audio-engineer",
+      "prompt": "agents/11-audio-engineer.md",
+      "role": "audio sincronizado y exportación",
+      "inputs": ["SoundPlan", "MotionPlan"],
+      "outputs": ["AudioImplementation"],
+      "invokeFor": ["CREATE", "IMPROVE", "ADAPT"]
+    },
+    {
       "id": "brand-guardian",
       "prompt": "agents/02-brand-guardian.md",
       "role": "autoridad visual",
@@ -66,6 +95,22 @@
       "role": "calidad y claims",
       "inputs": ["CampaignImplementation", "BrandReview"],
       "outputs": ["QualityReview"],
+      "invokeFor": ["CREATE", "IMPROVE", "ADAPT"]
+    },
+    {
+      "id": "visual-qa-director",
+      "prompt": "agents/12-visual-qa-director.md",
+      "role": "revisión de checkpoints y composición",
+      "inputs": ["CampaignImplementation", "CampaignPlan"],
+      "outputs": ["VisualQAReview"],
+      "invokeFor": ["CREATE", "IMPROVE", "ADAPT"]
+    },
+    {
+      "id": "av-quality-auditor",
+      "prompt": "agents/13-av-quality-auditor.md",
+      "role": "revisión conjunta de video y audio",
+      "inputs": ["CampaignImplementation", "AudioImplementation", "VisualQAReview"],
+      "outputs": ["AVReview"],
       "invokeFor": ["CREATE", "IMPROVE", "ADAPT"]
     },
     {

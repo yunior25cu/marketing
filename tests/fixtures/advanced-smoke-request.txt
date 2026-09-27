@@ -1,0 +1,9 @@
+CREAR CAMPAÑA
+Título: UNA OPERACIÓN SE PROPAGA.
+Tema: propagación de una venta entre áreas
+Objetivo: mostrar una transacción inicial que se relaciona con inventario, finanzas y registro
+Público: pequeñas y medianas empresas
+Mensaje: una operación conecta estados de varias áreas con un origen visible
+Duración: 8 segundos
+Formatos: 16:9 y 9:16
+Canal: digital genérico

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "assets": [],
+  "procedural": {
+    "source": "scripts/audio-core.mjs",
+    "author": "Balaxys Brand OS",
+    "license": "Proyecto Balaxys; síntesis original, sin muestras de terceros",
+    "restrictions": "Revisar uso comercial con el titular de la marca antes de publicar",
+    "location": "Generado en memoria durante preview y exportación"
+  }
+}

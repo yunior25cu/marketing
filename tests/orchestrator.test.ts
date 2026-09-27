@@ -106,6 +106,7 @@ describe('Campaign Orchestrator', () => {
     record.reviews.quality.status = 'PASS'
     record.reviews.performance.status = 'PASS'
     record.reviews.technical = { lint: true, typecheck: true, tests: true, build: true }
+    record.audioLevel = 'NONE'
     record.brief.productCapabilities[0] = {
       ...record.brief.productCapabilities[0],
       status: 'VERIFIED',

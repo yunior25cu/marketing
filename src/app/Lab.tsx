@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { formats, ratios } from '@/compositions/formats'
 import { colors } from '@/brand/tokens/colors'
 import { motionTokens } from '@/brand/tokens/motion'
@@ -18,6 +18,42 @@ import { saleFlow } from '@/scenes/SaleFlow'
 import { inventoryFlow } from '@/scenes/InventoryFlow'
 import { accountingFlow } from '@/scenes/AccountingFlow'
 import { CampaignConsole } from './CampaignConsole'
+const VisualEngineLab = lazy(() =>
+  import('./AdvancedLabs').then((module) => ({ default: module.VisualEngineLab })),
+)
+const SoundLab = lazy(() =>
+  import('./AdvancedLabs').then((module) => ({ default: module.SoundLab })),
+)
+
+function DeferredLab({ id, children }: { id: string; children: React.ReactNode }) {
+  const host = useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = useState(false)
+  useEffect(() => {
+    if (!host.current || visible) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '240px' },
+    )
+    observer.observe(host.current)
+    return () => observer.disconnect()
+  }, [visible])
+  return (
+    <div id={id} ref={host}>
+      {visible ? (
+        <Suspense fallback={<div className="lab-section">Cargando muestras…</div>}>
+          {children}
+        </Suspense>
+      ) : (
+        <div className="lab-section" aria-hidden="true" style={{ minHeight: 240 }} />
+      )}
+    </div>
+  )
+}
 import './lab.css'
 
 const scenes = [saleFlow, inventoryFlow, accountingFlow]
@@ -54,6 +90,8 @@ export function Lab() {
         <a href="#scenes">05 / SCENES</a>
         <a href="#campaigns">06 / CAMPAIGNS</a>
         <a href="#campaign-console">07 / CONSOLE</a>
+        <a href="#visual-engine">08 / VISUAL ENGINE</a>
+        <a href="#sound-lab">09 / SOUND LAB</a>
       </nav>
       <section id="tokens" className="lab-section">
         <div className="lab-section__head">
@@ -253,6 +291,12 @@ export function Lab() {
         </a>
       </section>
       <CampaignConsole />
+      <DeferredLab id="visual-engine">
+        <VisualEngineLab />
+      </DeferredLab>
+      <DeferredLab id="sound-lab">
+        <SoundLab />
+      </DeferredLab>
     </main>
   )
 }

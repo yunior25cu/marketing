@@ -1,0 +1,62 @@
+.engine-grid,
+.sound-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1rem;
+}
+.engine-grid article,
+.sound-grid__item {
+  border: 1px solid var(--line);
+  background: var(--graphite);
+  padding: 1rem;
+}
+.engine-grid article p {
+  color: var(--mist);
+  font-size: 0.8rem;
+}
+.engine-grid__sample {
+  height: 160px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  margin-top: 1rem;
+  background: #0b1010;
+}
+.engine-grid__sample > div,
+.engine-grid__sample > canvas {
+  width: 100%;
+  height: 100%;
+}
+.engine-grid__sample svg {
+  width: 100%;
+  height: 100%;
+}
+.engine-grid__dom {
+  font: 600 1.25rem var(--font-mono);
+  gap: 0.4rem;
+}
+.engine-grid__dom b {
+  color: var(--signal);
+}
+.sound-grid__item {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  align-items: start;
+  gap: 0.6rem;
+  color: var(--bone);
+  cursor: pointer;
+}
+.sound-grid__item strong {
+  font: 650 1rem var(--font-mono);
+}
+.sound-grid__item > span:not(.micro-label) {
+  color: var(--mist);
+  font-size: 0.8rem;
+}
+.sound-grid__item em {
+  color: var(--signal);
+  font: 600 0.7rem var(--font-mono);
+  font-style: normal;
+  margin-top: auto;
+}

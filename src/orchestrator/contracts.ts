@@ -75,6 +75,9 @@ export interface CampaignRecord {
     brand: AgentReview
     quality: AgentReview
     performance: AgentReview
+    visual?: AgentReview
+    audio?: AgentReview
+    av?: AgentReview
     technical: { lint: boolean; typecheck: boolean; tests: boolean; build: boolean }
   }
 }

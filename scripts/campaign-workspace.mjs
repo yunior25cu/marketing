@@ -107,7 +107,7 @@ async function create() {
   const now = new Date().toISOString()
   const record = createRecord(id, brief, now)
   await saveRecord(record)
-  const agents = selectedAgentIds('CREATE', manifest)
+  const agents = selectedAgentIds('CREATE', manifest, request)
   const claimText = record.brief.productCapabilities.length
     ? record.brief.productCapabilities
         .map((claim) => `- UNVERIFIED PRODUCT CLAIM: ${claim.statement}`)
@@ -217,6 +217,13 @@ async function adapt() {
       summary: 'Revisar adaptación de formato.',
       blocking: false,
     }
+  for (const audit of ['visual', 'audio', 'av'])
+    if (record.reviews[audit])
+      record.reviews[audit] = {
+        status: 'PENDING',
+        summary: 'Revisar adaptación de formato.',
+        blocking: false,
+      }
   record.reviews.technical = { lint: false, typecheck: false, tests: false, build: false }
   await saveRecord(record)
   await appendChangelog(
@@ -242,6 +249,13 @@ async function improve() {
       summary: 'Revisar la versión modificada.',
       blocking: false,
     }
+  for (const audit of ['visual', 'audio', 'av'])
+    if (record.reviews[audit])
+      record.reviews[audit] = {
+        status: 'PENDING',
+        summary: 'Revisar la versión modificada.',
+        blocking: false,
+      }
   record.reviews.technical = { lint: false, typecheck: false, tests: false, build: false }
   await saveRecord(record)
   await writeFile(

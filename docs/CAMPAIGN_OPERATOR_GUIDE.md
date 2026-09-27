@@ -16,6 +16,8 @@ Mensaje importante: el cambio tiene un origen visible
 
 Si omitís duración o formato, el agente empieza con 10 segundos y 16:9. También podés decir simplemente: «Quiero una campaña sobre cobranza». El agente hará una pregunta sólo si una respuesta cambia realmente la campaña.
 
+Si querés más profundidad o sonido, describí la sensación y la función: «Quiero que se vea cómo una operación se propaga entre áreas, con movimiento espacial sutil y sonido discreto». El Orchestrator decidirá cómo producirlo. También podés pedir silencio. No necesitás elegir programas ni técnicas. En Campaign Console podés revisar el sonido y la imagen antes de aprobar.
+
 ## Pedir cambios
 
 ```text
