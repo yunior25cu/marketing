@@ -8,6 +8,7 @@ import {
   approvalBlockers,
   createRecord,
   inferIntent,
+  interpretMotionDirection,
   normalizeBrief,
   selectedAgentIds,
   validateRecord,
@@ -48,6 +49,14 @@ describe('Campaign Orchestrator', () => {
     expect(inferIntent('Quiero explorar una nueva forma de representar alertas')).toBe('EVOLVE')
     expect(inferIntent('Aprobar esta campaña')).toBe('APPROVE')
     expect(inferIntent('Quiero una campaña sobre cobranza')).toBe('CREATE')
+    expect(inferIntent('Se siente como slides')).toBe('IMPROVE')
+    expect(inferIntent('Quiero más continuidad visual')).toBe('IMPROVE')
+    const motionDirection = interpretMotionDirection(
+      'Parece un dashboard; quiero una transformación continua',
+    )
+    expect(motionDirection.motionStyle).toBe('CONTINUOUS')
+    expect(motionDirection.reviseSlideRisk).toBe(true)
+    expect(motionDirection.actions).toContain('increase_object_permanence')
     expect(selectedAgentIds('ADAPT', manifest)).not.toContain('copywriter')
     expect(selectedAgentIds('IMPROVE', manifest, 'acelerar el inicio')).not.toContain(
       'creative-director',
@@ -98,6 +107,8 @@ describe('Campaign Orchestrator', () => {
     expect(record.brief.duration).toBe(6000)
     expect(record.brief.formats).toEqual(['16:9'])
     expect(record.playback.sceneId).toBe('sale-flow')
+    expect(record.motionStyle).toBe('CONTINUOUS')
+    expect(record.motionContinuity).toBe('NEEDS_REVISION')
     expect(record.brief.productCapabilities[0].status).toBe('UNVERIFIED')
     expect(() => cli('approve', '--id=orchestrator-smoke-test', '--by=Prueba')).toThrow()
 
@@ -107,6 +118,8 @@ describe('Campaign Orchestrator', () => {
     record.reviews.performance.status = 'PASS'
     record.reviews.technical = { lint: true, typecheck: true, tests: true, build: true }
     record.audioLevel = 'NONE'
+    record.motionContinuity = 'PASS'
+    record.powerpointRisk = 'LOW'
     record.brief.productCapabilities[0] = {
       ...record.brief.productCapabilities[0],
       status: 'VERIFIED',

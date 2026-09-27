@@ -253,6 +253,42 @@
   opacity: 0;
   transform: translateY(0.12em);
 }
+.camera-layer {
+  position: absolute;
+  inset: 0;
+  transform: translate3d(var(--camera-x, 0), var(--camera-y, 0), 0) scale(var(--camera-scale, 1))
+    rotate(var(--camera-rotation, 0deg));
+  transform-origin: var(--camera-origin-x, 50%) 50%;
+  will-change: transform;
+}
+.kinetic-text--controlled {
+  position: relative;
+  transform: scale(var(--type-scale, 1)) translate3d(var(--type-x, 0), var(--type-y, 0), 0);
+  letter-spacing: var(--type-tracking, -0.075em);
+  clip-path: inset(0 var(--type-clip, 0%) 0 0);
+  transform-origin: left center;
+  transition: none;
+}
+.kinetic-text--controlled > span {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+.kinetic-text--controlled .kinetic-text__unit {
+  display: inline-block;
+  opacity: var(--unit-opacity, 1);
+  transform: translate3d(0, var(--unit-y, 0), 0) scale(var(--unit-scale, 1));
+  transform-origin: center bottom;
+  transition: none;
+}
+.kinetic-text__replacement {
+  display: inline-grid;
+  position: relative;
+}
+.kinetic-text__replacement > span {
+  grid-area: 1 / 1;
+  white-space: nowrap;
+}
 @media (max-width: 650px) {
   .connection-graph {
     display: grid;

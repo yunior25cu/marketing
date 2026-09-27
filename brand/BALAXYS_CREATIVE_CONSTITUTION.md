@@ -51,6 +51,16 @@ El wordmark tipográfico `BALAXYS` y la marca de actividad provisional `✳` ide
 
 Azul corporativo SaaS, degradado azul-violeta, bancos visuales, crypto, videojuegos, glassmorphism gratuito, dashboards flotantes sin narrativa, partículas, confetti, iconos decorativos, esferas arbitrarias, exceso de tarjetas, gráficos falsos, listados de módulos y slogans vacíos. «Todo en un solo lugar», «potencia tu negocio», «transforma tu negocio» y equivalentes se rechazan.
 
+### Antipatrones de motion
+
+- **PowerPoint pattern:** title → card → card → card → logo. FAIL.
+- **SaaS hero pattern:** headline centrado + tres tarjetas + glow + líneas + CTA. FAIL para campañas audiovisuales salvo justificación explícita.
+- **Fade stack:** fade out → fade in repetido como estructura narrativa. FAIL.
+- **Component parade:** mostrar componentes sucesivamente sin que generen el siguiente beat. FAIL.
+- **UI demo disfrazada de motion graphics:** dashboard + zoom + cursor + tarjetas flotantes sin transformación. FAIL salvo que demostrar producto sea el objetivo explícito.
+
+Consultar `brand/BALAXYS_CONTINUOUS_MOTION_LANGUAGE.md` para coreografía semántica, continuidad y cámara.
+
 ## Ejemplos
 
 **Correcto:** «UNA VENTA NUNCA ES SÓLO UNA VENTA.» → Venta #18492 se confirma → Inventario 18→17 → aparece una cuenta por cobrar → un registro conserva el origen. Datos rotulados como demostrativos hasta su validación.

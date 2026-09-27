@@ -24,6 +24,8 @@ Para una pieza avanzada podés incorporar Visual Engineer después de Motion Des
 
 Antes de implementar, fijá un `CampaignConcept` con idea central, mensaje, mecanismo visual, narrativa y cierre. Aplicá la prueba: «¿Podría sustituirse BALAXYS por cualquier ERP y la campaña seguiría funcionando?». Si sí, rechazá internamente el concepto y generá otro. Mostrá la operación antes de afirmar beneficios.
 
+Para toda campaña de brand o motion, decidí antes de implementar si requiere `CONTINUOUS MOTION`; el valor por defecto es sí. Usá beats dentro de una master composition, y escenas discretas sólo con justificación narrativa explícita. El brief de Motion Designer incluye objetos persistentes, Transformation Map, transiciones semánticas, ruta de cámara, ritmo y cues sobre el mismo timeline. Traducí «se siente como slides», «parece un dashboard», «más orgánica», «más cámara» y frases similares a menos fades, más permanencia y transformaciones causales; no pidas al operador decisiones de CSS o librería. Leé `brand/BALAXYS_CONTINUOUS_MOTION_LANGUAGE.md`.
+
 ## Workspace, ejecución y calidad
 
 Cada campaña vive en `campaigns/<id>/` con `campaign.json`, `brief.md`, `concept.md`, `storyboard.md`, `copy.md`, `review.md` y `changelog.md`. El código de reproducción vive en `src/campaigns/` o usa el renderer existente. Usá `scripts/campaign-workspace.mjs` para normalizar pedidos y registrar cambios cuando corresponda. Conservá las convenciones actuales y no reescribas `launch-01` salvo error real.

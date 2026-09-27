@@ -51,7 +51,11 @@ export function inferIntent(request) {
   )
     return 'EVOLVE'
   if (/\b(adapt[aoá]|pas[áa]|otro formato|formato cuadrado|stories)\b/.test(text)) return 'ADAPT'
-  if (/\b(mejor[aoá]|ajust[aoá]|correg[íi]|más impacto|demasiado lento)\b/.test(text))
+  if (
+    /\b(mejor[aoá]|ajust[aoá]|correg[íi]|más impacto|demasiado lento|se siente como slides|parece un dashboard|más motion graphics|transición más orgánica|escena nazca|más sensación de cámara|transformación continua|demasiado estático|más continuidad visual)\b/.test(
+      text,
+    )
+  )
     return 'IMPROVE'
   return 'CREATE'
 }
@@ -153,6 +157,24 @@ export function selectedAgentIds(intent, manifest, request = '') {
   })
 }
 
+export function interpretMotionDirection(request) {
+  const text = request.toLocaleLowerCase('es')
+  const slideLike = /slides|diapositivas|powerpoint|presentación|dashboard/.test(text)
+  return {
+    motionStyle: 'CONTINUOUS',
+    reviseSlideRisk: slideLike,
+    actions: [
+      'reduce_fade_stack',
+      'increase_object_permanence',
+      'design_causal_transformations',
+      'choreograph_virtual_camera',
+      'review_master_composition',
+      'capture_transition_checkpoints',
+    ],
+    requestedMotion: request.trim(),
+  }
+}
+
 export function approvalBlockers(record) {
   const blockers = []
   if (record.status !== 'IN_REVIEW') blockers.push('La campaña debe estar en revisión')
@@ -162,6 +184,9 @@ export function approvalBlockers(record) {
     blockers.push('Performance detectó un problema grave')
   if (record.reviews.visual && record.reviews.visual.status !== 'PASS')
     blockers.push('Visual QA no aprobó la pieza')
+  if (record.motionContinuity && record.motionContinuity !== 'PASS')
+    blockers.push(`MOTION_CONTINUITY ${record.motionContinuity}`)
+  if (record.powerpointRisk === 'HIGH') blockers.push('POWERPOINT_RISK alto')
   if (record.audioLevel && record.audioLevel !== 'NONE') {
     if (record.reviews.audio?.status !== 'PASS') blockers.push('Audio QA no aprobó la pieza')
     if (record.reviews.av?.status !== 'PASS') blockers.push('AV Quality no aprobó la pieza')
@@ -188,6 +213,16 @@ export function validateRecord(record) {
     errors.push('Formato inválido')
   if (record.visualCheckpoints?.some((time) => time < 0 || time >= record.brief.duration))
     errors.push('Checkpoint fuera de la campaña')
+  if (record.motionStyle === 'CONTINUOUS' && record.motionBeats?.length) {
+    if (record.motionBeats[0].from !== 0 || record.motionBeats.at(-1).to !== record.brief.duration)
+      errors.push('Los motion beats no cubren la duración')
+    for (let index = 1; index < record.motionBeats.length; index++)
+      if (record.motionBeats[index].from > record.motionBeats[index - 1].to)
+        errors.push('Los motion beats tienen una discontinuidad temporal')
+    if (!record.transformationMap?.length) errors.push('Falta Transformation Map')
+  }
+  if (record.transitionCheckpoints?.some((item) => item.at < 0 || item.at >= record.brief.duration))
+    errors.push('Transition checkpoint fuera de la campaña')
   if (record.storyboard[0]?.from !== 0 || record.storyboard.at(-1)?.to !== record.brief.duration)
     errors.push('El storyboard no cubre la duración')
   for (let index = 1; index < record.storyboard.length; index++)
@@ -214,6 +249,9 @@ export function createRecord(id, brief, now) {
     brief: publicBrief,
     visualLevel: 'STANDARD',
     audioLevel: 'SFX',
+    motionStyle: 'CONTINUOUS',
+    powerpointRisk: 'MEDIUM',
+    motionContinuity: 'NEEDS_REVISION',
     concept: {
       idea: `${template.title}. ${template.mechanism}.`,
       visualMechanism: template.mechanism,

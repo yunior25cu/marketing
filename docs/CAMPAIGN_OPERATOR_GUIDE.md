@@ -18,6 +18,8 @@ Si omitís duración o formato, el agente empieza con 10 segundos y 16:9. Tambi�
 
 Si querés más profundidad o sonido, describí la sensación y la función: «Quiero que se vea cómo una operación se propaga entre áreas, con movimiento espacial sutil y sonido discreto». El Orchestrator decidirá cómo producirlo. También podés pedir silencio. No necesitás elegir programas ni técnicas. En Campaign Console podés revisar el sonido y la imagen antes de aprobar.
 
+El motion es continuo por defecto: una composición evoluciona en beats conectados. Si «se siente como slides», «parece un dashboard», «está demasiado estático» o querés «más continuidad visual», «una transición orgánica» o «más sensación de cámara», el Orchestrator traducirá el pedido en objetos persistentes, transformaciones causales y revisión de transiciones. No hace falta pedir una tecnología concreta.
+
 ## Pedir cambios
 
 ```text

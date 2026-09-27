@@ -225,6 +225,10 @@ async function adapt() {
         blocking: false,
       }
   record.reviews.technical = { lint: false, typecheck: false, tests: false, build: false }
+  if (record.motionStyle === 'CONTINUOUS') {
+    record.motionContinuity = 'NEEDS_REVISION'
+    record.powerpointRisk = 'MEDIUM'
+  }
   await saveRecord(record)
   await appendChangelog(
     id,
@@ -257,6 +261,10 @@ async function improve() {
         blocking: false,
       }
   record.reviews.technical = { lint: false, typecheck: false, tests: false, build: false }
+  if (record.motionStyle === 'CONTINUOUS') {
+    record.motionContinuity = 'NEEDS_REVISION'
+    record.powerpointRisk = 'MEDIUM'
+  }
   await saveRecord(record)
   await writeFile(
     join(workspace(id), `revision-v${record.version}.md`),

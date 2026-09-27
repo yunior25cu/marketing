@@ -1,36 +1,41 @@
 # Sistema de motion de Balaxys
 
-La unidad narrativa es `evento → propagación → estado → registro → resolución`. Ningún cambio visual puede anticipar su causa. Los tiempos son absolutos en milisegundos dentro de `SceneDefinition`; se pueden derivar offsets relativos desde un evento al construir nuevas secuencias.
+Autoridad complementaria: [`BALAXYS_CONTINUOUS_MOTION_LANGUAGE.md`](BALAXYS_CONTINUOUS_MOTION_LANGUAGE.md). Una campaña es una master composition continua; beats son estados narrativos, `scenes/` sigue nombrando unidades técnicas reutilizables.
 
-| Escala    | Valor inicial | Uso                                   |
-| --------- | ------------: | ------------------------------------- |
-| Micro     |        150 ms | cambio de estado, feedback de control |
-| Standard  |        280 ms | aparición o salida de dato            |
-| Narrative |        540 ms | número, línea, documento              |
-| Scene     |        900 ms | cambio de foco entre escenas          |
+La unidad narrativa es `evento → propagación → estado → registro → resolución`. Ningún cambio visual puede anticipar su causa. Los tiempos son absolutos en milisegundos; keyframes y acciones pueden solaparse siempre que el resultado para un `timeMs` sea determinista.
 
-Tokens: `src/brand/tokens/motion.ts`. Easing estándar `[.22, 1, .36, 1]`, salida `[.55, 0, 1, .45]`; stagger de 110 ms sólo cuando cada elemento expresa un paso distinto. Estos valores son el punto de partida: inspeccionar legibilidad en pantalla real y ajustar el evento, no reemplazar la gramática.
+| Escala    | Valor inicial | Uso                            |
+| --------- | ------------: | ------------------------------ |
+| Micro     |        150 ms | cambio de estado y feedback    |
+| Standard  |        280 ms | transformación breve y legible |
+| Narrative |        540 ms | número, línea, documento       |
+| Focus     |        900 ms | reencuadre o atención motivada |
 
-## Gramática
+Tokens: `src/brand/tokens/motion.ts`. Easing estándar `[.22, 1, .36, 1]`, salida `[.55, 0, 1, .45]`; stagger de 110 ms sólo cuando cada elemento expresa una consecuencia distinta.
 
-- **Entrada:** opacidad 0→1 y desplazamiento vertical pequeño. Se completa antes de pedir lectura.
-- **Salida:** opacidad 1→0 sin rebote ni dispersión.
-- **Propagación:** línea desde origen hasta destino; el destino se activa después de la llegada.
-- **Pulso:** una expansión breve de Signal Lime confirma el evento. No repetir indefinidamente.
-- **Contador:** conservar valor anterior, mostrar dirección y fijar el nuevo valor; evitar números que giran sin relación con un dato.
-- **Número:** reservar ancho o usar cifras tabulares para impedir saltos de layout.
-- **Línea:** revelar mediante escala horizontal o trazo SVG desde el origen, nunca en dirección ambigua.
-- **Documento:** aparece al confirmar el evento; cambia de estado después de recibir los datos.
-- **Nodo:** pasa de pendiente a activo cuando el evento correspondiente alcanza su `at`.
-- **Éxito:** estado final estable, sin confetti.
-- **Warning:** ámbar sobrio y texto del motivo; nunca flashes.
-- **Error:** rojo sobrio, texto explícito y vía de recuperación.
-- **Transición entre escenas:** cerrar cadena actual, dar un breve intervalo y abrir el siguiente origen.
+## Gramática de transformación
+
+- **Transformación:** conservar el objeto y su ancla; morph, split o cambio de función explican el siguiente dato.
+- **Entrada/salida:** opacity y translate son secundarios. No encadenarlos como estructura narrativa.
+- **Propagación:** una línea nace en el origen; el destino responde después de su llegada.
+- **Contador/dato:** conservar valor anterior, dirección y nuevo estado. El significado contable no se deforma.
+- **Línea:** mantener origen, trayectoria y peso cuando pasa a otra función.
+- **Documento:** hereda sus datos de la acción precedente y conserva la relación visible.
+- **Éxito/error:** estado legible y estable; sin flashes ni confetti.
+- **Entre beats:** MORPH, CARRY, REVEAL, CONTINUATION, MATCH, SPLIT, MERGE, CAMERA DISCOVERY, MASK TRANSITION o TYPOGRAPHIC TRANSFORMATION. Un objeto actual motiva el estado siguiente.
+
+## CAMERA LANGUAGE
+
+Usar pan/tracking para seguir una causa, push-in para detalle que requiere lectura, pull-out para revelar relaciones, reframe para equilibrar jerarquía, parallax/depth sólo para distinguir planos y foco para guiar atención. Reposar cámara durante cifras y holds. Velocidad y aceleración siguen al objeto causal; cada trayecto termina estable. `VirtualCamera` interpola posición, escala, rotación, foco y profundidad de forma determinista; DOM/SVG usa transform, Canvas/Three adaptan su cámara.
+
+## RHYTHMIC STRUCTURE
+
+Planificar anticipation → action → reaction → hold → acceleration → release. Alternar movimiento con pausas de lectura. Los beats pueden solaparse; no asignarles automáticamente pantallas. Los datos pueden crecer, dividirse, desplazarse o volverse geometría sin cambiar su valor real.
 
 ## Timeline y campañas
 
-El motor usa `duration`, eventos con `at` absoluto y un tiempo de reproducción controlable. `sceneState` resuelve estados de forma determinista para cualquier fotograma; no depende de timers por componente. Para 6, 10, 15 o 30 segundos, reservar tiempo de lectura antes de añadir detalle. La campaña `launch-01` dura **10 000 ms exactos**: premisa 0–1700, demostración 1700–7700, resolución 7700–10 000. El reloj se detiene en 10 000 ms.
+El timeline usa duración, beats solapables, keyframes de cámara, objetos persistentes, morph progress y cues absolutos. Cada estado deriva de `timeMs`, sin timers por componente, para que el scrub reproduzca siempre el mismo fotograma. Reservar holds de lectura en piezas de 6, 10, 15 o 30 segundos. `launch-01` conserva 10 000 ms y su montaje actual hasta que una propuesta nueva sea aprobada; esta evolución no la rediseña.
 
 ## Accesibilidad y rendimiento
 
-Con `prefers-reduced-motion`, fijar el estado final, conservar todos los cambios como texto y desactivar playback. Los controles permiten pausar y scrub. No crear flashes. Favorecer `transform` y `opacity`, evitar animaciones de layout y efectos constantes. Medir en dispositivos reales antes de introducir Canvas o WebGL.
+Con `prefers-reduced-motion`, presentar un estado final que conserve todos los cambios como texto y desactivar playback. Los controles permiten pausar y scrub con pasos de 1–10 ms según el uso. No crear flashes. Favorecer transform y opacity, evitar layout thrashing y medir en dispositivos reales antes de Canvas o WebGL.

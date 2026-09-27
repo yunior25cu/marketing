@@ -1,4 +1,5 @@
 import type { SceneRatio } from '@/renderer/scene'
+import type { CameraKeyframe, MotionBeat, SemanticTransition } from '@/motion/continuous'
 
 export type CampaignIntent = 'CREATE' | 'IMPROVE' | 'ADAPT' | 'EVOLVE' | 'APPROVE'
 export type CampaignStatus = 'DRAFT' | 'IN_REVIEW' | 'NEEDS_CHANGES' | 'APPROVED' | 'ARCHIVED'
@@ -37,7 +38,7 @@ export interface CampaignConcept {
 }
 
 export interface CampaignPhase {
-  id: 'intro' | 'event' | 'close'
+  id: string
   from: number
   to: number
   label: string
@@ -73,6 +74,17 @@ export interface CampaignRecord {
   visualLevel?: 'STANDARD' | 'ADVANCED_2D' | 'CANVAS' | 'THREE_D' | 'SHADER'
   audioLevel?: 'NONE' | 'SFX' | 'SFX_AMBIENCE' | 'FULL'
   visualCheckpoints?: number[]
+  transitionCheckpoints?: {
+    at: number
+    transition: SemanticTransition
+    moment: 'before' | 'during' | 'after'
+  }[]
+  motionStyle?: 'CONTINUOUS' | 'DISCRETE'
+  powerpointRisk?: 'LOW' | 'MEDIUM' | 'HIGH'
+  motionContinuity?: 'PASS' | 'NEEDS_REVISION' | 'FAIL'
+  motionBeats?: MotionBeat[]
+  cameraPath?: CameraKeyframe[]
+  transformationMap?: { from: string; transition: SemanticTransition; to: string; at: number }[]
   audioTimelineId?: string
   playback: {
     kind: 'launch-01' | 'template'
@@ -98,7 +110,19 @@ export interface AgentContract<Input, Output> {
 }
 
 export type CampaignPlan = { objective: string; storyboard: CampaignPhase[]; formats: SceneRatio[] }
-export type MotionPlan = { duration: number; cues: { at: number; event: string; effect: string }[] }
+export type MotionPlan = {
+  duration: number
+  motionStyle: 'CONTINUOUS' | 'DISCRETE'
+  beats: MotionBeat[]
+  transformationMap: { from: string; transition: SemanticTransition; to: string; at: number }[]
+  cameraPath: CameraKeyframe[]
+  transitionCheckpoints: {
+    at: number
+    transition: SemanticTransition
+    moment: 'before' | 'during' | 'after'
+  }[]
+  cues: { at: number; event: string; effect: string }[]
+}
 export type CampaignImplementation = { sceneId: string; previewPath: string; formats: SceneRatio[] }
 export type BrandReview = AgentReview
 export type QualityReview = AgentReview

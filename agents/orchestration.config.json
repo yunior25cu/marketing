@@ -46,7 +46,7 @@
       "prompt": "agents/04-motion-designer.md",
       "role": "tiempos y coreografía",
       "inputs": ["CampaignConcept", "CampaignCopy"],
-      "outputs": ["MotionPlan"],
+      "outputs": ["MotionPlan", "TransformationMap", "CameraPath", "TransitionCheckpoints"],
       "invokeFor": ["CREATE", "IMPROVE", "ADAPT"]
     },
     {
@@ -123,8 +123,8 @@
     }
   ],
   "selectionRules": {
-    "CREATE": "Campaña completa: todos los roles necesarios para concepto, implementación y revisión.",
-    "IMPROVE": "Invocar concepto/copy sólo cuando el cambio afecte idea o mensaje; siempre auditar el resultado.",
+    "CREATE": "Por defecto Motion Designer crea una master composition continua con beats, transformación y permanencia. Usar escenas discretas sólo con justificación explícita.",
+    "IMPROVE": "Traducir pedidos como slides/dashboard/estático/orgánico/cámara a permanencia, transformaciones causales, coreografía de cámara y transition checkpoints. Invocar concepto/copy sólo si cambia idea o mensaje; siempre auditar el resultado.",
     "ADAPT": "Conservar concepto y copy; revisar composición, implementación y calidad por ratio.",
     "EVOLVE": "Propuesta de marca y Brand Guardian; nunca aplicar cambios permanentes automáticamente."
   }

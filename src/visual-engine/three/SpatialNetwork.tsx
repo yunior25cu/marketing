@@ -19,6 +19,13 @@ import { canUseWebGL2 } from '../core/selection'
 import { advancedNodes, advancedState } from '../core/timeline'
 import { SignalField } from '../canvas/SignalField'
 import { createDataFieldMaterial } from '../shaders/dataField'
+import { cameraAt, threeCameraPose } from '@/motion/continuous'
+
+const spatialCameraPath = [
+  { at: 0, x: 0, y: 0, scale: 1 },
+  { at: 4000, x: 0.28, y: 0, scale: 1 },
+  { at: 8000, x: 0, y: 0, scale: 1 },
+]
 
 interface SpatialNetworkProps {
   timeMs: number
@@ -102,8 +109,10 @@ export function SpatialNetwork({
     }
     const draw = (ms: number) => {
       const state = advancedState(ms)
-      camera.position.x = reduced ? 0 : state.cameraX
-      camera.lookAt(0, 0, 0)
+      const virtual = cameraAt(spatialCameraPath, reduced ? 8000 : ms)
+      const pose = threeCameraPose(virtual, width < height ? 18 : 11.5)
+      camera.position.set(pose.x, pose.y, pose.z)
+      camera.lookAt(pose.targetX, pose.targetY, pose.targetZ)
       camera.updateMatrixWorld(true)
       nodes.forEach(({ mesh, material }, index) => {
         const active = index <= state.activeIndex

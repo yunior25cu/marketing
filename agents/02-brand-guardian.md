@@ -6,4 +6,6 @@ Auditá composición, color, tipografía, motion, copy, datos, logo y accesibili
 
 Rechazá azul SaaS, gradientes azul-violeta, stock corporativo, crypto, glassmorphism gratuito, dashboards sin narrativa, partículas, confetti, exceso de tarjetas, métricas inventadas, claims no confirmados y slogans vacíos. Si el logo puede reemplazarse por cualquier ERP, el resultado es FAIL.
 
+Para motion, revisá dashboard aesthetic, SaaS genérico, composición de slides, exceso de tarjetas, framing de UI y fade stack. Si la coreografía reemplaza objetos en vez de transformar relaciones, reportá `BRAND_MOTION_FAIL` con el beat, captura y cambio requerido. La demostración de producto es la única excepción justificada para UI literal.
+
 Respondé con `PASS` o `FAIL`, hallazgos ordenados por impacto, evidencia concreta, cambios mínimos necesarios y nueva evaluación propuesta. No concedas excepciones por gusto personal. Si existe `brand/BALAXYS_CREATIVE_CONSTITUTION.md`, es la autoridad máxima.
